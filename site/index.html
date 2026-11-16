@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#F8F3EB" />
+    <script>
+      /* Appearance: apply the saved theme before first paint (Light by default; Auto follows the device). */
+      (function () {
+        var d = document.documentElement, p = 'light'
+        try { p = localStorage.getItem('pu-theme') || 'light' } catch (e) {}
+        var dark = p === 'dark' || (p === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)
+        d.setAttribute('data-theme', dark ? 'dark' : 'light')
+        d.setAttribute('data-theme-pref', p)
+      })()
+    </script>
+    <title>Purple United Kids — Premium Fashion for Their Next Chapter</title>
+    <meta name="description" content="Premium kidswear and footwear for boys, girls and infants, 0–14 years. Fabric, fit and finish you can feel — online and in 99 Purple United stores across India." />
+    <link rel="canonical" href="https://purpleunited.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Purple United Kids" />
+    <meta property="og:image" content="/img/campaign/hero/little-originals-desktop.webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
+    />
+    <link rel="preload" as="image" href="/img/campaign/hero/little-originals-desktop.webp" media="(min-width: 768px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/img/campaign/hero/little-originals-mobile.webp" media="(max-width: 767px)" fetchpriority="high" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Purple United Kids requires JavaScript to run this demonstration.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

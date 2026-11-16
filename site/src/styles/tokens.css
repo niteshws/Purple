@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Purple United — design tokens
+   Source: PixelCrayons brand proposal (Nov 2026), pages 17–19.
+   60 · 30 · 10 — ivory & oat lead, rose / mauve / wine warm, plum & champagne sign off.
+   ========================================================================== */
+:root {
+  /* Primary */
+  --plum: #4a2240;
+  --ivory: #f8f3eb;
+  /* Accent */
+  --champagne: #d9b87a;
+  --gold: #9a7536; /* Antique gold — accent text only */
+  /* Secondary */
+  --wine: #2e1428;
+  --mauve: #a8758f;
+  --rose: #e8cfcb;
+  --oat: #eadfcc;
+  --ink: #2e2a2f;
+
+  /* Derived neutrals (tints of the palette, not new hues) */
+  --ivory-2: #f3ece1;
+  --paper: #fcfaf6;
+  --rose-2: #f3e5e2;
+  --oat-2: #f1e9dc;
+  --plum-90: #5a2e4f;
+  --ink-70: rgba(46, 42, 47, 0.72);
+  --ink-55: rgba(46, 42, 47, 0.58);
+  --ink-40: rgba(46, 42, 47, 0.42);
+  --line: rgba(46, 42, 47, 0.12);
+  --line-strong: rgba(46, 42, 47, 0.24);
+  --plum-line: rgba(74, 34, 64, 0.18);
+
+  /* Semantic theme tokens (light defaults; redefined in theme.css for dark) */
+  --canvas: var(--ivory);
+  --accent: var(--plum);
+  --accent-deep: var(--wine);
+  --surface-hi: #fff;
+  --glass: rgba(248, 243, 235, 0.97);
+  --glass-soft: rgba(248, 243, 235, 0.6);
+  color-scheme: light;
+
+  /* Feedback (kept inside the brand family) */
+  --success: #3f6b4f;
+  --error: #a3363a;
+  --error-bg: #f8e9e7;
+  --warning: #8a5a14;
+
+  /* Typography */
+  --font-display: 'Playfair Display', 'Times New Roman', serif;
+  --font-sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-signature: 'Cormorant Garamond', 'Playfair Display', serif;
+
+  --fs-12: 0.75rem;
+  --fs-13: 0.8125rem;
+  --fs-14: 0.875rem;
+  --fs-15: 0.9375rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-20: 1.25rem;
+  --fs-24: 1.5rem;
+  --fs-h3: clamp(1.375rem, 1.1rem + 0.9vw, 1.875rem);
+  --fs-h2: clamp(1.875rem, 1.35rem + 1.9vw, 3rem);
+  --fs-h1: clamp(2.375rem, 1.6rem + 3vw, 4rem);
+  --fs-display: clamp(2.75rem, 1.7rem + 4.4vw, 5.25rem);
+
+  --tracking-eyebrow: 0.16em;
+
+  /* Spacing (4 px base) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-20: 80px;
+  --s-24: 96px;
+  --s-32: 128px;
+  --section: clamp(64px, 5vw + 40px, 128px);
+  --section-sm: clamp(48px, 3vw + 32px, 80px);
+
+  /* Layout */
+  --container: 1440px;
+  --container-narrow: 1120px;
+  --container-text: 720px;
+  --gutter: clamp(16px, 3.6vw, 56px);
+  --header-h: 72px;
+
+  /* Shape */
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --r-pill: 999px;
+
+  /* Elevation — used sparingly: overlays only */
+  --shadow-overlay: 0 24px 64px -24px rgba(46, 20, 40, 0.35);
+  --shadow-soft: 0 10px 30px -18px rgba(46, 20, 40, 0.35);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --t-fast: 160ms;
+  --t-base: 280ms;
+  --t-slow: 520ms;
+  --t-reveal: 900ms;
+
+  --z-header: 50;
+  --z-drawer: 80;
+  --z-modal: 90;
+  --z-toast: 100;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --header-h: 60px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 1ms;
+    --t-base: 1ms;
+    --t-slow: 1ms;
+    --t-reveal: 1ms;
+  }
+}

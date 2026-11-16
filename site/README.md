@@ -1,0 +1,74 @@
+# Purple United Kids — Redesign Demonstration
+
+A working, multi-page e-commerce prototype prepared by PixelCrayons to show Purple United's leadership the proposed brand relaunch as a complete digital shopping experience.
+
+> **Prototype.** No real orders, payments, emails or WhatsApp messages are processed. Simulated features are labelled in the interface with a small champagne dot ("demo-note").
+
+## Run it
+
+```bash
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # type-check + production build into dist/
+npm run preview    # serve the production build
+```
+
+Requires Node 20+. The app is a client-side SPA (React Router); when deploying, serve `index.html` for all routes.
+
+## Stack
+
+- React 19 + TypeScript + Vite
+- React Router 7 (client-side routing, lazy-loaded routes)
+- Zustand (cart, wishlist, account, recently viewed, UI) persisted to `localStorage` with an in-memory fallback
+- Plain CSS with design tokens (`src/styles/tokens.css`) — no UI framework
+
+```
+src/
+  App.tsx              routes, layout, scroll restoration
+  components/          Header + mega menu, mobile nav, search, cart drawer, size guide,
+                       product card, footer, WhatsApp concierge, shared UI primitives
+  data/                products, collections, stores (real), journal, verified site facts
+  lib/                 hooks (meta/SEO, focus trap, reveal, validation) and commerce helpers
+  pages/               every route (account/ for the customer area)
+  store/               Zustand stores
+  styles/              tokens, base, components, pages + per-area sheets
+public/img/            all imagery, organised by campaign / editorial / lifestyle / brand / retail / products
+```
+
+## Where the content comes from
+
+| Content | Source | Status |
+|---|---|---|
+| Products: names, prices, compare-at prices, photography | Current purpleunited.com homepage (saved HTML) | **Real** (colour variants of the same style grouped) |
+| Sizes, per-size stock, popularity, "added" dates | Generated deterministically | **Demo data** |
+| Store locator: 99 stores, addresses, hours, phones | purpleunited.com/pages/store-locator-1 (Nov 2026) | **Real** — re-sync before launch |
+| Contact, returns, refunds, FAQ, delivery times | purpleunited.com contact / refund-policy / faqs pages | **Real** (paraphrased) |
+| Exact shipping fee below ₹499, express rate | Not published | **Demo rates**, flagged |
+| Crest logo | PixelCrayons proposal p.16 (concept crest) | **Concept** — replace with master artwork |
+| Campaign & editorial photography | PixelCrayons proposal art direction (slides 1, 3, 5, 6, 10, 12, 20–28, 31, 33) | **Concept imagery** |
+| Flagship store walkthrough video (homepage "Visit us") | Supplied walkthrough film, re-encoded to 720p (5.0 MB) and 480p (2.6 MB) in `public/video/` | **Concept** store identity |
+| Lifestyle photography | Current purpleunited.com banners/tiles (text-free crops only) | Real brand assets |
+| Purple Circle tiers & benefits | Proposal p.26 | **Proposed / illustrative** |
+| Ask Purple stylist | Rule-based scoring over the catalogue | **Simulated — not live AI** |
+| WhatsApp concierge | Purple United's published number (+91 93193 91444) via wa.me links | Opens WhatsApp; nothing is sent automatically |
+
+## Appearance (light / dark / auto)
+
+- Switcher in the header (desktop), the mobile menu and the footer. Default is **Light**; **Auto** follows the device and updates live.
+- The choice is saved in `localStorage` (`pu-theme`) and applied by an inline script in `index.html` before first paint, so there is no flash.
+- Dark styling lives in `src/styles/theme.css`; components use semantic tokens (`--canvas`, `--accent`, `--accent-deep`, `--surface-hi`, `--glass`) defined in `tokens.css`.
+
+## Motion
+
+- Every route fades in; sections without hand-authored reveals rise in as they enter view; product, category, occasion and journal grids stagger in (`src/lib/hooks.ts` → `autoTag`). All of it is disabled under `prefers-reduced-motion`.
+
+## Simulated flows
+
+- **Checkout**: 5 steps + confirmation, full validation, mock payment (no card data is collected or stored).
+- **Accounts**: registration, login and password reset are stored only in this browser.
+- **Reviews**: no reviews are shown or invented; a customer's draft review is kept locally.
+- **Newsletter / contact / try-on booking**: validated and confirmed on screen; nothing is sent.
+
+## Not connected
+
+Shopify (or any commerce backend), payments, inventory, email/SMS, WhatsApp Business API, maps API and analytics are intentionally not connected. The product data model (`src/data/products.ts`) mirrors what a Shopify Storefront API integration would return, so the UI can be wired to live data later.

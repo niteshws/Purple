@@ -1,0 +1,170 @@
+/* ==========================================================================
+   Appearance — dark theme
+   Applied when <html data-theme="dark"> (set from the Appearance switcher:
+   Light / Dark / Auto, where Auto follows the device setting).
+   The palette stays inside the brand family: a plum-black canvas, rose accents,
+   champagne for signatures. Ivory remains the "light ink" used on photography
+   and dark bands, so those areas look identical in both themes.
+   ========================================================================== */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --canvas: #1b1318;
+  --paper: #241a21;
+  --surface-hi: #2c2029;
+  --ivory-2: #20171d;
+  --oat-2: #20171d;
+  --oat: #2b2027;
+  --rose-2: #2b1c26;
+  --rose: #3d2834;
+
+  --ink: #f0e7dd;
+  --ink-70: rgba(240, 231, 221, 0.76);
+  --ink-55: rgba(240, 231, 221, 0.62);
+  --ink-40: rgba(240, 231, 221, 0.46);
+  --line: rgba(240, 231, 221, 0.12);
+  --line-strong: rgba(240, 231, 221, 0.26);
+  --plum-line: rgba(226, 191, 210, 0.3);
+
+  --plum: #73406a; /* filled buttons, chips, badges */
+  --accent: #e4c3d5; /* text, links, icons, focus borders */
+  --accent-deep: #efd6e2;
+  --mauve: #c99db5;
+  --gold: #d9b67c;
+
+  --success: #93c7a4;
+  --error: #ef9b97;
+  --error-bg: rgba(239, 155, 151, 0.12);
+  --warning: #e3b46a;
+
+  --glass: rgba(27, 19, 24, 0.94);
+  --glass-soft: rgba(240, 231, 221, 0.06);
+
+  --shadow-overlay: 0 24px 64px -20px rgba(0, 0, 0, 0.7);
+  --shadow-soft: 0 12px 34px -16px rgba(0, 0, 0, 0.65);
+}
+
+/* Smooth hand-off when the visitor changes appearance */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition:
+    background-color 420ms ease,
+    color 420ms ease,
+    border-color 420ms ease,
+    fill 420ms ease !important;
+}
+
+/* ---- Component touches that can't be expressed purely as tokens ---- */
+[data-theme='dark'] ::selection {
+  background: #5a2e4f;
+  color: #fff;
+}
+[data-theme='dark'] .select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23E4C3D5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+}
+[data-theme='dark'] .input:focus,
+[data-theme='dark'] .select:focus,
+[data-theme='dark'] .textarea:focus {
+  background: var(--surface-hi);
+  box-shadow: 0 0 0 3px rgba(228, 195, 213, 0.18);
+}
+[data-theme='dark'] .btn--outline {
+  --btn-fg: var(--accent);
+  --btn-bd: var(--plum-line);
+}
+[data-theme='dark'] .btn--outline:hover {
+  --btn-bg: var(--accent);
+  --btn-fg: #1b1318;
+  --btn-bd: var(--accent);
+}
+[data-theme='dark'] .btn:not(.btn--outline):not(.btn--ivory):not(.btn--ghost-light):hover {
+  --btn-bg: #8a4c7f;
+  --btn-bd: #8a4c7f;
+}
+[data-theme='dark'] .chip[aria-pressed='true'],
+[data-theme='dark'] .chip.is-active {
+  color: #fff;
+}
+[data-theme='dark'] .tag {
+  background: var(--surface-hi);
+  color: var(--accent);
+}
+[data-theme='dark'] .tag--plum {
+  background: var(--plum);
+  color: var(--ivory);
+}
+[data-theme='dark'] .icon-btn:hover {
+  background: rgba(240, 231, 221, 0.08);
+}
+[data-theme='dark'] .checkbox input:checked,
+[data-theme='dark'] .switch:checked {
+  background: #a0628f;
+  border-color: #a0628f;
+}
+[data-theme='dark'] .radio-card input::after {
+  background: var(--accent);
+}
+[data-theme='dark'] :focus-visible {
+  outline-color: var(--accent);
+}
+
+/* Media placeholders and product frames read as soft panels, not holes */
+[data-theme='dark'] .media,
+[data-theme='dark'] .pcard__media {
+  background: #2a1f26;
+}
+
+/* Physical card renderings (gift cards, member cards) keep their printed colours */
+[data-theme='dark'] .gc--ivory {
+  background: linear-gradient(135deg, #fffdf8 0%, #f8f3eb 55%, #eadfcc 100%);
+  color: #4a2240;
+}
+[data-theme='dark'] .gc--rose {
+  background: linear-gradient(135deg, #f6e7e4 0%, #e8cfcb 60%, #d9b3be 100%);
+  color: #2e1428;
+}
+[data-theme='dark'] .mcard--circle {
+  background: linear-gradient(135deg, #fffdf8, #f8f3eb 50%, #eadfcc);
+  color: #4a2240;
+}
+[data-theme='dark'] .circle__card--plus .member-card {
+  background: linear-gradient(135deg, #f8f3eb, #eadfcc);
+  color: #4a2240;
+}
+[data-theme='dark'] .circle__card {
+  background: radial-gradient(circle at 30% 20%, #3a2632, #2b1c26 70%);
+}
+
+/* Brand crest: show the reversed artwork on dark surfaces */
+:root:not([data-theme='dark']) .crest-d {
+  display: none !important;
+}
+[data-theme='dark'] .crest-l {
+  display: none !important;
+}
+
+/* Footer and wine bands are already dark — lift them slightly off the canvas */
+[data-theme='dark'] .site-footer {
+  background: #140d12;
+  border-top: 1px solid rgba(240, 231, 221, 0.08);
+}
+[data-theme='dark'] .announce {
+  background: #140d12;
+}
+[data-theme='dark'] .originals {
+  background: #241621;
+}
+[data-theme='dark'] .gifting-band {
+  background: #3b1f35;
+}
+[data-theme='dark'] .bg-plum {
+  background: #3b1f35;
+}
+
+/* Photography sits slightly softer on a dark page */
+[data-theme='dark'] .pcard__img,
+[data-theme='dark'] .cline__img img {
+  filter: brightness(0.94);
+}
