@@ -499,15 +499,20 @@
 }
 .co-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 16px 14px;
+}
+.co :is(.input, .select) {
+  height: 50px;
+  min-width: 0;
 }
 .co-grid .span-2 {
   grid-column: 1 / -1;
 }
 @media (max-width: 560px) {
   .co-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 .co-actions {
