@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom'
 import { AnnouncementBar, Header, MobileNav } from './components/Header'
 import { Footer, Concierge } from './components/Footer'
+import { AskPurpleChat } from './components/AskPurpleChat'
 import { CartDrawer, SearchOverlay, SizeGuideModal } from './components/Overlays'
 import { Toasts } from './components/ui'
 import { useRevealAll } from './lib/hooks'
@@ -119,6 +120,7 @@ function Layout() {
       <SearchOverlay />
       <CartDrawer />
       <SizeGuideModal />
+      <AskPurpleChat />
       <Concierge />
       <Toasts />
       <ScrollManager />

@@ -3,228 +3,35 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from '../components/Icon'
 import { Breadcrumbs, Price } from '../components/ui'
-import {
-  products,
-  stockFor,
-  formatINR,
-  isProductSoldOut,
-  allColorFamilies,
-  colorFamiliesOf,
-  type Product,
-  type AgeGroup,
-  type Occasion,
-  type Style,
-} from '../data/products'
+import { formatINR, allColorFamilies, type Style } from '../data/products'
 import { useWishlist, useUI } from '../store'
 import { addToBag, toggleWish } from '../lib/commerce'
 import { useMeta } from '../lib/hooks'
+import {
+  AGES,
+  OCCASIONS,
+  STYLES,
+  BUDGETS,
+  KID_SIZES,
+  INFANT_SIZES,
+  SHOE_SIZES,
+  INFANT_SHOE_SIZES,
+  DEFAULT_PREFS as DEFAULT,
+  PREFS_KEY as KEY,
+  isInfant,
+  suggestApparel,
+  suggestShoe,
+  recommend,
+  loadPrefs,
+  type Prefs,
+  type Pick,
+} from '../lib/askPurple'
 
 /* ==========================================================================
    Ask Purple — transparent, rule-based stylist over the demo catalogue.
-   Not AI: every suggestion comes from the scoring rules below.
+   Not AI: every suggestion comes from the scoring rules in lib/askPurple.ts
+   (shared with the floating Ask Purple chat).
    ========================================================================== */
-
-type Prefs = {
-  age: string // '0-6m' | '6-12m' | '12-24m' | '2'..'14'
-  gender: 'girl' | 'boy' | 'any'
-  occasion: Occasion | ''
-  styles: Style[]
-  budget: number // per piece, 0 = no limit
-  apparelSize: string // '' = auto
-  shoeSize: string // '' = auto
-  colors: string[]
-}
-
-const DEFAULT: Prefs = { age: '6', gender: 'any', occasion: '', styles: [], budget: 0, apparelSize: '', shoeSize: '', colors: [] }
-const KEY = 'pu-ask-purple'
-
-const AGES = [
-  { v: '0-6m', l: '0–6 months' },
-  { v: '6-12m', l: '6–12 months' },
-  { v: '12-24m', l: '12–24 months' },
-  ...Array.from({ length: 13 }, (_, i) => ({ v: String(i + 2), l: `${i + 2} years` })),
-]
-const OCCASIONS: { v: Occasion; l: string }[] = [
-  { v: 'everyday', l: 'Everyday' },
-  { v: 'celebration', l: 'Celebration & party' },
-  { v: 'festive', l: 'Festive' },
-  { v: 'weekend', l: 'Weekend adventures' },
-  { v: 'special', l: 'Special moments' },
-]
-const STYLES: { v: Style; l: string }[] = [
-  { v: 'classic', l: 'Classic' },
-  { v: 'sporty', l: 'Sporty' },
-  { v: 'playful', l: 'Playful' },
-  { v: 'smart', l: 'Smart' },
-  { v: 'cosy', l: 'Cosy' },
-]
-const BUDGETS = [
-  { v: 1000, l: 'Up to ₹1,000' },
-  { v: 2000, l: 'Up to ₹2,000' },
-  { v: 3000, l: 'Up to ₹3,000' },
-  { v: 5000, l: 'Up to ₹5,000' },
-  { v: 0, l: 'No limit' },
-]
-const KID_SIZES = ['2-3Y', '3-4Y', '4-5Y', '5-6Y', '6-7Y', '7-8Y', '8-9Y', '9-10Y', '10-11Y', '11-12Y', '12-13Y', '13-14Y']
-const INFANT_SIZES = ['0-3M', '3-6M', '6-9M', '9-12M', '12-18M', '18-24M']
-const SHOE_SIZES = ['UK 5K', 'UK 6K', 'UK 7K', 'UK 8K', 'UK 9K', 'UK 10K', 'UK 11K', 'UK 12K', 'UK 13K', 'UK 1', 'UK 2', 'UK 3', 'UK 4', 'UK 5']
-
-const isInfant = (age: string) => age.endsWith('m')
-const years = (age: string) => (isInfant(age) ? 0 : Number(age))
-function ageGroup(age: string): AgeGroup {
-  if (isInfant(age)) return '0-2'
-  const y = Number(age)
-  return y <= 5 ? '2-5' : y <= 9 ? '6-9' : '10-14'
-}
-function suggestApparel(age: string) {
-  if (age === '0-6m') return '3-6M'
-  if (age === '6-12m') return '9-12M'
-  if (age === '12-24m') return '18-24M'
-  const y = Math.min(13, Math.max(2, Number(age)))
-  return `${y}-${y + 1}Y`
-}
-function suggestShoe(age: string) {
-  if (isInfant(age)) return age === '0-6m' ? '0-6M' : age === '6-12m' ? '6-12M' : '12-18M'
-  const y = Number(age)
-  const map: Record<number, string> = { 2: 'UK 7K', 3: 'UK 8K', 4: 'UK 10K', 5: 'UK 11K', 6: 'UK 12K', 7: 'UK 13K', 8: 'UK 1', 9: 'UK 2', 10: 'UK 3', 11: 'UK 4', 12: 'UK 5', 13: 'UK 5', 14: 'UK 5' }
-  return map[y] ?? 'UK 1'
-}
-
-/** Pick the product size closest to the target, preferring in-stock sizes. */
-function pickSize(p: Product, color: string, target: string): { size: string; exact: boolean } | null {
-  if (p.sizeSystem === 'one-size') return stockFor(p, color, 'One size') > 0 ? { size: 'One size', exact: true } : null
-  if (p.sizes.includes(target) && stockFor(p, color, target) > 0) return { size: target, exact: true }
-  const ref = [...KID_SIZES, ...INFANT_SIZES, ...SHOE_SIZES, '0-6M', '6-12M', '12-18M']
-  const order = (s: string) => {
-    const a = SHOE_SIZES.indexOf(s)
-    if (a >= 0) return a
-    const k = KID_SIZES.indexOf(s)
-    if (k >= 0) return k
-    const i = INFANT_SIZES.indexOf(s)
-    if (i >= 0) return i
-    return ['0-6M', '6-12M', '12-18M'].indexOf(s) * 2
-  }
-  const t = order(target)
-  const candidates = p.sizes.filter((s) => stockFor(p, color, s) > 0 && ref.includes(s))
-  if (!candidates.length) return null
-  candidates.sort((a, b) => Math.abs(order(a) - t) - Math.abs(order(b) - t))
-  const best = candidates[0]
-  if (Math.abs(order(best) - t) > 2) return null
-  return { size: best, exact: false }
-}
-
-type Pick = { p: Product; color: string; size: string; exact: boolean; score: number; reasons: string[]; slot: Slot }
-type Slot = 'outfit' | 'top' | 'bottom' | 'layer' | 'shoes' | 'extra'
-function slotOf(p: Product): Slot {
-  if (p.departments.includes('footwear')) return 'shoes'
-  if (p.type === 'Soft Toys') return 'extra'
-  if (p.type === 'Dresses' || p.type === 'Sets') return 'outfit'
-  if (p.type === 'Jackets') return 'layer'
-  if (['Jeans', 'Trousers', 'Shorts & Skirts'].includes(p.type)) return 'bottom'
-  return 'top'
-}
-
-function recommend(prefs: Prefs) {
-  const group = ageGroup(prefs.age)
-  const apparelTarget = prefs.apparelSize || suggestApparel(prefs.age)
-  const shoeTarget = prefs.shoeSize || suggestShoe(prefs.age)
-  const out: Pick[] = []
-  for (const p of products) {
-    if (isProductSoldOut(p)) continue
-    if (!p.ageGroups.includes(group)) continue
-    if (group === '0-2' && !p.departments.includes('infants')) continue
-    if (group !== '0-2' && p.departments.includes('infants') && !p.departments.includes('accessories')) continue
-    if (prefs.gender === 'girl' && p.gender === 'boys') continue
-    if (prefs.gender === 'boy' && p.gender === 'girls') continue
-    if (prefs.budget && p.price > prefs.budget) continue
-    const reasons: string[] = []
-    let score = p.popularity / 40
-    // colour
-    const fams = colorFamiliesOf(p)
-    let color = p.colors.find((c) => !c.soldOut)!.name
-    if (prefs.colors.length) {
-      const hit = p.colors.find((c) => !c.soldOut && allColorFamilies.some((f) => prefs.colors.includes(f.name) && f.match.test(c.name)))
-      if (hit) {
-        color = hit.name
-        score += 2
-        reasons.push(`Comes in ${hit.name.toLowerCase()}`)
-      } else if (!fams.some((f) => prefs.colors.includes(f))) score -= 1
-    }
-    const isShoe = p.departments.includes('footwear')
-    const sz = pickSize(p, color, isShoe ? shoeTarget : apparelTarget)
-    if (!sz) continue
-    if (prefs.occasion) {
-      if (p.occasions.includes(prefs.occasion)) {
-        score += 3
-        reasons.push(`Made for ${OCCASIONS.find((o) => o.v === prefs.occasion)!.l.toLowerCase()}`)
-      } else score -= 2
-    }
-    const styleHits = prefs.styles.filter((s) => p.styles.includes(s))
-    if (styleHits.length) {
-      score += styleHits.length * 2
-      reasons.push(`${styleHits.map((s) => STYLES.find((x) => x.v === s)!.l).join(' & ')} feel`)
-    }
-    if (prefs.budget) reasons.push(`${formatINR(p.price)} — within your budget`)
-    reasons.push(sz.exact ? `In stock in ${sz.size}` : `Nearest available size: ${sz.size}`)
-    if (p.isNew) {
-      score += 0.5
-      reasons.push('New this season')
-    }
-    out.push({ p, color, size: sz.size, exact: sz.exact, score, reasons, slot: slotOf(p) })
-  }
-  out.sort((a, b) => b.score - a.score)
-  // Build up to two looks — each look stays coherent (one gender + unisex pieces)
-  const used = new Set<string>()
-  let lookGender: string | null = null
-  const fits = (o: (typeof out)[number]) => !lookGender || o.p.gender === 'unisex' || o.p.gender === lookGender
-  const claim = (o: (typeof out)[number]) => {
-    used.add(o.p.handle)
-    if (!lookGender && o.p.gender !== 'unisex') lookGender = o.p.gender
-  }
-  const take = (slot: Slot) => {
-    const x = out.find((o) => o.slot === slot && !used.has(o.p.handle) && fits(o))
-    if (x) claim(x)
-    return x
-  }
-  const looks: { title: string; items: Pick[] }[] = []
-  for (let i = 0; i < 2; i++) {
-    lookGender = null
-    const items: Pick[] = []
-    const outfit = out.find((o) => o.slot === 'outfit' && !used.has(o.p.handle))
-    const top = out.find((o) => o.slot === 'top' && !used.has(o.p.handle))
-    const bottom = out.find((o) => o.slot === 'bottom' && !used.has(o.p.handle) && (!top || top.p.gender === 'unisex' || o.p.gender === 'unisex' || o.p.gender === top.p.gender))
-    const useOutfit = outfit && (!top || !bottom || outfit.score >= (top.score + bottom.score) / 2)
-    if (useOutfit && outfit) {
-      claim(outfit)
-      items.push(outfit)
-    } else {
-      const t = take('top')
-      const b = take('bottom')
-      if (t) items.push(t)
-      if (b) items.push(b)
-    }
-    const layer = take('layer')
-    if (layer && items.length) items.push(layer)
-    const shoes = take('shoes')
-    if (shoes) items.push(shoes)
-    if (!items.length) {
-      const extra = take('extra')
-      if (extra) items.push(extra)
-    }
-    if (items.length >= 2) looks.push({ title: i === 0 ? 'Look one' : 'Look two', items })
-    else items.forEach((x) => used.delete(x.p.handle))
-  }
-  return { looks, ranked: out.slice(0, 8), apparelTarget, shoeTarget, total: out.length }
-}
-
-function loadPrefs(): Prefs {
-  try {
-    const s = sessionStorage.getItem(KEY)
-    return s ? { ...DEFAULT, ...JSON.parse(s) } : DEFAULT
-  } catch {
-    return DEFAULT
-  }
-}
 
 function PickRow({ x, rank }: { x: Pick; rank?: number }) {
   const wished = useWishlist((s) => s.items.some((i) => i.handle === x.p.handle))
@@ -446,7 +253,7 @@ export default function AskPurple() {
                 </label>
                 <select id="ask-shoe" className="select" value={prefs.shoeSize} onChange={(e) => set('shoeSize', e.target.value)}>
                   <option value="">Suggested: {autoShoe}</option>
-                  {(infant ? ['0-6M', '6-12M', '12-18M'] : SHOE_SIZES).map((s) => (
+                  {(infant ? INFANT_SHOE_SIZES : SHOE_SIZES).map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
