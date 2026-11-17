@@ -1814,15 +1814,19 @@
   justify-items: end;
   gap: 12px;
 }
+/* Concierge and Ask Purple launchers share one size (see .askp__fab).
+   Concierge is the light pill with its icon in a plum disc; Ask Purple is the filled one. */
 .concierge__fab {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  width: 176px;
   height: 52px;
-  padding: 0 20px 0 16px;
+  padding: 0 16px 0 8px;
   border-radius: var(--r-pill);
-  background: var(--plum);
-  color: var(--ivory);
+  background: var(--paper);
+  color: var(--accent);
+  border: 1px solid var(--plum-line);
   box-shadow: var(--shadow-soft);
   font-size: 12px;
   font-weight: 600;
@@ -1830,10 +1834,21 @@
   text-transform: uppercase;
   transition:
     background var(--t-fast),
+    border-color var(--t-fast),
     transform var(--t-fast);
 }
+.concierge__fab > svg {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 50%;
+  color: var(--champagne);
+  background: radial-gradient(120% 120% at 30% 20%, #73406a 0%, #4a2240 55%, #2e1428 100%);
+}
 .concierge__fab:hover {
-  background: var(--wine);
+  background: var(--surface-hi);
+  border-color: var(--accent);
 }
 .concierge__fab:active {
   transform: scale(0.96);
@@ -1923,6 +1938,11 @@
     padding: 0;
     justify-content: center;
   }
+  .concierge__fab > svg {
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+  }
 }
 body:has(.pdp-sticky.is-on) .concierge {
   bottom: 92px;
@@ -1951,12 +1971,13 @@ body:has(.askp.is-open) .concierge {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  width: 176px;
   height: 52px;
-  padding: 0 20px 0 8px;
+  padding: 0 16px 0 8px;
   border-radius: var(--r-pill);
-  background: var(--paper);
-  color: var(--accent);
-  border: 1px solid var(--plum-line);
+  background: var(--plum);
+  color: var(--ivory);
+  border: 1px solid var(--plum);
   box-shadow: var(--shadow-soft);
   font-size: 12px;
   font-weight: 600;
@@ -1968,8 +1989,13 @@ body:has(.askp.is-open) .concierge {
     transform var(--t-fast);
 }
 .askp__fab:hover {
-  background: var(--surface-hi);
-  border-color: var(--accent);
+  background: var(--wine);
+  border-color: var(--wine);
+}
+/* On the filled pill the sparkle sits in a soft ivory disc rather than a plum one */
+.askp__fab .askp__fab-icon {
+  background: rgba(248, 243, 235, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(217, 184, 122, 0.4);
 }
 .askp__fab:active {
   transform: scale(0.96);
@@ -2454,6 +2480,10 @@ body:has(.askp.is-open) .concierge {
     width: 52px;
     padding: 0;
     justify-content: center;
+  }
+  .askp__fab .askp__fab-icon {
+    width: 42px;
+    height: 42px;
   }
   .askp.is-open {
     z-index: var(--z-modal);
