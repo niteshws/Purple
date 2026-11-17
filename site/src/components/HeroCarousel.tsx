@@ -4,8 +4,9 @@ import { Icon } from './Icon'
 
 /* Homepage campaign hero — four editorial slides that auto-advance.
    - Crossfade + slow push-in on the image, staggered text entrance per slide.
-   - Pauses on hover / keyboard focus / hidden tab; visible pause control (WCAG 2.2.2).
-   - prefers-reduced-motion: no autoplay, no motion.
+   - Always auto-advances (hover and focus do not pause it); only the visible pause
+     control stops it (WCAG 2.2.2). A background tab holds the slide until it is visible.
+   - prefers-reduced-motion: slides still change, but without the push-in motion (CSS).
    - Separate desktop (2.5:1) and mobile (4:3) crops via <picture>. */
 
 export interface HeroSlide {
@@ -77,24 +78,9 @@ const INTERVAL = 3000
 export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] }) {
   const [index, setIndex] = useState(0)
   const [userPaused, setUserPaused] = useState(false)
-  const [hoverPaused, setHoverPaused] = useState(false)
-  const [reduced, setReduced] = useState(false)
   const [loaded, setLoaded] = useState<Set<number>>(() => new Set([0]))
-  const root = useRef<HTMLElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const n = slides.length
-
-  useEffect(() => {
-    try {
-      const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-      setReduced(mq.matches)
-      const on = () => setReduced(mq.matches)
-      mq.addEventListener('change', on)
-      return () => mq.removeEventListener('change', on)
-    } catch {
-      /* no matchMedia */
-    }
-  }, [])
 
   // Warm the next slides once the first image is on screen.
   useEffect(() => {
@@ -111,7 +97,7 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
     [n],
   )
 
-  const paused = userPaused || hoverPaused || reduced
+  const paused = userPaused
 
   // Advance every INTERVAL. If the tab is in the background when the timer fires,
   // hold the slide and restart the countdown once the page is visible again.
@@ -145,18 +131,9 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
 
   return (
     <section
-      ref={root}
       className={`hero-c${paused ? ' is-paused' : ''}`}
       aria-roledescription="carousel"
       aria-label="New season campaigns"
-      onMouseEnter={() => setHoverPaused(true)}
-      onMouseLeave={() => setHoverPaused(false)}
-      onFocus={(e) => {
-        if (root.current?.contains(e.target as Node) && (e.target as HTMLElement).matches(':focus-visible')) setHoverPaused(true)
-      }}
-      onBlur={(e) => {
-        if (!root.current?.contains(e.relatedTarget as Node)) setHoverPaused(false)
-      }}
       onKeyDown={onKey}
       onTouchStart={(e) => {
         touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
@@ -226,10 +203,10 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
             type="button"
             className="hero-c__pause"
             onClick={() => setUserPaused((p) => !p)}
-            aria-label={userPaused || reduced ? 'Play slideshow' : 'Pause slideshow'}
+            aria-label={userPaused ? 'Play slideshow' : 'Pause slideshow'}
             aria-pressed={userPaused}
           >
-            <Icon name={userPaused || reduced ? 'play' : 'pause'} size={14} strokeWidth={2} />
+            <Icon name={userPaused ? 'play' : 'pause'} size={14} strokeWidth={2} />
           </button>
           {slides.map((s, i) => (
             <button
