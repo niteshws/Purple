@@ -563,7 +563,7 @@
   outline: none;
 }
 .search-ov__form input::placeholder {
-  color: rgba(74, 34, 64, 0.38);
+  color: rgba(74, 34, 64, 0.66);
 }
 .search-ov__body {
   padding-top: 28px;
@@ -1757,7 +1757,7 @@
   color: var(--ivory);
 }
 .newsletter--dark .input::placeholder {
-  color: rgba(248, 243, 235, 0.55);
+  color: rgba(248, 243, 235, 0.72);
 }
 .newsletter--dark .input:focus {
   background: rgba(248, 243, 235, 0.1);

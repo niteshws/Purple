@@ -30,6 +30,7 @@
   --accent: #e4c3d5; /* text, links, icons, focus borders */
   --accent-deep: #efd6e2;
   --mauve: #c99db5;
+  --mauve-ink: #c99db5; /* text variant matches the dark mauve */
   --gold: #d9b67c;
 
   --success: #93c7a4;
@@ -167,4 +168,13 @@ html.theme-switching *::after {
 [data-theme='dark'] .pcard__img,
 [data-theme='dark'] .cline__img img {
   filter: brightness(0.94);
+}
+
+/* The highlighted plum service card sits on the lighter dark-theme plum, so its small
+   text needs a little more light to keep 4.5:1 (WCAG 1.4.3). */
+:root[data-theme='dark'] .svc-card--plum .eyebrow {
+  color: #e6cc98;
+}
+:root[data-theme='dark'] .svc-card--plum .svc-list small {
+  color: rgba(248, 243, 235, 0.84);
 }

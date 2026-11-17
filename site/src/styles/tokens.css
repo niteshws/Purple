@@ -9,10 +9,11 @@
   --ivory: #f8f3eb;
   /* Accent */
   --champagne: #d9b87a;
-  --gold: #9a7536; /* Antique gold — accent text only */
+  --gold: #82612b; /* Antique gold — accent text only. Deepened from #9a7536 so small text passes 4.5:1 on ivory, paper, oat and rose (WCAG 1.4.3) */
   /* Secondary */
   --wine: #2e1428;
   --mauve: #a8758f;
+  --mauve-ink: #8a5873; /* mauve for text (4.6:1+ on every light surface); --mauve stays for fills */
   --rose: #e8cfcb;
   --oat: #eadfcc;
   --ink: #2e2a2f;
@@ -24,7 +25,7 @@
   --oat-2: #f1e9dc;
   --plum-90: #5a2e4f;
   --ink-70: rgba(46, 42, 47, 0.72);
-  --ink-55: rgba(46, 42, 47, 0.58);
+  --ink-55: rgba(46, 42, 47, 0.68); /* secondary text: was 0.58 (3.5:1), now 4.6:1+ on every light surface */
   --ink-40: rgba(46, 42, 47, 0.42);
   --line: rgba(46, 42, 47, 0.12);
   --line-strong: rgba(46, 42, 47, 0.24);

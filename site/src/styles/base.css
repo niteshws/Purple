@@ -252,6 +252,7 @@ html {
 .on-dark .h1,
 .on-dark .h2,
 .on-dark .h3,
+.on-dark .h4,
 .on-dark .display {
   color: var(--ivory);
 }
@@ -423,7 +424,7 @@ html {
   text-decoration-thickness: 1px;
 }
 .text-link:hover {
-  color: var(--mauve);
+  color: var(--mauve-ink);
 }
 
 /* Icon button */
@@ -656,6 +657,11 @@ html {
 }
 .chip:hover {
   border-color: var(--accent);
+}
+/* Muted text inside a selected (plum) chip, e.g. result counts (WCAG 1.4.3) */
+.chip[aria-pressed='true'] .muted,
+.chip.is-active .muted {
+  color: rgba(248, 243, 235, 0.78);
 }
 .chip[aria-pressed='true'],
 .chip.is-active {

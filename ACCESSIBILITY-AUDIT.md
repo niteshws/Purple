@@ -50,7 +50,9 @@ The invisible fixes from Section 3 are now in the code. They are **not committed
 | ✅ Fixed and verified live | H1–H5, H8, H9 (Undo stays), M1, M2, M4, M9 (zoom keys), L1 (24px, same layout), L2, L3, L4, L5 |
 | ✅ Fixed, checked in code and DOM | H6, H7, M5, M10, M11, L6–L14 |
 | ⏸ Left on purpose | **M3**: the card fields keep `autocomplete="off"` while this is a demo that says "don't enter real card details". Switch to `cc-number`, `cc-name`, `cc-exp` and `cc-csc` when real payments are connected. |
-| ⏳ Waiting for a decision | **M6 / D1**: carousel keyboard-focus pause. **M7, M8 (V5)**: focus-ring colours. **V1–V4**: visible contrast changes. |
+| ✅ Fixed (approved): text on photos | **V3, extended sitewide.** Every piece of text drawn on a photo was re-measured on the real image pixels with its overlay, on 32 pages at 1440, 1280, 1024, 900 and 375px. Stronger overlays only where text sits: Login, Register and Reset caption (the eyebrow is now champagne; 1.2 → 5.4:1), home hero (tablet and narrow desktop), category and occasion tiles, "For her / For him", Gifting hero quote, Store locator hero. Every text-on-photo element now passes 4.5:1, or 3:1 for large text. |
+| ✅ Fixed (approved): text colours | **V1, V2, V4.** Light-theme tokens only (dark mode keeps its own values):<br>• `--gold` `#9a7536` → `#82612b`<br>• `--ink-55` 58% → 68%<br>• new `--mauve-ink` `#8a5873` for mauve text (mauve fills unchanged)<br>• faint `--ink-40` text moved to `--ink-55` (disabled states stay faint, which WCAG exempts)<br>Also fixed: placeholders, selected-chip counts, store chip counts, Craft headings now ivory and step numbers champagne on wine, and the "For her / For him" inactive side now dims only its photos and heading. Re-scanned 22 pages in light and dark mode at 1440px, and 5 pages at 375px: no text on a solid background is under 4.5:1 (3:1 for large text), apart from disabled controls, which are exempt. |
+| ⏳ Waiting for a decision | **M6 / D1**: carousel keyboard-focus pause. **M7, M8 (V5)**: focus-ring colours. |
 
 After these fixes, the criteria still failing are:
 - 1.4.3 Contrast (V1–V4)

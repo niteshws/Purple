@@ -169,8 +169,15 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(0deg, rgba(46, 20, 40, 0.62) 0%, rgba(46, 20, 40, 0) 50%);
+  /* Strong enough under the title and subtitle on bright photos (WCAG 1.4.3). */
+  background: linear-gradient(0deg, rgba(46, 20, 40, 0.86) 0%, rgba(46, 20, 40, 0.56) 28%, rgba(46, 20, 40, 0) 56%);
   transition: opacity var(--t-slow);
+}
+@media (max-width: 767px) {
+  /* Small square tiles: size the scrim to the text block, not the tile. */
+  .cat::after {
+    background: linear-gradient(0deg, rgba(46, 20, 40, 0.8) 0px, rgba(46, 20, 40, 0.64) 100px, rgba(46, 20, 40, 0) 150px);
+  }
 }
 .cat__label {
   position: absolute;
@@ -275,7 +282,7 @@
 }
 .editorial__sig {
   font-size: 22px;
-  color: var(--mauve);
+  color: var(--mauve-ink);
 }
 .editorial__ctas {
   display: flex;
@@ -434,9 +441,15 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgba(36, 16, 14, 0.66) 0%, rgba(36, 16, 14, 0.18) 26%, rgba(36, 16, 14, 0) 42%);
+  /* Covers the number and the two-line label on bright photos (WCAG 1.4.3). */
+  background: linear-gradient(0deg, rgba(36, 16, 14, 0.84) 0%, rgba(36, 16, 14, 0.68) 28%, rgba(36, 16, 14, 0) 52%);
   pointer-events: none;
   transition: opacity var(--t-slow);
+}
+@media (max-width: 1023px) {
+  .occasion::after {
+    background: linear-gradient(0deg, rgba(36, 16, 14, 0.9) 0%, rgba(36, 16, 14, 0.76) 32%, rgba(36, 16, 14, 0) 58%);
+  }
 }
 .occasion__label {
   position: absolute;
@@ -852,7 +865,7 @@
   font-family: var(--font-signature);
   font-style: italic;
   font-size: 22px;
-  color: var(--mauve);
+  color: var(--mauve-ink);
   margin-bottom: 10px;
 }
 .circle__perks ul {
@@ -1091,7 +1104,7 @@
 }
 .jt__lead:hover .h3,
 .jt__item:hover .h4 {
-  color: var(--mauve);
+  color: var(--mauve-ink);
 }
 .jt__list {
   display: grid;
@@ -1331,7 +1344,7 @@
 .filters__opt .n {
   margin-left: auto;
   font-size: var(--fs-12);
-  color: var(--ink-40);
+  color: var(--ink-55);
 }
 .filters__opt.is-disabled {
   color: var(--ink-40);
@@ -2014,7 +2027,7 @@
   gap: 4px;
 }
 .reviews__stars button {
-  color: var(--ink-40);
+  color: var(--ink-55);
   transition: color var(--t-fast), transform var(--t-fast);
 }
 .reviews__stars button.is-on {
@@ -2226,7 +2239,8 @@ body {
   z-index: -1;
   background:
     linear-gradient(0deg, rgb(var(--hero-soft-plum) / 0.44) 0%, rgb(var(--hero-soft-plum) / 0) 30%),
-    linear-gradient(90deg, rgb(var(--hero-deep-plum) / 0.96) 0%, rgb(var(--hero-deep-plum) / 0.76) 24%, rgb(var(--hero-soft-plum) / 0.34) 42%, rgb(var(--hero-soft-plum) / 0) 58%);
+    /* Held a little further right so the copy stays readable on light photos at narrower desktops (WCAG 1.4.3). */
+    linear-gradient(90deg, rgb(var(--hero-deep-plum) / 0.96) 0%, rgb(var(--hero-deep-plum) / 0.8) 30%, rgb(var(--hero-soft-plum) / 0.48) 46%, rgb(var(--hero-soft-plum) / 0) 62%);
 }
 .hero-c__content {
   display: grid;
@@ -2436,7 +2450,7 @@ body {
   .hero-c__shade {
     background:
       linear-gradient(0deg, rgb(var(--hero-soft-plum) / 0.44) 0%, rgb(var(--hero-soft-plum) / 0) 30%),
-      linear-gradient(90deg, rgb(var(--hero-deep-plum) / 0.96) 0%, rgb(var(--hero-deep-plum) / 0.72) 34%, rgb(var(--hero-soft-plum) / 0.18) 62%, rgb(var(--hero-soft-plum) / 0) 75%);
+      linear-gradient(90deg, rgb(var(--hero-deep-plum) / 0.96) 0%, rgb(var(--hero-deep-plum) / 0.78) 40%, rgb(var(--hero-soft-plum) / 0.42) 62%, rgb(var(--hero-soft-plum) / 0) 78%);
   }
   .hero-c__media img {
     object-position: 74% 40% !important;
@@ -2584,11 +2598,16 @@ body {
   display: grid;
   gap: 14px;
   justify-items: start;
-  opacity: 0.62;
+}
+/* The side not in focus dims its photos and heading only; product names and prices stay at
+   full contrast so they remain readable (WCAG 1.4.3). */
+.fhf__col .fhf__thumb,
+.fhf__col .fhf__label {
   transition: opacity var(--t-slow) var(--ease-out);
 }
-.fhf__col.is-active {
-  opacity: 1;
+.fhf__col:not(.is-active) .fhf__thumb,
+.fhf__col:not(.is-active) .fhf__label {
+  opacity: 0.62;
 }
 .fhf__col--him {
   justify-items: end;
@@ -2705,11 +2724,18 @@ body {
   pointer-events: none;
   transition: background var(--t-slow) var(--ease-out);
 }
+/* Bottom band strengthened so the "For her / for him" caption reads on the light photo (WCAG 1.4.3). */
 .fhf--her .fhf__shade {
-  background: linear-gradient(90deg, rgba(46, 20, 40, 0) 45%, rgba(46, 20, 40, 0.42) 100%), linear-gradient(0deg, rgba(46, 20, 40, 0.55) 0%, rgba(46, 20, 40, 0) 30%);
+  background: linear-gradient(90deg, rgba(46, 20, 40, 0) 45%, rgba(46, 20, 40, 0.42) 100%), linear-gradient(0deg, rgba(46, 20, 40, 0.82) 0%, rgba(46, 20, 40, 0) 34%);
 }
 .fhf--him .fhf__shade {
-  background: linear-gradient(270deg, rgba(46, 20, 40, 0) 45%, rgba(46, 20, 40, 0.42) 100%), linear-gradient(0deg, rgba(46, 20, 40, 0.55) 0%, rgba(46, 20, 40, 0) 30%);
+  background: linear-gradient(270deg, rgba(46, 20, 40, 0) 45%, rgba(46, 20, 40, 0.42) 100%), linear-gradient(0deg, rgba(46, 20, 40, 0.82) 0%, rgba(46, 20, 40, 0) 34%);
+}
+@media (max-width: 1100px) {
+  .fhf--her .fhf__shade,
+  .fhf--him .fhf__shade {
+    background: linear-gradient(0deg, rgba(46, 20, 40, 0.94) 0%, rgba(46, 20, 40, 0.8) 22%, rgba(46, 20, 40, 0) 46%);
+  }
 }
 .fhf__caption {
   position: absolute;
