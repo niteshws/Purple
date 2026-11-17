@@ -124,11 +124,15 @@ export default function Search() {
                 </button>
               </div>
             ) : (
-              <div className="pgrid">
-                {results.map((p, i) => (
-                  <ProductCard key={p.handle} product={p} priority={i < 4} />
-                ))}
-              </div>
+              <>
+                {/* Keeps the outline h1 → h2 → product h3 (WCAG 1.3.1). */}
+                <h2 className="sr-only">Results</h2>
+                <div className="pgrid">
+                  {results.map((p, i) => (
+                    <ProductCard key={p.handle} product={p} priority={i < 4} />
+                  ))}
+                </div>
+              </>
             )}
           </>
         )}

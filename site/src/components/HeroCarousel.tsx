@@ -149,7 +149,7 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
       <div className="hero-c__slides" aria-live={paused ? 'polite' : 'off'}>
         {slides.map((s, i) => {
           const active = i === index
-          const HeadingTag = i === 0 ? 'h1' : 'h2'
+          const HeadingTag = 'h2' // the page h1 is permanent and lives outside the rotating slides (Home)
           return (
             <div
               key={s.key}
@@ -203,7 +203,7 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
             type="button"
             className="hero-c__pause"
             onClick={() => setUserPaused((p) => !p)}
-            aria-label={userPaused ? 'Play slideshow' : 'Pause slideshow'}
+            aria-label="Pause slideshow" // fixed label; aria-pressed carries the state
             aria-pressed={userPaused}
           >
             <Icon name={userPaused ? 'play' : 'pause'} size={14} strokeWidth={2} />

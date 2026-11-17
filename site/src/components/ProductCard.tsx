@@ -14,6 +14,13 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
   const wished = useWishlist((s) => s.items.some((i) => i.handle === p.handle))
   const soldOut = isProductSoldOut(p)
   const panelRef = useRef<HTMLDivElement>(null)
+  const quickRef = useRef<HTMLButtonElement>(null)
+  // Closing the size panel removes the focused control, so return focus to "Quick add" (WCAG 2.4.3).
+  const closeQuick = () => {
+    const hadFocus = !!panelRef.current?.contains(document.activeElement)
+    setQuick(false)
+    if (hadFocus) setTimeout(() => quickRef.current?.focus(), 0)
+  }
   const href = `/products/${p.handle}${colorName !== p.colors[0].name ? `?color=${encodeURIComponent(colorName)}` : ''}`
   const alt = color.images[1]
   const otherColor = !alt ? p.colors.find((c) => c.name !== colorName && !c.soldOut) : undefined
@@ -28,7 +35,7 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
     const onDoc = (e: MouseEvent) => {
       if (panelRef.current && !panelRef.current.closest('.pcard')?.contains(e.target as Node)) setQuick(false)
     }
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setQuick(false)
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeQuick()
     document.addEventListener('mousedown', onDoc)
     document.addEventListener('keydown', onKey)
     setTimeout(() => panelRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])')?.focus(), 30)
@@ -54,7 +61,7 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
     setTimeout(() => {
       const ok = addToBag(p.handle, colorName, size, 1, { openDrawer: false })
       setBusy(null)
-      if (ok) setQuick(false)
+      if (ok) closeQuick()
     }, 380)
   }
 
@@ -79,7 +86,14 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
           <Icon name={wished ? 'heart-fill' : 'heart'} size={20} />
         </button>
         {!soldOut && !color.soldOut && (
-          <button type="button" className={`pcard__quick${quick ? ' is-open' : ''}${busy === 'One size' ? ' is-busy' : ''}`} onClick={quickAdd} aria-expanded={p.sizeSystem === 'one-size' ? undefined : quick} aria-label={`Quick add ${p.name}`}>
+          <button
+            ref={quickRef}
+            type="button"
+            className={`pcard__quick${quick ? ' is-open' : ''}${busy === 'One size' ? ' is-busy' : ''}`}
+            onClick={quickAdd}
+            aria-expanded={p.sizeSystem === 'one-size' ? undefined : quick}
+            aria-label={quick ? `Close sizes for ${p.name}` : `Quick add ${p.name}`}
+          >
             <Icon name={quick ? 'close' : 'plus'} size={18} />
             <span>{quick ? 'Close' : 'Quick add'}</span>
           </button>

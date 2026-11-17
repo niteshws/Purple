@@ -115,17 +115,31 @@ export default function Checkout() {
     return e
   }
 
+  // Open a step and move keyboard / screen-reader focus to its heading, so nobody is
+  // left on <body> when the previous step's controls unmount (WCAG 2.4.3).
+  const goStep = (n: number) => {
+    setStep(n)
+    setTimeout(() => {
+      const h = document.getElementById(`co-h-${n}`)
+      if (!h) return
+      h.focus({ preventScroll: true })
+      const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      document.getElementById(`co-step-${n}`)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+    }, 60)
+  }
+
   const next = (i: number) => {
     const e = validate(i)
     setErrors(e)
     if (Object.keys(e).length) return focusFirst(e)
+    // Don't make people type the same mobile number twice (WCAG 3.3.7).
+    if (i === 0 && !addr.phone) setAddr((a) => ({ ...a, phone: contact.phone }))
     if (i === 1 && addrChoice === 'new' && current && saveAddr) {
       saveAddress({ id: `a${Date.now()}`, label: saved.length ? 'Address' : 'Home', ...addr, isDefault: !saved.length })
     }
     const n = i + 1
-    setStep(n)
     setMaxStep((m) => Math.max(m, n))
-    setTimeout(() => document.getElementById(`co-step-${n}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
+    goStep(n)
   }
 
   const place = () => {
@@ -199,11 +213,11 @@ export default function Checkout() {
         <div className="co-step__head">
           <span className="co-step__num">{done ? <Icon name="check" size={16} /> : i + 1}</span>
           <div className="co-step__title">
-            <h2 id={`co-h-${i}`}>{STEPS[i] === 'Delivery' ? 'Delivery address' : STEPS[i] === 'Shipping' ? 'Shipping method' : STEPS[i] === 'Review' ? 'Review & place order' : STEPS[i]}</h2>
+            <h2 id={`co-h-${i}`} tabIndex={-1}>{STEPS[i] === 'Delivery' ? 'Delivery address' : STEPS[i] === 'Shipping' ? 'Shipping method' : STEPS[i] === 'Review' ? 'Review & place order' : STEPS[i]}</h2>
             {done && summaries[i] && <p className="co-step__summary">{summaries[i]}</p>}
           </div>
           {done && (
-            <button type="button" className="co-step__edit" onClick={() => setStep(i)} aria-label={`Edit ${STEPS[i]}`}>
+            <button type="button" className="co-step__edit" onClick={() => goStep(i)} aria-label={`Edit ${STEPS[i]}`}>
               Edit
             </button>
           )}
@@ -244,6 +258,7 @@ export default function Checkout() {
 
         <div className="co-layout">
           <div>
+            <h1 className="sr-only">Checkout</h1>
             <ol className="co-progress" aria-label="Checkout progress">
               {STEPS.map((s, i) => (
                 <li key={s} className={i < step ? 'is-done' : i === step ? 'is-current' : ''} aria-current={i === step ? 'step' : undefined}>
@@ -518,22 +533,23 @@ export default function Checkout() {
               i: 4,
               children: (
                 <div className="co-review">
-                  <dl style={{ margin: 0 }}>
+                  {/* Each row is a labelled group; a <dl> can't contain the Edit buttons (WCAG 1.3.1). */}
+                  <div style={{ margin: 0 }}>
                     {[
                       ['Contact', summaries[0], 0],
                       ['Deliver to', hasPhysical ? `${chosenAddress.name}, ${chosenAddress.line1}${chosenAddress.line2 ? `, ${chosenAddress.line2}` : ''}, ${chosenAddress.city}, ${chosenAddress.state} ${chosenAddress.pincode} · ${chosenAddress.phone}` : 'Gift cards delivered by email', 1],
                       ['Shipping', summaries[2], 2],
                       ['Payment', summaries[3], 3],
                     ].map(([label, val, i]) => (
-                      <div key={label as string} className="co-review__block">
-                        <dt>{label}</dt>
-                        <dd>{val}</dd>
-                        <button type="button" className="co-step__edit" onClick={() => setStep(i as number)}>
+                      <div key={label as string} className="co-review__block" role="group" aria-label={label as string}>
+                        <span className="co-review__term">{label}</span>
+                        <span className="co-review__val">{val}</span>
+                        <button type="button" className="co-step__edit" onClick={() => goStep(i as number)} aria-label={`Edit ${label}`}>
                           Edit
                         </button>
                       </div>
                     ))}
-                  </dl>
+                  </div>
                   {readGiftNote() && (
                     <div className="cm-note cm-note--oat">
                       <Icon name="gift" size={18} />

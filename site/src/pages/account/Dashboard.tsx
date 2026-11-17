@@ -352,13 +352,13 @@ function Addresses() {
               </Field>
             </div>
             <Field id="ad-pincode" label="Pincode" error={errs.pincode}>
-              <input id="ad-pincode" className="input" inputMode="numeric" maxLength={6} value={editing.pincode} onChange={(e) => set('pincode', e.target.value.replace(/\D/g, ''))} {...inv('pincode')} />
+              <input id="ad-pincode" className="input" inputMode="numeric" autoComplete="postal-code" maxLength={6} value={editing.pincode} onChange={(e) => set('pincode', e.target.value.replace(/\D/g, ''))} {...inv('pincode')} />
             </Field>
             <Field id="ad-city" label="City" error={errs.city}>
-              <input id="ad-city" className="input" value={editing.city} onChange={(e) => set('city', e.target.value)} {...inv('city')} />
+              <input id="ad-city" className="input" autoComplete="address-level2" value={editing.city} onChange={(e) => set('city', e.target.value)} {...inv('city')} />
             </Field>
             <Field id="ad-state" label="State" error={errs.state}>
-              <select id="ad-state" className="select" value={editing.state} onChange={(e) => set('state', e.target.value)} {...inv('state')}>
+              <select id="ad-state" className="select" autoComplete="address-level1" value={editing.state} onChange={(e) => set('state', e.target.value)} {...inv('state')}>
                 <option value="">Select state</option>
                 {STATES.map((s) => (
                   <option key={s}>{s}</option>
@@ -366,7 +366,7 @@ function Addresses() {
               </select>
             </Field>
             <Field id="ad-phone" label="Mobile number" error={errs.phone}>
-              <input id="ad-phone" type="tel" className="input" value={editing.phone} onChange={(e) => set('phone', e.target.value)} {...inv('phone')} />
+              <input id="ad-phone" type="tel" className="input" autoComplete="tel" value={editing.phone} onChange={(e) => set('phone', e.target.value)} {...inv('phone')} />
             </Field>
             <label className="checkbox span-2">
               <input type="checkbox" checked={!!editing.isDefault} onChange={(e) => set('isDefault', e.target.checked)} />

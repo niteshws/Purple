@@ -162,7 +162,7 @@ export default function Stores() {
               </select>
             </div>
             <div className="stores-loc">
-              <button type="button" className="btn btn--outline btn--sm" onClick={() => setLocNote((v) => !v)} aria-expanded={locNote} aria-controls="loc-note">
+              <button type="button" className="btn btn--outline btn--sm" onClick={() => setLocNote((v) => !v)} aria-expanded={locNote} aria-controls={locNote ? 'loc-note' : undefined}>
                 <Icon name="direction" size={16} /> Use my location
               </button>
               {locNote && (

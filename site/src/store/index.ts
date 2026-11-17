@@ -361,10 +361,15 @@ interface UIState {
   openSizeGuide: (s: Product['sizeSystem'] | null) => void
   toast: (t: Omit<Toast, 'id'>) => void
   dismiss: (id: number) => void
+  /** Pause / resume a toast's auto-dismiss while it is hovered or focused (WCAG 2.2.1). */
+  holdToast: (id: number) => void
+  releaseToast: (id: number) => void
   bumpAdded: () => void
 }
 let tid = 1
-export const useUI = create<UIState>()((set) => ({
+const TOAST_MS = 4800
+const toastTimers = new Map<number, ReturnType<typeof setTimeout>>()
+export const useUI = create<UIState>()((set, get) => ({
   cartOpen: false,
   searchOpen: false,
   navOpen: false,
@@ -380,8 +385,23 @@ export const useUI = create<UIState>()((set) => ({
   toast: (t) => {
     const id = tid++
     set((s) => ({ toasts: [...s.toasts.slice(-2), { ...t, id }] }))
-    setTimeout(() => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })), 4800)
+    // A toast whose button is the only way to do something (e.g. "Undo") stays until dismissed,
+    // so nobody runs out of time to reach it. Everything else auto-dismisses (WCAG 2.2.1).
+    if (t.action?.onClick && !t.action.to) return
+    toastTimers.set(id, setTimeout(() => get().dismiss(id), TOAST_MS))
   },
-  dismiss: (id) => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })),
+  dismiss: (id) => {
+    clearTimeout(toastTimers.get(id))
+    toastTimers.delete(id)
+    set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) }))
+  },
+  holdToast: (id) => {
+    clearTimeout(toastTimers.get(id))
+  },
+  releaseToast: (id) => {
+    if (!toastTimers.has(id)) return
+    clearTimeout(toastTimers.get(id))
+    toastTimers.set(id, setTimeout(() => get().dismiss(id), TOAST_MS))
+  },
   bumpAdded: () => set({ lastAdded: Date.now() }),
 }))

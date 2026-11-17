@@ -5,7 +5,7 @@ import { Breadcrumbs, Img, EmptyState } from '../components/ui'
 import { ProductCard } from '../components/ProductCard'
 import { collectionByHandle } from '../data/collections'
 import { products, allColorFamilies, colorFamiliesOf, stockFor, formatINR, AGE_LABELS, type Product, type AgeGroup, type Department } from '../data/products'
-import { useLockScroll, useMeta, useMedia } from '../lib/hooks'
+import { useDialog, useLockScroll, useMeta, useMedia } from '../lib/hooks'
 import NotFound from './NotFound'
 
 const SORTS = [
@@ -118,12 +118,16 @@ export default function Collection() {
       : undefined,
   })
 
+  // Mobile filter panel is a modal dialog: move focus in, trap Tab, close on Escape, and
+  // return focus to the Filter button (WCAG 2.4.3 / 4.1.2).
+  const filtersRef = useRef<HTMLElement>(null)
+  useDialog(drawer && isMobile, filtersRef, () => setDrawer(false))
   useEffect(() => {
-    if (!drawer) return
+    if (!drawer || isMobile) return
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setDrawer(false)
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [drawer])
+  }, [drawer, isMobile])
 
   if (!c) return <NotFound />
 
@@ -178,7 +182,7 @@ export default function Collection() {
           </h1>
           <p className="lead">{c.description}</p>
           {c.related && (
-            <div className="coll-hero__related" aria-label="Related categories">
+            <div className="coll-hero__related" role="group" aria-label="Related categories">
               {c.related.map((r) => (
                 <Link key={r.label} to={r.to} className="chip">
                   {r.label}
@@ -196,6 +200,7 @@ export default function Collection() {
       <div className="container plp">
         {drawer && isMobile && <div className="filters-scrim" onClick={() => setDrawer(false)} />}
         <aside
+          ref={filtersRef}
           className={`filters${drawer ? ' is-open' : ''}`}
           aria-label="Product filters"
           role={isMobile ? 'dialog' : undefined}
@@ -341,7 +346,7 @@ export default function Collection() {
             </div>
           </div>
           {chips.length > 0 && (
-            <div className="plp__chips" aria-label="Active filters">
+            <div className="plp__chips" role="group" aria-label="Active filters">
               {chips.map((ch) => (
                 <button key={ch.label} type="button" className="chip" onClick={ch.onRemove} aria-label={`Remove filter ${ch.label}`}>
                   {ch.label} <Icon name="close" size={14} />
@@ -371,6 +376,8 @@ export default function Collection() {
             />
           ) : (
             <>
+              {/* Keeps the outline h1 → h2 → product h3 (WCAG 1.3.1). */}
+              <h2 className="sr-only">Products</h2>
               <div className={`pgrid plp__grid${pending ? ' is-loading' : ''}`}>
                 {visible.map((p, i) => (
                   <ProductCard key={p.handle} product={p} priority={i < 3} />
@@ -404,11 +411,12 @@ function FilterGroup({ title, children }: { title: string; children: ReactNode }
   const id = `fg-${title.replace(/\W+/g, '-').toLowerCase()}`
   return (
     <div className={`filters__group${open ? '' : ' is-collapsed'}`}>
-      <button type="button" className="filters__head" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+      <button type="button" className="filters__head" id={`${id}-h`} aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
         {title}
         <Icon name="chevron-down" size={16} />
       </button>
-      <div className="filters__body" id={id} hidden={!open}>
+      {/* Name the group of options after its heading (WCAG 1.3.1). */}
+      <div className="filters__body" id={id} role="group" aria-labelledby={`${id}-h`} hidden={!open}>
         {children}
       </div>
     </div>

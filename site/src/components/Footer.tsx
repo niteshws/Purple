@@ -10,15 +10,26 @@ export function Newsletter({ tone = 'dark', compact }: { tone?: 'dark' | 'light'
   const [email, setEmail] = useState('')
   const [state, setState] = useState<'idle' | 'error' | 'loading' | 'done'>('idle')
   const [consent, setConsent] = useState(true)
+  const doneRef = useRef<HTMLDivElement>(null)
   const submit = (e: FormEvent) => {
     e.preventDefault()
-    if (!validEmail(email)) return setState('error')
+    if (!validEmail(email)) {
+      // Put focus on the field so its error is announced (WCAG 3.3.1).
+      setState('error')
+      setTimeout(() => document.getElementById(`nl-${tone}`)?.focus(), 20)
+      return
+    }
+    // The form is replaced by the confirmation, so move focus there (WCAG 2.4.3).
+    const hadFocus = (e.currentTarget as HTMLElement).contains(document.activeElement)
     setState('loading')
-    setTimeout(() => setState('done'), 700)
+    setTimeout(() => {
+      setState('done')
+      if (hadFocus) setTimeout(() => doneRef.current?.focus(), 20)
+    }, 700)
   }
   if (state === 'done')
     return (
-      <div className="newsletter newsletter--done" role="status">
+      <div className="newsletter newsletter--done" role="status" ref={doneRef} tabIndex={-1}>
         <Icon name="check" />
         <p>
           <strong>You’re on the list.</strong> Look out for one beautiful story per send — never a flood. <span className="demo-note">Demo: no email was sent.</span>
@@ -213,7 +224,7 @@ export function Concierge() {
   return (
     <div className={`concierge${open ? ' is-open' : ''}`}>
       {open && (
-        <div className="concierge__panel" ref={ref} role="dialog" aria-label="WhatsApp concierge">
+        <div className="concierge__panel" ref={ref} role="dialog" aria-modal="true" aria-label="WhatsApp concierge">
           <div className="concierge__head">
             <Crest variant="mark" tone="dark" className="concierge__mark" />
             <div>

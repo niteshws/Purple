@@ -233,13 +233,15 @@ function PickRow({ x, rank }: { x: Pick; rank?: number }) {
   const href = `/products/${x.p.handle}?color=${encodeURIComponent(x.color)}`
   return (
     <li className="ask-pick">
-      <Link to={href} className="ask-pick__img">
+      {/* Duplicate of the name link below: pointer-only, hidden from keyboard and screen readers (WCAG 2.4.4). */}
+      <Link to={href} className="ask-pick__img" tabIndex={-1} aria-hidden="true">
         <img src={img} alt="" loading="lazy" />
         {rank !== undefined && <span className="ask-pick__rank">{rank}</span>}
       </Link>
       <div className="ask-pick__body">
         <Link to={href} className="ask-pick__name">
           {x.p.name}
+          {rank !== undefined && <span className="sr-only">, pick {rank}</span>}
         </Link>
         <p className="muted body-sm">
           {x.color} · {x.size} · <Price price={x.p.price} compareAt={x.p.compareAt} />

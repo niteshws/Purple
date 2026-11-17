@@ -52,7 +52,13 @@ export default function Home() {
 
 /* ---------------- 1 · Hero (auto-sliding campaign) ---------------- */
 function Hero() {
-  return <HeroCarousel />
+  // The slides rotate and inactive ones are inert, so the page's h1 lives here permanently (WCAG 1.3.1).
+  return (
+    <>
+      <h1 className="sr-only">Purple United Kids: premium clothing and footwear for boys, girls and infants</h1>
+      <HeroCarousel />
+    </>
+  )
 }
 
 /* ---------------- 2 · Shop by category ---------------- */
@@ -210,7 +216,7 @@ function EditColumn({ k, active, onFocus }: { k: EditKey; active: boolean; onFoc
   const e = EDITS[k]
   const picks = e.picks.map((h) => getProduct(h)!).filter(Boolean)
   return (
-    <div className={`fhf__col fhf__col--${k}${active ? ' is-active' : ''}`} onMouseEnter={onFocus} onFocus={onFocus} id={`fhf-${k}`} role="tabpanel" aria-labelledby={`fhf-tab-${k}`}>
+    <div className={`fhf__col fhf__col--${k}${active ? ' is-active' : ''}`} onMouseEnter={onFocus} onFocus={onFocus} id={`fhf-${k}`} role="group" aria-labelledby={`fhf-tab-${k}`}>
       <p className="fhf__label signature">{e.label}</p>
       <p className="fhf__line">{e.line}</p>
       <ul role="list" className="fhf__picks">
@@ -248,15 +254,14 @@ function ForHimForHer() {
             For her <em>&amp;</em> for him
           </h2>
           <p className="lead">Two wardrobes, one Purple. Pieces chosen to be mixed, matched and loved — whoever they are.</p>
-          <div className="fhf__switch" role="tablist" aria-label="Choose an edit">
+          {/* Toggle buttons, not tabs: both edits are always shown, this only highlights one (WCAG 4.1.2). */}
+          <div className="fhf__switch" role="group" aria-label="Highlight an edit">
             {(['her', 'him'] as EditKey[]).map((k) => (
               <button
                 key={k}
                 id={`fhf-tab-${k}`}
-                role="tab"
                 type="button"
-                aria-selected={side === k}
-                aria-controls={`fhf-${k}`}
+                aria-pressed={side === k}
                 className={`fhf__tab${side === k ? ' is-active' : ''}`}
                 onClick={() => setSide(k)}
               >
@@ -423,7 +428,6 @@ function CompleteTheLook() {
             to={`/products/${items[active].handle}?color=${items[active].color}`}
             className="look__card"
             key={active}
-            aria-label={`View ${items[active].p.name}`}
           >
             <img src={productThumbnail(items[active].p.colors.find((c) => c.name === items[active].color)!.images[0])} alt="" />
             <div>
@@ -454,7 +458,8 @@ function CompleteTheLook() {
                       aria-label={`Include ${it.p.name}`}
                     />
                   </label>
-                  <Link to={`/products/${it.handle}?color=${it.color}`} className="look__thumb">
+                  {/* Duplicate of the name link: pointer-only, hidden from keyboard and screen readers (WCAG 2.4.4). */}
+                  <Link to={`/products/${it.handle}?color=${it.color}`} className="look__thumb" tabIndex={-1} aria-hidden="true">
                     <img src={productThumbnail(img)} alt="" loading="lazy" />
                   </Link>
                   <div className="look__info">

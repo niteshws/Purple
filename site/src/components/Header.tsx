@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Icon } from './Icon'
 import { Crest } from './ui'
@@ -59,13 +59,29 @@ export function Header() {
   const navRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => setOpen(null), [pathname])
+
+  // Publish the sticky header's height so `scroll-padding-top` keeps focused items out from under it.
+  const headerRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    const set = () => document.documentElement.style.setProperty('--sticky-top', `${Math.round(el.getBoundingClientRect().height)}px`)
+    set()
+    if (!('ResizeObserver' in window)) return
+    const ro = new ResizeObserver(set)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   useEffect(() => {
     if (open === null) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        const btn = navRef.current?.querySelector<HTMLElement>(`[data-nav="${open}"]`)
+        // Only move focus back to the menu's trigger if focus is in the nav (not for a hover-opened menu).
+        const inNav = navRef.current?.contains(document.activeElement)
+        const btn = navRef.current?.querySelector<HTMLElement>(`[data-nav="${open}"] + .main-nav__toggle`)
         setOpen(null)
-        btn?.focus()
+        if (inNav) btn?.focus()
       }
     }
     document.addEventListener('keydown', onKey)
@@ -84,8 +100,28 @@ export function Header() {
 
   const item = open !== null ? NAV[open] : null
 
+  const focusMega = () => setTimeout(() => document.querySelector<HTMLElement>('#mega a')?.focus(), 30)
+
+  // The panel sits after all top-level items in the DOM, so wire Tab at its edges back into the nav order.
+  const onMegaKey = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Tab' || open === null) return
+    const links = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('a[href]'))
+    if (!links.length) return
+    if (!e.shiftKey && document.activeElement === links[links.length - 1]) {
+      const next = navRef.current?.querySelector<HTMLElement>(`[data-nav="${open + 1}"]`)
+      if (next) {
+        e.preventDefault()
+        setOpen(null)
+        next.focus()
+      }
+    } else if (e.shiftKey && document.activeElement === links[0]) {
+      e.preventDefault()
+      navRef.current?.querySelector<HTMLElement>(`[data-nav="${open}"] + .main-nav__toggle`)?.focus()
+    }
+  }
+
   return (
-    <header className={`site-header${scrolled ? ' is-scrolled' : ''}${open !== null ? ' is-menu-open' : ''}`}>
+    <header ref={headerRef} className={`site-header${scrolled ? ' is-scrolled' : ''}${open !== null ? ' is-menu-open' : ''}`}>
       <div className="site-header__bar container">
         <div className="site-header__left">
           <button type="button" className="icon-btn only-mobile" onClick={() => setNav(true)} aria-label="Open menu">
@@ -129,7 +165,16 @@ export function Header() {
         </div>
       </div>
 
-      <nav className="main-nav only-desktop" aria-label="Main" ref={navRef} onMouseLeave={leave}>
+      <nav
+        className="main-nav only-desktop"
+        aria-label="Main"
+        ref={navRef}
+        onMouseLeave={leave}
+        onBlur={(e) => {
+          // Close the panel once keyboard focus leaves the main nav entirely.
+          if (open !== null && !navRef.current?.contains(e.relatedTarget as Node | null)) setOpen(null)
+        }}
+      >
         <ul role="list" className="main-nav__list container">
           {NAV.map((n, i) => (
             <li key={n.label} onMouseEnter={() => enter(i)}>
@@ -142,12 +187,17 @@ export function Header() {
                 aria-expanded={open === i}
                 aria-controls="mega"
                 aria-label={`${n.label} menu`}
-                onClick={() => setOpen(open === i ? null : i)}
+                onClick={(e) => {
+                  const next = open === i ? null : i
+                  setOpen(next)
+                  // Keyboard activation (Enter/Space report detail 0): move focus into the panel.
+                  if (next !== null && e.detail === 0) focusMega()
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowDown') {
                     e.preventDefault()
                     setOpen(i)
-                    setTimeout(() => document.querySelector<HTMLElement>('#mega a')?.focus(), 30)
+                    focusMega()
                   }
                 }}
               >
@@ -156,7 +206,7 @@ export function Header() {
             </li>
           ))}
         </ul>
-        <div id="mega" className={`mega${item ? ' is-open' : ''}`} onMouseEnter={() => clearTimeout(closeT.current)} hidden={!item}>
+        <div id="mega" className={`mega${item ? ' is-open' : ''}`} onMouseEnter={() => clearTimeout(closeT.current)} onKeyDown={onMegaKey} hidden={!item}>
           {item && (
             <div className="container mega__inner" key={item.label}>
               <div className="mega__cols">

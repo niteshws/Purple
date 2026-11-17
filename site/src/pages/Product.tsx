@@ -254,7 +254,6 @@ function ProductView({ p }: { p: P }) {
                 className={`btn${state === 'loading' ? ' is-loading' : ''}${state === 'done' ? ' is-success' : ''}`}
                 onClick={() => add(false)}
                 disabled={soldOut}
-                aria-live="polite"
               >
                 {soldOut ? 'Sold out' : state === 'done' ? (
                   <>
@@ -266,6 +265,10 @@ function ProductView({ p }: { p: P }) {
                   </>
                 )}
               </button>
+              {/* Announce the result once, instead of making the button itself a live region (WCAG 4.1.3). */}
+              <span className="sr-only" role="status">
+                {state === 'done' ? `${p.name} added to bag` : ''}
+              </span>
               <button
                 type="button"
                 className={`icon-btn pdp__wish${wished ? ' is-on' : ''}`}
@@ -303,6 +306,7 @@ function ProductView({ p }: { p: P }) {
             <p className="pdp__desc">{p.description}</p>
 
             <Accordion
+              headingLevel={2}
               defaultOpen={0}
               items={[
                 {
@@ -451,16 +455,18 @@ function Gallery({ slides, index, onIndex, onZoom, badge }: { slides: Slide[]; i
   const [drag, setDrag] = useState(0)
   const go = (i: number) => onIndex(Math.max(0, Math.min(slides.length - 1, i)))
   return (
-    <div className="gallery" aria-roledescription="carousel" aria-label="Product images">
-      <div className="gallery__thumbs" role="tablist" aria-label="Choose image">
+    <div className="gallery" role="group" aria-roledescription="carousel" aria-label="Product images">
+      {/* Plain toggle buttons: these never had tab panels or arrow-key tab behaviour (WCAG 4.1.2). */}
+      <div className="gallery__thumbs" role="group" aria-label="Choose image">
         {slides.map((s, i) => (
-          <button key={i} type="button" role="tab" className="gallery__thumb" aria-current={i === index} aria-selected={i === index} aria-label={`Image ${i + 1}`} onClick={() => onIndex(i)}>
+          <button key={i} type="button" className="gallery__thumb" aria-current={i === index} aria-label={`Image ${i + 1}`} onClick={() => onIndex(i)}>
             <img src={productThumbnail(s.src)} alt="" />
           </button>
         ))}
       </div>
       <div
         className="gallery__main"
+        role="group"
         tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === 'ArrowRight') go(index + 1)
@@ -521,17 +527,31 @@ function Zoom({ slides, index, onIndex, onClose }: { slides: Slide[]; index: num
   const ref = useRef<HTMLDivElement>(null)
   const [z, setZ] = useState(false)
   const [origin, setOrigin] = useState('50% 50%')
+  const [pan, setPan] = useState<[number, number]>([50, 50])
   useLockScroll(true)
   useDialog(true, ref, onClose)
   useEffect(() => setZ(false), [index])
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
+      // While zoomed, the arrow keys pan the image; otherwise they change image (WCAG 2.1.1).
+      if (z && e.target instanceof HTMLElement && e.target.classList.contains('zoom__stage')) {
+        const d: Record<string, [number, number]> = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, -10], ArrowDown: [0, 10] }
+        const m = d[e.key]
+        if (!m) return
+        e.preventDefault()
+        setPan(([x, y]) => {
+          const n: [number, number] = [Math.max(0, Math.min(100, x + m[0])), Math.max(0, Math.min(100, y + m[1]))]
+          setOrigin(`${n[0]}% ${n[1]}%`)
+          return n
+        })
+        return
+      }
       if (e.key === 'ArrowRight') onIndex(Math.min(slides.length - 1, index + 1))
       if (e.key === 'ArrowLeft') onIndex(Math.max(0, index - 1))
     }
     document.addEventListener('keydown', k)
     return () => document.removeEventListener('keydown', k)
-  }, [index])
+  }, [index, z])
   const s = slides[index]
   return (
     <div className="zoom" ref={ref} role="dialog" aria-modal="true" aria-label="Image zoom">
@@ -545,6 +565,19 @@ function Zoom({ slides, index, onIndex, onClose }: { slides: Slide[]; index: num
       </div>
       <div
         className={`zoom__stage${z ? ' is-zoomed' : ''}`}
+        // Keyboard equivalent of click-to-zoom: Enter/Space toggles, arrows pan while zoomed.
+        role="button"
+        tabIndex={0}
+        aria-pressed={z}
+        aria-label="Zoom image. When zoomed, use the arrow keys to move around."
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setPan([50, 50])
+            setOrigin('50% 50%')
+            setZ(!z)
+          }
+        }}
         onClick={(e) => {
           const r = (e.currentTarget as HTMLElement).getBoundingClientRect()
           setOrigin(`${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`)
@@ -593,7 +626,12 @@ function Reviews({ p }: { p: P }) {
     if (body.trim().length < 20) er.body = 'Tell us a little more (at least 20 characters).'
     if (!name.trim()) er.name = 'Add your first name.'
     setErr(er)
-    if (Object.keys(er).length) return
+    // Move focus to the first problem so the error is heard and fixable (WCAG 3.3.1).
+    const first = (['rating', 'title', 'body', 'name'] as const).find((k) => er[k])
+    if (first) {
+      setTimeout(() => document.querySelector<HTMLElement>(first === 'rating' ? '#rv-rating [role="radio"]' : `#rv-${first}`)?.focus(), 20)
+      return
+    }
     const r = { rating, title: title.trim(), body: body.trim(), name: name.trim() }
     try {
       localStorage.setItem(key, JSON.stringify(r))
@@ -602,7 +640,18 @@ function Reviews({ p }: { p: P }) {
     }
     setMine(r)
     setOpen(false)
+    setTimeout(() => document.getElementById('rv-mine')?.focus(), 20)
   }
+  // Keep focus on something sensible when the form opens or closes (WCAG 2.4.3).
+  const openForm = () => {
+    setOpen(true)
+    setTimeout(() => document.querySelector<HTMLElement>('#rv-rating [role="radio"]')?.focus(), 20)
+  }
+  const closeForm = () => {
+    setOpen(false)
+    setTimeout(() => document.getElementById('rv-write')?.focus(), 20)
+  }
+  const desc = (k: string) => (err[k] ? `rv-${k}-err` : undefined)
   return (
     <section className="pdp-section" aria-labelledby="rev-h">
       <div className="reviews">
@@ -613,16 +662,16 @@ function Reviews({ p }: { p: P }) {
           </h2>
           <p className="muted">No published reviews for this piece yet. Verified-purchase reviews will appear here once connected to Purple United’s review platform.</p>
           {!mine && !open && (
-            <button type="button" className="btn btn--outline" onClick={() => setOpen(true)}>
+            <button type="button" id="rv-write" className="btn btn--outline" onClick={openForm}>
               Write a review
             </button>
           )}
         </div>
         <div>
           {mine && (
-            <div className="reviews__mine">
+            <div className="reviews__mine" id="rv-mine" tabIndex={-1}>
               <p className="eyebrow">Your review · saved in this browser (demo)</p>
-              <div className="reviews__stars" aria-label={`${mine.rating} out of 5 stars`}>
+              <div className="reviews__stars" role="img" aria-label={`${mine.rating} out of 5 stars`}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <span key={i} className={i <= mine.rating ? 'is-on' : ''} style={{ color: i <= mine.rating ? 'var(--gold)' : 'var(--ink-40)' }}>
                     <Icon name="star" size={18} fill={i <= mine.rating ? 'currentColor' : 'none'} />
@@ -643,6 +692,7 @@ function Reviews({ p }: { p: P }) {
                     /* ignore */
                   }
                   setMine(null)
+                  setTimeout(() => document.getElementById('rv-write')?.focus(), 20)
                 }}
               >
                 Delete my review
@@ -653,29 +703,33 @@ function Reviews({ p }: { p: P }) {
             <form className="reviews__form" onSubmit={submit} noValidate>
               <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
                 <legend className="field__label">Your rating</legend>
-                <div className="reviews__stars" role="radiogroup" aria-label="Rating" style={{ marginTop: 8 }}>
+                <div className="reviews__stars" id="rv-rating" role="radiogroup" aria-label="Rating" aria-describedby={desc('rating')} style={{ marginTop: 8 }}>
                   {[1, 2, 3, 4, 5].map((i) => (
                     <button key={i} type="button" role="radio" aria-checked={rating === i} className={i <= rating ? 'is-on' : ''} onClick={() => setRating(i)} aria-label={`${i} star${i > 1 ? 's' : ''}`}>
                       <Icon name="star" size={26} fill={i <= rating ? 'currentColor' : 'none'} />
                     </button>
                   ))}
                 </div>
-                {err.rating && <p className="field__error">{err.rating}</p>}
+                {err.rating && (
+                  <p className="field__error" id="rv-rating-err">
+                    {err.rating}
+                  </p>
+                )}
               </fieldset>
               <Field id="rv-title" label="Title" error={err.title}>
-                <input id="rv-title" className="input" value={title} onChange={(e) => setTitle(e.target.value)} aria-invalid={!!err.title} />
+                <input id="rv-title" className="input" value={title} onChange={(e) => setTitle(e.target.value)} aria-invalid={!!err.title || undefined} aria-describedby={desc('title')} />
               </Field>
               <Field id="rv-body" label="Review" error={err.body}>
-                <textarea id="rv-body" className="textarea" value={body} onChange={(e) => setBody(e.target.value)} aria-invalid={!!err.body} />
+                <textarea id="rv-body" className="textarea" value={body} onChange={(e) => setBody(e.target.value)} aria-invalid={!!err.body || undefined} aria-describedby={desc('body')} />
               </Field>
               <Field id="rv-name" label="First name" error={err.name}>
-                <input id="rv-name" className="input" value={name} onChange={(e) => setName(e.target.value)} aria-invalid={!!err.name} autoComplete="given-name" />
+                <input id="rv-name" className="input" value={name} onChange={(e) => setName(e.target.value)} aria-invalid={!!err.name || undefined} aria-describedby={desc('name')} autoComplete="given-name" />
               </Field>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <button type="submit" className="btn">
                   Save review
                 </button>
-                <button type="button" className="btn btn--outline" onClick={() => setOpen(false)}>
+                <button type="button" className="btn btn--outline" onClick={closeForm}>
                   Cancel
                 </button>
               </div>

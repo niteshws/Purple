@@ -164,7 +164,7 @@ export default function About() {
           <div className="territories">
             {TERRITORIES.map((t) => (
               <article key={t.t} className="territory">
-                <LoopVideo {...t.video} className="territory__video" autoPlay={false} />
+                <LoopVideo {...t.video} className="territory__video" />
                 <p className="eyebrow">{t.t}</p>
                 <h3 className="h3">{t.line}</h3>
                 <p className="territory__description">{t.d}</p>

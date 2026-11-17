@@ -577,11 +577,13 @@
   border-bottom: 1px solid var(--line);
   font-size: var(--fs-14);
 }
-.co-review__block dt {
+.co-review__block dt,
+.co-review__term {
   color: var(--ink-55);
   font-size: var(--fs-13);
 }
-.co-review__block dd {
+.co-review__block dd,
+.co-review__val {
   margin: 0;
   line-height: 1.55;
 }
@@ -589,7 +591,8 @@
   .co-review__block {
     grid-template-columns: 1fr auto;
   }
-  .co-review__block dd {
+  .co-review__block dd,
+  .co-review__val {
     grid-column: 1 / -1;
     grid-row: 2;
   }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type ReactNode, type CSSProperties } from 'react'
+import { cloneElement, isValidElement, useEffect, useId, useRef, useState, type ReactNode, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from './Icon'
 import { formatINR } from '../data/products'
@@ -101,16 +101,28 @@ export function Breadcrumbs({ items }: { items: { label: string; to?: string }[]
   )
 }
 
-export function Accordion({ items, defaultOpen = -1, className }: { items: { title: ReactNode; body: ReactNode; id?: string }[]; defaultOpen?: number; className?: string }) {
+export function Accordion({
+  items,
+  defaultOpen = -1,
+  className,
+  headingLevel = 3,
+}: {
+  items: { title: ReactNode; body: ReactNode; id?: string }[]
+  defaultOpen?: number
+  className?: string
+  /** Heading level for item titles, so the page outline doesn't skip levels. Styling is class-based. */
+  headingLevel?: 2 | 3 | 4
+}) {
   const [open, setOpen] = useState<number>(defaultOpen)
   const uid = useId()
+  const H = `h${headingLevel}` as 'h2' | 'h3' | 'h4'
   return (
     <div className={`accordion ${className ?? ''}`}>
       {items.map((it, i) => {
         const isOpen = open === i
         return (
           <div className={`accordion__item${isOpen ? ' is-open' : ''}`} key={i} id={it.id}>
-            <h3 className="accordion__h">
+            <H className="accordion__h">
               <button
                 type="button"
                 className="accordion__btn"
@@ -122,7 +134,7 @@ export function Accordion({ items, defaultOpen = -1, className }: { items: { tit
                 <span>{it.title}</span>
                 <span className="accordion__icon" aria-hidden="true" />
               </button>
-            </h3>
+            </H>
             <div className="accordion__panel" id={`${uid}-p-${i}`} role="region" aria-labelledby={`${uid}-b-${i}`} hidden={!isOpen}>
               <div className="accordion__inner">{it.body}</div>
             </div>
@@ -184,10 +196,19 @@ export function Modal({
 export function Toasts() {
   const toasts = useUI((s) => s.toasts)
   const dismiss = useUI((s) => s.dismiss)
+  const hold = useUI((s) => s.holdToast)
+  const release = useUI((s) => s.releaseToast)
   return (
     <div className="toasts" role="status" aria-live="polite">
       {toasts.map((t) => (
-        <div key={t.id} className={`toast toast--${t.kind ?? 'success'}`}>
+        <div
+          key={t.id}
+          className={`toast toast--${t.kind ?? 'success'}`}
+          onMouseEnter={() => hold(t.id)}
+          onMouseLeave={() => release(t.id)}
+          onFocus={() => hold(t.id)}
+          onBlur={(e) => !e.currentTarget.contains(e.relatedTarget as Node | null) && release(t.id)}
+        >
           {t.image ? <img src={t.image} alt="" className="toast__img" /> : <Icon name={t.kind === 'error' ? 'alert' : t.kind === 'info' ? 'info' : 'check'} className="toast__icon" />}
           <div className="toast__text">
             <strong>{t.title}</strong>
@@ -262,12 +283,21 @@ export function Field({
   children: ReactNode
   id: string
 }) {
+  // Link the visible hint to its control (WCAG 1.3.1). Errors replace the hint and are
+  // already referenced through the page's own aria-describedby.
+  const hintId = !error && hint ? `${id}-hint` : undefined
+  const control =
+    hintId && isValidElement<{ id?: string; 'aria-describedby'?: string }>(children) && children.props.id === id
+      ? cloneElement(children, {
+          'aria-describedby': [children.props['aria-describedby'], hintId].filter((v, i, a) => v && a.indexOf(v) === i).join(' '),
+        })
+      : children
   return (
     <div className="field">
       <label className="field__label" htmlFor={id}>
         {label} {optional && <span className="opt">(optional)</span>}
       </label>
-      {children}
+      {control}
       {error ? (
         <p className="field__error" id={`${id}-err`}>
           <Icon name="alert" size={15} />

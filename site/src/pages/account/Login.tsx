@@ -32,7 +32,7 @@ export function PasswordInput({ id, value, onChange, invalid, describedBy, autoC
         aria-describedby={describedBy}
         autoComplete={autoComplete}
       />
-      <button type="button" className="pw-toggle" onClick={() => setShow((s) => !s)} aria-label={show ? 'Hide password' : 'Show password'} aria-pressed={show}>
+      <button type="button" className="pw-toggle" onClick={() => setShow((s) => !s)} aria-label={show ? 'Hide password' : 'Show password'}>
         {show ? 'Hide' : 'Show'}
       </button>
     </div>

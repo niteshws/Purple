@@ -246,15 +246,19 @@ export default function Gifting() {
                 Chosen with <em>care.</em>
               </h2>
             </div>
-            <div className="chips" role="tablist" aria-label="Budget">
+            {/* Filter toggles (not tabs: there are no tab panels or arrow-key tab behaviour) (WCAG 4.1.2). */}
+            <div className="chips" role="group" aria-label="Budget">
               {BUDGETS.map((b) => (
-                <button key={b.k} type="button" role="tab" aria-selected={budget === b.k} className={`chip${budget === b.k ? ' is-active' : ''}`} onClick={() => setBudget(b.k)}>
+                <button key={b.k} type="button" aria-pressed={budget === b.k} className={`chip${budget === b.k ? ' is-active' : ''}`} onClick={() => setBudget(b.k)}>
                   {b.label}
                 </button>
               ))}
             </div>
           </div>
-          <div className="pgrid" role="tabpanel" aria-live="polite">
+          <p className="sr-only" role="status">
+            {ideas.length} gift {ideas.length === 1 ? 'idea' : 'ideas'}
+          </p>
+          <div className="pgrid">
             {ideas.map((p) => (
               <ProductCard key={p.handle} product={p} />
             ))}

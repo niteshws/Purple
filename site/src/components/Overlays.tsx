@@ -89,7 +89,11 @@ export function SearchOverlay() {
               <Icon name="close" />
             </button>
           </form>
-          <div className="search-ov__body" id="search-results" aria-live="polite">
+          {/* Announce a short summary instead of re-reading the whole results list on every keystroke (WCAG 4.1.3). */}
+          <p className="sr-only" role="status">
+            {dq ? (results.length || cols.length ? `${results.length} ${results.length === 1 ? 'product' : 'products'}${cols.length ? ` and ${cols.length} ${cols.length === 1 ? 'collection' : 'collections'}` : ''} for ${dq}` : `No matches for ${dq}`) : ''}
+          </p>
+          <div className="search-ov__body" id="search-results">
             {!dq ? (
               <div className="search-ov__suggest">
                 <p className="eyebrow">Popular searches</p>
@@ -179,7 +183,22 @@ export function CartLineRow({ line, compact }: { line: CartLine; compact?: boole
   if (!isGift && !p) return null
   const image = isGift ? '/img/brand/gift-card.webp' : p!.colors.find((c) => c.name === line.color)?.images[0]
   const max = p ? Math.min(10, stockFor(p, line.color, line.size)) : 1
-  const onRemove = () => {
+  const name = isGift ? 'Purple United Gift Card' : p!.name
+  const onRemove = (e: { currentTarget: HTMLElement }) => {
+    // The line unmounts, so hand focus to the neighbouring line, or to the bag heading (WCAG 2.4.3).
+    const li = e.currentTarget.closest('li')
+    const list = li?.parentElement
+    const idx = list && li ? Array.prototype.indexOf.call(list.children, li) : -1
+    setTimeout(() => {
+      const rest = list?.isConnected ? Array.from(list.querySelectorAll<HTMLElement>(':scope > li')) : []
+      const target = (rest[idx] ?? rest[idx - 1])?.querySelector<HTMLElement>('.cline__name a, .cline__links button')
+      if (target) return target.focus()
+      const h = document.getElementById('cart-h') ?? document.querySelector<HTMLElement>('main h1')
+      if (h) {
+        h.setAttribute('tabindex', '-1')
+        h.focus()
+      }
+    }, 40)
     const removed = remove(line.key)
     if (removed)
       toast({ kind: 'info', title: 'Removed from your bag', body: isGift ? 'Purple gift card' : p!.name, action: { label: 'Undo', onClick: () => restore(removed) } })
@@ -191,7 +210,8 @@ export function CartLineRow({ line, compact }: { line: CartLine; compact?: boole
           <img src={image} alt="" />
         </div>
       ) : (
-        <Link to={`/products/${p!.handle}?color=${encodeURIComponent(line.color)}`} className="cline__img" onClick={() => setCart(false)}>
+        // Duplicate of the product-name link below: kept for pointer users, hidden from keyboard and screen readers.
+        <Link to={`/products/${p!.handle}?color=${encodeURIComponent(line.color)}`} className="cline__img" onClick={() => setCart(false)} tabIndex={-1} aria-hidden="true">
           <img src={image} alt="" loading="lazy" />
         </Link>
       )}
@@ -224,12 +244,17 @@ export function CartLineRow({ line, compact }: { line: CartLine; compact?: boole
           </div>
         )}
         <div className="cline__actions">
-          {isGift ? <span className="body-sm muted">Delivered by email</span> : <QtyStepper value={line.qty} max={max} onChange={(n) => setQty(line.key, n)} size="sm" />}
+          {isGift ? <span className="body-sm muted">Delivered by email</span> : <QtyStepper value={line.qty} max={max} onChange={(n) => setQty(line.key, n)} size="sm" label={`Quantity, ${name}`} />}
           <div className="cline__links">
             {p && p.sizeSystem !== 'one-size' && (
-              <button type="button" onClick={() => setEditing((e) => !e)}>{editing ? 'Done' : 'Edit'}</button>
+              <button type="button" onClick={() => setEditing((e) => !e)} aria-expanded={editing}>
+                {editing ? 'Done' : 'Edit'}
+                <span className="sr-only"> {name}</span>
+              </button>
             )}
-            <button type="button" onClick={onRemove}>Remove</button>
+            <button type="button" onClick={onRemove}>
+              Remove<span className="sr-only"> {name}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -423,14 +448,39 @@ export function SizeGuideModal() {
   }, [sys])
   return (
     <Modal open={!!sys} onClose={() => close(null)} title="Size guide" wide>
-      <div className="tabs" role="tablist" aria-label="Size guide categories">
+      {/* Full tabs pattern: one tab stop, arrow / Home / End keys, tabs linked to the panel (WCAG 4.1.2). */}
+      <div
+        className="tabs"
+        role="tablist"
+        aria-label="Size guide categories"
+        onKeyDown={(e) => {
+          const order = ['apparel', 'infant', 'footwear'] as const
+          const i = order.indexOf(tab)
+          const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: order.length - 1 }[e.key]
+          if (n === undefined) return
+          e.preventDefault()
+          const t = order[(n + order.length) % order.length]
+          setTab(t)
+          setTimeout(() => document.getElementById(`sg-tab-${t}`)?.focus(), 0)
+        }}
+      >
         {(['apparel', 'infant', 'footwear'] as const).map((t) => (
-          <button key={t} role="tab" type="button" aria-selected={tab === t} className={`tabs__tab${tab === t ? ' is-active' : ''}`} onClick={() => setTab(t)}>
+          <button
+            key={t}
+            id={`sg-tab-${t}`}
+            role="tab"
+            type="button"
+            aria-selected={tab === t}
+            aria-controls="sg-panel"
+            tabIndex={tab === t ? 0 : -1}
+            className={`tabs__tab${tab === t ? ' is-active' : ''}`}
+            onClick={() => setTab(t)}
+          >
             {t === 'apparel' ? 'Kids clothing' : t === 'infant' ? 'Infants' : 'Footwear'}
           </button>
         ))}
       </div>
-      <div className="size-guide" role="tabpanel">
+      <div className="size-guide" role="tabpanel" id="sg-panel" aria-labelledby={`sg-tab-${tab}`}>
         <p className="body-sm muted">
           A general reference by age and height. Every child grows differently — if they are between sizes, choose the larger one for room to grow. Product-specific
           measurements will be shown here once supplied by Purple United.

@@ -223,13 +223,16 @@
   transform: scaleX(1);
 }
 .main-nav__toggle {
-  width: 20px;
+  /* 24px wide hit area (WCAG 2.5.8). The negative margins keep the chevron and the
+     nav spacing exactly where they were with the old 20px button. */
+  width: 24px;
   height: 28px;
   display: grid;
   place-items: center;
   color: var(--ink-55);
   opacity: 0;
-  margin-left: -2px;
+  margin-left: -4px;
+  margin-right: -2px;
 }
 .main-nav__toggle:focus-visible {
   opacity: 1;
@@ -1655,7 +1658,15 @@
   margin-top: 16px;
   margin-left: -10px;
 }
+/* Restore the round, centred icon button: `.site-footer__grid a` (flex, left-aligned,
+   5px vertical padding) is more specific than `.icon-btn` and would otherwise win. */
 .site-footer__social .icon-btn {
+  display: inline-grid;
+  place-items: center;
+  gap: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   color: var(--ivory);
 }
 .site-footer__social .icon-btn:hover {

@@ -68,6 +68,19 @@ ol[role='list'] {
   color: var(--accent-deep);
 }
 
+/* Keep focused elements clear of the sticky header and the fixed bottom UI
+   (concierge button, mobile product bar) when the browser scrolls them into view
+   (WCAG 2.4.11). --sticky-top is measured by the Header. */
+html {
+  scroll-padding-top: calc(var(--sticky-top, 150px) + 12px);
+  scroll-padding-bottom: 96px;
+}
+@media (max-width: 900px) {
+  html:has(.pdp-sticky.is-on) {
+    scroll-padding-bottom: 160px;
+  }
+}
+
 /* Focus — always visible for keyboard users */
 :focus-visible {
   outline: 2px solid var(--accent);

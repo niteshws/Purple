@@ -51,7 +51,7 @@ export function AppearanceMenu() {
         className="icon-btn"
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-controls={menuId}
+        aria-controls={open ? menuId : undefined}
         aria-label={`Appearance: ${current.label}${pref === 'auto' ? ` (${resolved})` : ''}`}
         title="Appearance"
         onClick={() => setOpen((o) => !o)}
