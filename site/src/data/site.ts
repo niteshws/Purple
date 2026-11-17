@@ -1,6 +1,8 @@
 /* Verified facts — sourced from purpleunited.com (pages/contact, pages/refund-policy,
    pages/faqs, pages/about-us) in November 2026. Anything not verified is labelled. */
 
+import storeDirectory from './stores.json'
+
 export const CONTACT = {
   company: 'Purple United Sales Limited',
   companyNote: 'Formerly known as Purple United Sales Private Limited',
@@ -18,7 +20,7 @@ export const CONTACT = {
   linkedin: 'https://www.linkedin.com/company/purple-united-sales-limited/',
 }
 
-export const STORE_COUNT = 99
+export const STORE_COUNT = storeDirectory.length
 
 export const POLICY = {
   returnWindowDays: 7,
@@ -40,7 +42,7 @@ export const FAQS: { cat: string; q: string; a: string }[] = [
   { cat: 'Returns & exchanges', q: 'What is your return and exchange policy?', a: 'You can return or exchange unused items with tags intact within 7 days of receiving them. Size mismatches and defective items are eligible for a free replacement (conditions apply).' },
   { cat: 'Returns & exchanges', q: 'How do I start a return?', a: 'Raise a return from My Account or email connect@purpleunited.com with your order ID and the reason. Pickup is arranged where available; otherwise you can self-ship to our returns address.' },
   { cat: 'Returns & exchanges', q: 'When will I receive my refund?', a: 'Prepaid orders are refunded to the original payment method within 7 working days of the return being approved. Cash-on-delivery orders are refunded by bank transfer, which may take 2–3 weeks.' },
-  { cat: 'Stores & gifting', q: 'Where can I shop Purple United?', a: 'Online here, and in Purple United stores across India — use the store locator to find your nearest one.' },
+  { cat: 'Stores & gifting', q: 'Where can I shop Purple United?', a: `Shop online or visit one of our ${STORE_COUNT} stores across India. Use the store locator to find your nearest one.` },
   { cat: 'Stores & gifting', q: 'Do you offer gift cards?', a: 'Yes — gift cards are available for birthdays, baby showers and every celebration in between.' },
   { cat: 'Stores & gifting', q: 'Do you run sales or offers?', a: 'We run occasional promotions and early-access events, announced on our Instagram. Purple Circle members (proposed programme) would hear first.' },
 ]

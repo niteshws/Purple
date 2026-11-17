@@ -1,6 +1,5 @@
-/* Store network — captured from purpleunited.com/pages/store-locator-1 (Nov 2026).
-   Addresses, hours and phone numbers are as published by Purple United's own
-   locator (Google Places data). Re-sync before launch. */
+/* Store network from Purple United's locator and published store list (Nov 2026).
+   Address, hours and phone fields may be empty when details are unavailable. */
 import raw from './stores.json'
 
 export interface Store {
@@ -66,12 +65,13 @@ const titleCase = (s: string) =>
     .replace(/\bGt\b/, 'GT')
     .replace(/\bTgip\b/, 'TGIP')
     .replace(/\bGs\b/, 'GS')
+    .replace(/\bHsr\b/, 'HSR')
     .replace(/\bVrc\b/, 'VRC')
     .replace(/\bSc-140\b/i, 'SC-140')
     .replace(/\bNh-9\b/i, 'NH-9')
     .replace(/Intiriorz/, 'Interiorz')
 
-function parse(r: { name: string; address: string; hours: string; phone: string }, i: number): Store {
+function parse(r: { name: string; address: string; hours: string; phone: string; city?: string; state?: string }, i: number): Store {
   const pin = r.address.match(/\b(\d{6})\b/)?.[1] ?? ''
   let state = STATES.find((s) => r.address.includes(`${s} ${pin}`) || r.address.includes(`${s},`)) ?? ''
   let city = ''
@@ -82,7 +82,8 @@ function parse(r: { name: string; address: string; hours: string; phone: string 
     if (state === 'Delhi') city = 'New Delhi'
   }
   if (OVERRIDES[r.name]) ({ city, state } = OVERRIDES[r.name])
-  city = CITY_FIX[city] ?? city
+  city = r.city ?? CITY_FIX[city] ?? city
+  state = r.state ?? state
   const name = titleCase(r.name)
   return {
     id: `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}-${i}`,
@@ -97,7 +98,7 @@ function parse(r: { name: string; address: string; hours: string; phone: string 
   }
 }
 
-export const stores: Store[] = (raw as { name: string; address: string; hours: string; phone: string }[]).map(parse)
+export const stores = raw.map(parse)
 export const storeById = new Map(stores.map((s) => [s.id, s]))
 export const storeStates = Array.from(new Set(stores.map((s) => s.state).filter(Boolean))).sort()
 export const storeCities = Array.from(new Set(stores.map((s) => s.city))).sort()

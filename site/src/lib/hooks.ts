@@ -170,14 +170,21 @@ export function useMedia(q: string) {
   return m
 }
 
-export function useScrolled(threshold = 24) {
+/** True once the page scrolls past `threshold`; false again only at or above `release`.
+ *  The gap (hysteresis) matters when the flag changes the height of an in-flow element such as
+ *  the sticky header: shrinking it shifts the content, the browser's scroll anchoring moves
+ *  scrollY back by the same amount, and a single threshold would flip on/off every frame. */
+export function useScrolled(threshold = 24, release = Math.max(0, threshold - 60)) {
   const [s, setS] = useState(false)
   useEffect(() => {
-    const on = () => setS(window.scrollY > threshold)
+    const on = () => {
+      const y = window.scrollY
+      setS((prev) => (prev ? y > release : y > threshold))
+    }
     on()
     window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
-  }, [threshold])
+  }, [threshold, release])
   return s
 }
 

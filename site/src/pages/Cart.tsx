@@ -6,6 +6,7 @@ import { Breadcrumbs, EmptyState } from '../components/ui'
 import { ProductCard } from '../components/ProductCard'
 import { CartLineRow, FreeShippingMeter } from '../components/Overlays'
 import { products, formatINR } from '../data/products'
+import { STORE_COUNT } from '../data/site'
 import { useCart, cartTotals, DISCOUNTS, FREE_SHIPPING_FROM, STANDARD_SHIPPING_FEE } from '../store'
 import { useMeta } from '../lib/hooks'
 
@@ -168,7 +169,7 @@ export default function Cart() {
                   <Icon name="store" />
                   <strong>Exchange in store</strong>
                   <span>
-                    Visit one of our <Link to="/stores" className="text-link">99 stores</Link> to try sizes in person.
+                    Visit one of our <Link to="/stores" className="text-link">{STORE_COUNT} stores</Link> to try sizes in person.
                   </span>
                 </div>
               </div>

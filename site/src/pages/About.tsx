@@ -1,7 +1,9 @@
 import '../styles/info.css'
 import { Link } from 'react-router-dom'
 import { Icon } from '../components/Icon'
-import { Img, Breadcrumbs, Crest } from '../components/ui'
+import { Img, Breadcrumbs } from '../components/ui'
+import { LoopVideo } from '../components/LoopVideo'
+import { ORIGINAL_VIDEOS } from '../data/originals'
 import { STORE_COUNT } from '../data/site'
 import { useMeta } from '../lib/hooks'
 
@@ -12,9 +14,9 @@ const VALUES = [
 ]
 
 const TERRITORIES = [
-  { n: '01', t: 'The art of growing up', line: 'Made for every version of them.', d: 'Warm, nostalgic and milestone-led. Purple grows with your child.', img: '/img/editorial/art-of-growing-up.webp' },
-  { n: '02', t: 'The little originals', line: 'Born to be their own.', d: 'Bold, playful and full of self-expression. Their personality, dressed with style.', img: '/img/editorial/born-to-be.webp' },
-  { n: '03', t: 'A little extraordinary', line: 'Premium, reimagined for childhood.', d: 'Refined and aspirational. Everyday moments, made special.', img: '/img/editorial/sisters-pink.webp' },
+  { t: 'The art of growing up', line: 'Made for every version of them.', d: 'Warm, nostalgic and milestone-led. Purple grows with your child.', video: ORIGINAL_VIDEOS.quietCharmer },
+  { t: 'The little originals', line: 'Born to be their own.', d: 'Bold, playful and full of self-expression. Their personality, dressed with style.', video: ORIGINAL_VIDEOS.trailblazer },
+  { t: 'A little extraordinary', line: 'Premium, reimagined for childhood.', d: 'Refined and aspirational. Everyday moments, made special.', video: ORIGINAL_VIDEOS.freeSpirit },
 ]
 
 const VISION = [
@@ -48,12 +50,15 @@ export default function About() {
                 A modern French sensibility for a new generation.
               </p>
             </div>
-            <div className="about-hero__media reveal-img">
-              <Img src="/img/editorial/art-of-growing-up.webp" alt="A brother and sister in soft lilac knits laughing together in a flowering garden" eager />
-              <div className="about-hero__badge" aria-hidden="true">
-                <Crest variant="mark" />
-              </div>
-            </div>
+            <img
+              className="about-hero__media"
+              src="/img/campaign/wardrobe/story-hero.webp"
+              alt="Two children walking together in an ivory bouclé jacket and layered skirt, and a tailored sand outfit"
+              width={1448}
+              height={1086}
+              fetchPriority="high"
+              decoding="async"
+            />
           </div>
         </div>
       </section>
@@ -77,7 +82,7 @@ export default function About() {
       <section className="section">
         <div className="container mission">
           <div className="mission__media reveal-img">
-            <Img src="/img/editorial/baby-knit.webp" alt="A baby in a striped knit cardigan and bobble hat looking up curiously" pos="50% 35%" />
+            <Img src="/img/campaign/wardrobe/story-mission.webp" alt="A baby in a blue and oatmeal striped knit with a wooden play ring" pos="50% 35%" />
           </div>
           <div className="mission__body reveal">
             <p className="eyebrow">Our mission</p>
@@ -145,27 +150,24 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section bg-wine on-dark">
+      <section className="section bg-oat" id="brand-territories" aria-labelledby="territories-title">
         <div className="container">
           <div className="section-head reveal">
             <div className="section-head__text">
               <p className="eyebrow">Brand territories</p>
-              <h2 className="h2">
+              <h2 className="h2" id="territories-title">
                 Three ways Purple <em>could feel.</em>
               </h2>
             </div>
             <span className="demo-note">Proposed territories · research will test all three</span>
           </div>
           <div className="territories">
-            {TERRITORIES.map((t, i) => (
-              <article key={t.n} className="territory reveal" style={{ ['--d' as string]: `${i * 90}ms` }}>
-                <Img src={t.img} alt="" pos="50% 30%" />
-                <p className="num">{t.n}</p>
-                <div style={{ display: 'grid', gap: 8 }}>
-                  <p className="eyebrow">{t.t}</p>
-                  <h3 className="h3">{t.line}</h3>
-                  <p>{t.d}</p>
-                </div>
+            {TERRITORIES.map((t) => (
+              <article key={t.t} className="territory">
+                <LoopVideo {...t.video} className="territory__video" autoPlay={false} />
+                <p className="eyebrow">{t.t}</p>
+                <h3 className="h3">{t.line}</h3>
+                <p className="territory__description">{t.d}</p>
               </article>
             ))}
           </div>
@@ -192,7 +194,7 @@ export default function About() {
             </div>
           </div>
           <div className="presence__media reveal-img">
-            <Img src="/img/editorial/family-store.webp" alt="Parents holding up a floral dress for their toddler in a Purple United store" pos="50% 30%" />
+            <Img src="/img/campaign/wardrobe/story-boutique.webp" alt="Parents showing their child an ivory occasion outfit in a boutique" />
           </div>
         </div>
       </section>
@@ -227,7 +229,7 @@ export default function About() {
       <section className="section closing">
         <div className="container closing__inner">
           <div className="closing__media reveal-img">
-            <Img src="/img/lifestyle/girls-group.webp" alt="Four girls in pastel dresses laughing together outdoors" />
+            <Img src="/img/campaign/wardrobe/story-closing.webp" alt="Four children in layered knits, tailoring and partywear playing in a sunlit courtyard" />
           </div>
           <div className="closing__text reveal">
             <p className="signature" style={{ fontSize: 26, color: 'var(--gold)' }}>

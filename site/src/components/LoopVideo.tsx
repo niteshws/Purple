@@ -3,16 +3,17 @@ import { Icon } from './Icon'
 
 /* Muted, looping inline video for editorial cards.
    - Source attaches only when the card nears the viewport.
-   - Plays while visible, pauses off-screen.
+   - Pauses off-screen and supports opting out of autoplay.
    - prefers-reduced-motion: shows the poster until the visitor presses play.
    - Visible pause/play control (WCAG 2.2.2). */
-export function LoopVideo({ src, poster, label, className }: { src: string; poster: string; label: string; className?: string }) {
+export function LoopVideo({ src, poster, label, className, autoPlay = true }: { src: string; poster: string; label: string; className?: string; autoPlay?: boolean }) {
   const wrap = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
   const [attached, setAttached] = useState(false)
   const [visible, setVisible] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [userPaused, setUserPaused] = useState(() => {
+    if (!autoPlay) return true
     try {
       return window.matchMedia('(prefers-reduced-motion: reduce)').matches
     } catch {

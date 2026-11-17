@@ -95,13 +95,14 @@ function TryOnForm({ storeName }: { storeName: string }) {
 export default function StoreDetail() {
   const { id = '' } = useParams()
   const s = storeById.get(id)
-  useMeta(s ? `${s.name} store, ${s.city}` : 'Store not found', s ? `Purple United Kids ${s.name}: ${s.address}. ${s.hours ? `Open ${s.hours}.` : ''}` : undefined, {
+  const location = s ? [s.city, s.state].filter(Boolean).join(', ') : ''
+  useMeta(s ? `${s.name} store, ${s.city}` : 'Store not found', s ? `Purple United Kids ${s.name}: ${s.address || location}. ${s.hours ? `Open ${s.hours}.` : 'Contact customer care for visit details.'}` : undefined, {
     jsonLd: s
       ? {
           '@context': 'https://schema.org',
           '@type': 'ClothingStore',
           name: `Purple United Kids — ${s.name}`,
-          address: { '@type': 'PostalAddress', streetAddress: s.address, addressLocality: s.city, addressRegion: s.state, postalCode: s.pincode, addressCountry: 'IN' },
+          address: { '@type': 'PostalAddress', streetAddress: s.address || undefined, addressLocality: s.city, addressRegion: s.state, postalCode: s.pincode || undefined, addressCountry: 'IN' },
           telephone: s.phone || undefined,
         }
       : undefined,
@@ -136,7 +137,7 @@ export default function StoreDetail() {
       </div>
       <section className="container store-detail__grid">
         <div className="store-detail__info">
-          <p className="eyebrow">{[s.city, s.state].filter(Boolean).join(', ')}</p>
+          <p className="eyebrow">{location}</p>
           <h1 className="h1">
             Purple United <em>{s.name}</em>
           </h1>
@@ -145,13 +146,13 @@ export default function StoreDetail() {
               <dt>
                 <Icon name="pin" size={18} /> Address
               </dt>
-              <dd>{s.address}</dd>
+              <dd>{s.address || 'Street address not listed'}</dd>
             </div>
             <div>
               <dt>
                 <Icon name="clock" size={18} /> Opening hours
               </dt>
-              <dd>{s.hours ? `Every day, ${s.hours}` : 'Hours not listed — please call ahead or check Google Maps.'}</dd>
+              <dd>{s.hours ? `Every day, ${s.hours}` : 'Hours not listed. Contact customer care before visiting.'}</dd>
             </div>
             <div>
               <dt>
@@ -174,26 +175,32 @@ export default function StoreDetail() {
             </div>
           </dl>
           <div className="store-detail__actions">
-            <a href={directionsUrl(s)} target="_blank" rel="noreferrer" className="btn">
-              <Icon name="direction" size={18} /> Get directions
-              <span className="sr-only"> (opens Google Maps in a new tab)</span>
-            </a>
+            {s.address ? (
+              <a href={directionsUrl(s)} target="_blank" rel="noreferrer" className="btn">
+                <Icon name="direction" size={18} /> Get directions
+                <span className="sr-only"> (opens Google Maps in a new tab)</span>
+              </a>
+            ) : (
+              <Link to="/contact" className="btn">Contact customer care</Link>
+            )}
             {s.phone && (
               <a href={telHref(s.phone)} className="btn btn--outline">
                 <Icon name="phone" size={18} /> Call store
               </a>
             )}
           </div>
-          <p className="demo-note">Store information from Purple United’s store locator, Nov 2026 — verify before launch.</p>
+          <p className="demo-note">Store information from Purple United’s published locator and store list.</p>
         </div>
-        <div className="store-detail__map">
-          <iframe
-            title={`Map showing Purple United ${s.name}`}
-            src={`https://www.google.com/maps?q=${encodeURIComponent(`Purple United Kids ${s.address}`)}&output=embed`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
+        {s.address && (
+          <div className="store-detail__map">
+            <iframe
+              title={`Map showing Purple United ${s.name}`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(`Purple United Kids ${s.address}`)}&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        )}
       </section>
 
       <section className="section store-detail__services bg-oat">
@@ -222,11 +229,13 @@ export default function StoreDetail() {
               ))}
             </ul>
           </div>
-          <div className="store-detail__book">
-            <p className="eyebrow">Book a try-on</p>
-            <h2 className="h3">Have sizes ready when you arrive</h2>
-            <TryOnForm storeName={s.name} />
-          </div>
+          {s.address && (
+            <div className="store-detail__book">
+              <p className="eyebrow">Book a try-on</p>
+              <h2 className="h3">Have sizes ready when you arrive</h2>
+              <TryOnForm storeName={s.name} />
+            </div>
+          )}
         </div>
       </section>
 

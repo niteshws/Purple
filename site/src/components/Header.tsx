@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Icon } from './Icon'
 import { Crest } from './ui'
-import { NAV } from '../data/site'
+import { NAV, STORE_COUNT } from '../data/site'
 import { useCart, useUI, useWishlist, useCurrentUser } from '../store'
 import { useDialog, useLockScroll, useScrolled } from '../lib/hooks'
 import { AppearanceMenu, AppearanceSegmented } from './Appearance'
@@ -19,7 +19,7 @@ export function AnnouncementBar() {
         </p>
         <div className="announce__aside">
           <Link to="/stores">
-            <Icon name="store" size={15} /> Find one of our 99 stores
+            <Icon name="store" size={15} /> Find one of our {STORE_COUNT} stores
           </Link>
           <Link to="/help">
             <Icon name="return" size={15} /> 7-day easy returns

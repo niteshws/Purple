@@ -159,10 +159,10 @@ function SearchEmpty({ title, body }: { title: string; body: string }) {
       </div>
       <div className="srch-empty__cats">
         {[
-          { l: 'Girls', to: '/collections/girls', img: '/img/lifestyle/girl-street.webp' },
-          { l: 'Boys', to: '/collections/boys', img: '/img/lifestyle/soccer-boy.webp' },
-          { l: 'Infants', to: '/collections/infants', img: '/img/lifestyle/infant-portrait.webp' },
-          { l: 'New in', to: '/collections/new-arrivals', img: '/img/editorial/sisters-pink.webp' },
+          { l: 'Girls', to: '/collections/girls', img: '/img/campaign/wardrobe/shop-girls.webp' },
+          { l: 'Boys', to: '/collections/boys', img: '/img/campaign/wardrobe/shop-boys.webp' },
+          { l: 'Infants', to: '/collections/infants', img: '/img/campaign/wardrobe/shop-infants.webp' },
+          { l: 'New in', to: '/collections/new-arrivals', img: '/img/campaign/wardrobe/shop-new.webp' },
         ].map((c) => (
           <Link key={c.l} to={c.to} className="srch-empty__cat">
             <Img src={c.img} alt="" pos="50% 25%" />

@@ -48,7 +48,7 @@ export default function Craft() {
           </div>
         </div>
         <div className="craft-hero__media">
-          <Img src="/img/lifestyle/toddler-breakfast.webp" alt="A toddler in a soft cotton top and trousers sitting at a breakfast table" pos="50% 40%" eager />
+          <Img src="/img/campaign/wardrobe/craft-hero.webp" alt="A toddler in a yellow cotton pullover and olive trousers at a breakfast table" pos="50% 40%" eager />
         </div>
       </section>
 
@@ -81,10 +81,10 @@ export default function Craft() {
         <div className="container grow">
           <div className="grow__media">
             <div className="reveal-img">
-              <Img src="/img/lifestyle/infant-dungarees.webp" alt="Soft quilted blue infant dungarees over a cotton top" />
+              <Img src="/img/campaign/wardrobe/craft-overalls.webp" alt="Soft quilted sage infant overalls over an oatmeal cotton top" />
             </div>
             <div className="reveal-img" style={{ ['--d' as string]: '140ms' }}>
-              <Img src="/img/lifestyle/infant-romper.webp" alt="A pale pink infant romper with a small embroidered bear" />
+              <Img src="/img/campaign/wardrobe/craft-romper.webp" alt="An ivory infant romper with a small embroidered animal and blue trim" />
             </div>
           </div>
           <div className="grow__text reveal">

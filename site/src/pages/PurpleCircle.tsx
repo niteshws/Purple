@@ -125,7 +125,7 @@ export default function PurpleCircle() {
             )}
           </div>
           <div className="pc-hero__media">
-            <img src="/img/brand/gift-card.webp" alt="Concept Purple United gift card and Purple Circle member card" />
+            <img src="/img/campaign/wardrobe/circle-detail.webp" alt="Champagne and plum membership card concepts resting on a folded knit" />
           </div>
         </div>
       </section>

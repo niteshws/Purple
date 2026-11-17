@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from './Icon'
 import { Price } from './ui'
-import { type Product, stockFor, isProductSoldOut, AGE_LABELS } from '../data/products'
+import { type Product, stockFor, isProductSoldOut, AGE_LABELS, productThumbnail } from '../data/products'
 import { useWishlist } from '../store'
 import { addToBag, toggleWish } from '../lib/commerce'
 
@@ -62,8 +62,8 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
     <article className={`pcard${soldOut ? ' is-soldout' : ''}${compact ? ' pcard--compact' : ''}`}>
       <div className="pcard__media">
         <Link to={href} className="pcard__imglink" tabIndex={-1} aria-hidden="true">
-          <img className="pcard__img" src={color.images[0]} alt="" loading={priority ? 'eager' : 'lazy'} decoding="async" width={800} height={1000} />
-          {hoverImg && <img className="pcard__img pcard__img--alt" src={hoverImg} alt="" loading="lazy" decoding="async" width={800} height={1000} />}
+          <img className="pcard__img" src={productThumbnail(color.images[0])} alt="" loading={priority ? 'eager' : 'lazy'} decoding="async" width={840} height={840} />
+          {hoverImg && <img className="pcard__img pcard__img--alt" src={productThumbnail(hoverImg)} alt="" loading="lazy" decoding="async" width={840} height={840} />}
         </Link>
         <div className="pcard__badges">
           {soldOut ? <span className="tag tag--muted">Sold out</span> : p.isNew ? <span className="tag">New</span> : null}

@@ -77,7 +77,7 @@ export default function Login() {
 
   return (
     <AuthLayout
-      image="/img/editorial/art-of-growing-up.webp"
+      image="/img/campaign/wardrobe/story-hero.webp"
       pos="40% 30%"
       caption={
         <>

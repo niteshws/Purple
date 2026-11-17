@@ -2,7 +2,7 @@ import '../styles/info.css'
 import { useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from '../components/Icon'
-import { Breadcrumbs, Field } from '../components/ui'
+import { Breadcrumbs, Field, Img } from '../components/ui'
 import { CONTACT } from '../data/site'
 import { useMeta, validEmail, validPhone } from '../lib/hooks'
 
@@ -57,12 +57,15 @@ export default function Contact() {
     <div className="container">
       <div className="page-head">
         <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Contact us' }]} />
-        <div className="page-head__title">
-          <p className="eyebrow">Contact us</p>
-          <h1 className="h1">
-            We’re here, <em>like a trusted friend.</em>
-          </h1>
-          <p className="lead">Questions about an order, a size or a gift? Send us a note and our customer care team will get back to you.</p>
+        <div className="contact-head__grid">
+          <div className="page-head__title">
+            <p className="eyebrow">Contact us</p>
+            <h1 className="h1">
+              We’re here, <em>like a trusted friend.</em>
+            </h1>
+            <p className="lead">Questions about an order, a size or a gift? Send us a note and our customer care team will get back to you.</p>
+          </div>
+          <Img src="/img/campaign/wardrobe/contact-boutique.webp" alt="A boutique associate helping a parent choose childrenswear" ratio="3/2" eager />
         </div>
       </div>
 

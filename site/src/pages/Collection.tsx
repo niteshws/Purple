@@ -169,7 +169,7 @@ export default function Collection() {
 
   return (
     <>
-      <section className="coll-hero" aria-labelledby="coll-h">
+      <section className={`coll-hero${c.handle === 'footwear-accessories' ? ' coll-hero--footwear' : ''}`} aria-labelledby="coll-h">
         <div className="coll-hero__text">
           <Breadcrumbs items={crumbs} />
           <p className="eyebrow">{c.eyebrow}</p>

@@ -39,15 +39,15 @@ public/img/            all imagery, organised by campaign / editorial / lifestyl
 
 | Content | Source | Status |
 |---|---|---|
-| Products: names, prices, compare-at prices, photography | Current purpleunited.com homepage (saved HTML) | **Real** (colour variants of the same style grouped) |
+| Products: names, prices, compare-at prices, photography | Purple United Kids storefront and product CDN | **Real** (colour variants grouped by style, with separate gallery and card WebPs) |
 | Sizes, per-size stock, popularity, "added" dates | Generated deterministically | **Demo data** |
-| Store locator: 99 stores, addresses, hours, phones | purpleunited.com/pages/store-locator-1 (Nov 2026) | **Real** — re-sync before launch |
+| Store locator: 130 stores, with addresses, hours and phones where published | Purple United's store locator and its published store list (Nov 2026) | **Real** — re-sync before launch |
 | Contact, returns, refunds, FAQ, delivery times | purpleunited.com contact / refund-policy / faqs pages | **Real** (paraphrased) |
 | Exact shipping fee below ₹499, express rate | Not published | **Demo rates**, flagged |
 | Crest logo | PixelCrayons proposal p.16 (concept crest) | **Concept** — replace with master artwork |
-| Campaign & editorial photography | PixelCrayons proposal art direction (slides 1, 3, 5, 6, 10, 12, 20–28, 31, 33) | **Concept imagery** |
+| Campaign & editorial photography | PixelCrayons proposal art direction and generated photography based on supplied fashion references | **Concept imagery** |
 | Flagship store walkthrough video (homepage "Visit us") | Supplied walkthrough film, re-encoded to 720p (5.0 MB) and 480p (2.6 MB) in `public/video/` | **Concept** store identity |
-| Lifestyle photography | Current purpleunited.com banners/tiles (text-free crops only) | Real brand assets |
+| Lifestyle photography | Purple United Kids banners and tiles, plus selected refreshed campaign and editorial images | Brand photography and concept imagery |
 | Purple Circle tiers & benefits | Proposal p.26 | **Proposed / illustrative** |
 | Ask Purple stylist | Rule-based scoring over the catalogue | **Simulated — not live AI** |
 | WhatsApp concierge | Purple United's published number (+91 93193 91444) via wa.me links | Opens WhatsApp; nothing is sent automatically |

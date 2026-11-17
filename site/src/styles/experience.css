@@ -258,6 +258,10 @@
   display: grid;
   gap: 18px;
 }
+.store-detail__grid:not(:has(.store-detail__map)),
+.store-detail__svc-grid:not(:has(.store-detail__book)) {
+  grid-template-columns: minmax(0, 1fr);
+}
 .store-detail__dl {
   margin: 8px 0 0;
   display: grid;

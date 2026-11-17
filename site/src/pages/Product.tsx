@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Icon } from '../components/Icon'
 import { Accordion, Breadcrumbs, Price, QtyStepper, Field } from '../components/ui'
 import { ProductCard } from '../components/ProductCard'
-import { getProduct, products, stockFor, isProductSoldOut, formatINR, AGE_LABELS, type Product as P } from '../data/products'
+import { getProduct, products, productThumbnail, stockFor, isProductSoldOut, formatINR, AGE_LABELS, type Product as P } from '../data/products'
 import { POLICY } from '../data/site'
 import { useRecent, useUI, useWishlist } from '../store'
 import { addToBag, toggleWish } from '../lib/commerce'
@@ -19,7 +19,7 @@ const HEIGHT: Record<string, string> = {
   'UK 4': '22.6 cm foot', 'UK 5': '23.5 cm foot',
 }
 
-type Slide = { src: string; detail?: boolean; alt: string }
+type Slide = { src: string; alt: string }
 
 export default function Product() {
   const { handle = '' } = useParams()
@@ -51,17 +51,12 @@ function ProductView({ p }: { p: P }) {
   const soldOut = isProductSoldOut(p) || !!color.soldOut
   const stock = size ? stockFor(p, colorName, size) : null
 
-  const slides: Slide[] = useMemo(() => {
-    const s: Slide[] = color.images.map((src, i) => ({ src, alt: `${p.name} in ${color.name}${i ? ` — view ${i + 1}` : ''}` }))
-    s.push({ src: color.images[0], detail: true, alt: `${p.name} — fabric and finish detail` })
-    return s
-  }, [color, p.name])
+  const slides: Slide[] = color.images.map((src, i) => ({ src, alt: `${p.name} in ${color.name}${i ? ` — view ${i + 1}` : ''}` }))
 
   useEffect(() => {
     pushRecent(p.handle)
   }, [p.handle])
   useEffect(() => {
-    setSlide(0)
     if (size && p.sizeSystem !== 'one-size' && stockFor(p, colorName, size) === 0) setSize('')
     const next = new URLSearchParams(sp)
     if (colorName === p.colors[0].name) next.delete('color')
@@ -185,9 +180,13 @@ function ProductView({ p }: { p: P }) {
                     aria-checked={c.name === colorName}
                     aria-label={`${c.name}${c.soldOut ? ', sold out' : ''}`}
                     className={`color-opt${c.soldOut ? ' is-soldout' : ''}`}
-                    onClick={() => setColorName(c.name)}
+                    onClick={() => {
+                      if (c.name === colorName) return
+                      setColorName(c.name)
+                      setSlide(0)
+                    }}
                   >
-                    <img src={c.images[0]} alt="" />
+                    <img src={productThumbnail(c.images[0])} alt="" />
                   </button>
                 ))}
               </div>
@@ -430,7 +429,7 @@ function ProductView({ p }: { p: P }) {
       </div>
 
       <div className={`pdp-sticky${sticky && !soldOut ? ' is-on' : ''}`} aria-hidden={!sticky}>
-        <img src={color.images[0]} alt="" width={44} height={55} style={{ objectFit: 'cover', width: 44, height: 55 }} />
+        <img src={productThumbnail(color.images[0])} alt="" width={44} height={55} style={{ objectFit: 'cover', width: 44, height: 55 }} />
         <div className="pdp-sticky__info">
           <strong>{p.name}</strong>
           <span className="muted">
@@ -455,8 +454,8 @@ function Gallery({ slides, index, onIndex, onZoom, badge }: { slides: Slide[]; i
     <div className="gallery" aria-roledescription="carousel" aria-label="Product images">
       <div className="gallery__thumbs" role="tablist" aria-label="Choose image">
         {slides.map((s, i) => (
-          <button key={i} type="button" role="tab" className="gallery__thumb" aria-current={i === index} aria-selected={i === index} aria-label={s.detail ? 'Detail view' : `Image ${i + 1}`} onClick={() => onIndex(i)}>
-            <img src={s.src} alt="" style={s.detail ? { transform: 'scale(1.8)', transformOrigin: '50% 45%' } : undefined} />
+          <button key={i} type="button" role="tab" className="gallery__thumb" aria-current={i === index} aria-selected={i === index} aria-label={`Image ${i + 1}`} onClick={() => onIndex(i)}>
+            <img src={productThumbnail(s.src)} alt="" />
           </button>
         ))}
       </div>
@@ -493,7 +492,7 @@ function Gallery({ slides, index, onIndex, onZoom, badge }: { slides: Slide[]; i
       >
         <div className="gallery__track" style={{ transform: `translateX(calc(${-index * 100}% + ${drag}px))`, transition: drag ? 'none' : undefined }}>
           {slides.map((s, i) => (
-            <div key={i} className={`gallery__slide${s.detail ? ' gallery__slide--detail' : ''}`} aria-hidden={i !== index}>
+            <div key={i} className="gallery__slide" aria-hidden={i !== index}>
               <img src={s.src} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} draggable={false} />
             </div>
           ))}
@@ -557,12 +556,12 @@ function Zoom({ slides, index, onIndex, onClose }: { slides: Slide[]; index: num
           setOrigin(`${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`)
         }}
       >
-        <img src={s.src} alt={s.alt} style={{ transform: `scale(${z ? 2.2 : s.detail ? 1.6 : 1})`, transformOrigin: z ? origin : '50% 45%' }} />
+        <img src={s.src} alt={s.alt} style={z ? { transform: 'scale(2.2)', transformOrigin: origin } : undefined} />
       </div>
       <div className="zoom__thumbs">
         {slides.map((x, i) => (
           <button key={i} type="button" aria-current={i === index} onClick={() => onIndex(i)} aria-label={`Image ${i + 1}`}>
-            <img src={x.src} alt="" style={x.detail ? { transform: 'scale(1.8)' } : undefined} />
+            <img src={productThumbnail(x.src)} alt="" />
           </button>
         ))}
       </div>

@@ -24,7 +24,7 @@ export default function Reset() {
   }
   return (
     <AuthLayout
-      image="/img/editorial/baby-knit.webp"
+      image="/img/campaign/wardrobe/story-mission.webp"
       pos="50% 40%"
       caption={
         <>

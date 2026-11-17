@@ -20,7 +20,7 @@ export function StoreCard({ s, compact }: { s: Store; compact?: boolean }) {
       </div>
       <p className="store-card__addr">
         <Icon name="pin" size={17} />
-        <span>{s.address}</span>
+        <span>{s.address || 'Street address not listed'}</span>
       </p>
       <p className="store-card__meta">
         <Icon name="clock" size={17} />
@@ -38,10 +38,12 @@ export function StoreCard({ s, compact }: { s: Store; compact?: boolean }) {
         <Link to={`/stores/${s.id}`} className="btn btn--sm">
           Store details
         </Link>
-        <a href={directionsUrl(s)} target="_blank" rel="noreferrer" className="link">
-          Directions <Icon name="arrow" size={14} className="icon-arrow" />
-          <span className="sr-only"> (opens Google Maps in a new tab)</span>
-        </a>
+        {s.address && (
+          <a href={directionsUrl(s)} target="_blank" rel="noreferrer" className="link">
+            Directions <Icon name="arrow" size={14} className="icon-arrow" />
+            <span className="sr-only"> (opens Google Maps in a new tab)</span>
+          </a>
+        )}
       </div>
     </article>
   )
@@ -88,7 +90,7 @@ export default function Stores() {
   return (
     <div className="stores-page">
       <section className="stores-hero on-dark">
-        <Img src="/img/retail/store-facade.webp" alt="Concept rendering of a Purple United boutique façade with arched windows" className="stores-hero__img" eager />
+        <Img src="/img/campaign/wardrobe/storefront.webp" alt="Concept boutique interior with arched windows and childrenswear displays" className="stores-hero__img" eager />
         <div className="stores-hero__shade" aria-hidden="true" />
         <div className="container stores-hero__inner">
           <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Store locator' }]} />

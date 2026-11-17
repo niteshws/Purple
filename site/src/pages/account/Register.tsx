@@ -54,7 +54,7 @@ export default function Register() {
 
   return (
     <AuthLayout
-      image="/img/editorial/little-originals.webp"
+      image="/img/campaign/wardrobe/shop-new.webp"
       pos="35% 30%"
       caption={
         <>

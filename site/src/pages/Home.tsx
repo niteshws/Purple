@@ -6,9 +6,10 @@ import { ProductCard } from '../components/ProductCard'
 import { StoreVideo } from '../components/StoreVideo'
 import { HeroCarousel } from '../components/HeroCarousel'
 import { LoopVideo } from '../components/LoopVideo'
-import { products, getProduct, stockFor, formatINR, type Product } from '../data/products'
+import { products, getProduct, productThumbnail, stockFor, formatINR, type Product } from '../data/products'
 import { occasionTiles } from '../data/collections'
 import { articles } from '../data/journal'
+import { ORIGINAL_VIDEOS } from '../data/originals'
 import { STORE_COUNT } from '../data/site'
 import { stores } from '../data/stores'
 import { useMeta } from '../lib/hooks'
@@ -16,7 +17,7 @@ import { addToBag } from '../lib/commerce'
 import { useUI } from '../store'
 
 export default function Home() {
-  useMeta('Purple United Kids — Premium Fashion for Their Next Chapter', 'Premium kidswear and footwear for boys, girls and infants, 0–14 years. Fabric, fit and finish you can feel — online and in 99 stores across India.', {
+  useMeta('Purple United Kids — Premium Fashion for Their Next Chapter', `Premium kidswear and footwear for boys, girls and infants, 0–14 years. Fabric, fit and finish you can feel — online and in ${STORE_COUNT} stores across India.`, {
     canonical: '/',
     jsonLd: {
       '@context': 'https://schema.org',
@@ -102,7 +103,7 @@ function NewSeason() {
     <section className="editorial section" aria-labelledby="ed-h">
       <div className="container editorial__grid">
         <figure className="editorial__main reveal-img">
-          <Img src="/img/editorial/a-little-extraordinary.webp" alt="A girl in a plum velvet dress and a boy in an ivory bandhgala jacket walking hand in hand through a sunlit garden conservatory" ratio="1277/998" />
+          <Img src="/img/campaign/wardrobe/home-occasions.webp" alt="Two children walking on a sunlit terrace in layered tulle and ivory occasionwear" ratio="4/3" />
         </figure>
         <div className="editorial__side">
           <figure className="editorial__portrait reveal-img" style={{ ['--d' as string]: '160ms' }}>
@@ -125,7 +126,7 @@ function NewSeason() {
                 Party & celebration
               </Link>
             </div>
-            <p className="demo-note">Campaign imagery is concept art direction from the PixelCrayons proposal.</p>
+            <p className="demo-note">Campaign imagery is illustrative.</p>
           </div>
         </div>
       </div>
@@ -144,7 +145,10 @@ const NA_TABS = [
 function NewArrivals() {
   const [tab, setTab] = useState<(typeof NA_TABS)[number]['k']>('all')
   const list = useMemo(() => {
-    const fresh = [...products].sort((a, b) => b.addedAt.localeCompare(a.addedAt))
+    // Feature the colourblock hoodie once here. Both size ranges are available in the catalogue.
+    const fresh = products
+      .filter((p) => p.handle !== 'toddler-colourblock-fleece-hoodie')
+      .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
     const f = tab === 'all' ? fresh.filter((p) => p.isNew) : fresh.filter((p) => p.departments.includes(tab))
     return f.slice(0, 8)
   }, [tab])
@@ -214,7 +218,7 @@ function EditColumn({ k, active, onFocus }: { k: EditKey; active: boolean; onFoc
           <li key={p.handle} style={{ ['--i' as string]: i }}>
             <Link to={`/products/${p.handle}`} className="fhf__pick">
               <span className="fhf__thumb">
-                <img src={p.colors[0].images[0]} alt="" loading="lazy" width={600} height={750} />
+                <img src={productThumbnail(p.colors[0].images[0])} alt="" loading="lazy" width={840} height={840} />
               </span>
               <span className="fhf__meta">
                 <span className="fhf__name">{p.name}</span>
@@ -241,7 +245,7 @@ function ForHimForHer() {
         <div className="fhf__head reveal">
           <p className="eyebrow">Curated edits</p>
           <h2 id="fhf-h" className="h2">
-            For him <em>&amp;</em> for her
+            For her <em>&amp;</em> for him
           </h2>
           <p className="lead">Two wardrobes, one Purple. Pieces chosen to be mixed, matched and loved — whoever they are.</p>
           <div className="fhf__switch" role="tablist" aria-label="Choose an edit">
@@ -263,8 +267,8 @@ function ForHimForHer() {
         </div>
         <div className="fhf__grid">
           <EditColumn k="her" active={side === 'her'} onFocus={() => setSide('her')} />
-          <figure className="fhf__media reveal-img">
-            <Img src="/img/editorial/for-him-for-her.webp" alt="A girl in a lilac tulle dress and a boy in a plum suit smiling back to back" ratio="1244/1094" pos="50% 30%" />
+          <figure className="fhf__media">
+            <Img src="/img/campaign/wardrobe/home-paired.webp" alt="Two children posing back to back in ivory bouclé, champagne organza and olive tailoring" ratio="1" />
             <span className="fhf__shade" aria-hidden="true" />
             <figcaption className="fhf__caption">
               <span className={side === 'her' ? 'is-on' : ''}>For her</span>
@@ -284,23 +288,17 @@ const ORIGINALS = [
   {
     name: 'The trailblazer',
     line: 'Six looks before breakfast — and every one entirely his own.',
-    video: '/video/originals/trailblazer.mp4',
-    poster: '/video/originals/trailblazer-poster.webp',
-    label: 'A boy showing off one outfit after another in his bedroom — caps, shirts, shorts and sneakers',
+    ...ORIGINAL_VIDEOS.trailblazer,
   },
   {
     name: 'The free spirit',
     line: 'Mid-twirl, mid-laugh, always.',
-    video: '/video/originals/free-spirit.mp4',
-    poster: '/video/originals/free-spirit-poster.webp',
-    label: 'A girl twirling and laughing in a striped shirt and pleated skirt set',
+    ...ORIGINAL_VIDEOS.freeSpirit,
   },
   {
     name: 'The quiet charmer',
     line: 'Hands in pockets, a very good secret.',
-    video: '/video/originals/quiet-charmer.mp4',
-    poster: '/video/originals/quiet-charmer-poster.webp',
-    label: 'A curly-haired boy in a white tee, jeans and sneakers, hands in pockets',
+    ...ORIGINAL_VIDEOS.quietCharmer,
   },
 ]
 function LittleOriginals() {
@@ -319,7 +317,7 @@ function LittleOriginals() {
         {ORIGINALS.map((o, i) => (
           <figure key={o.name} className="original reveal" style={{ ['--d' as string]: `${i * 90}ms` }}>
             <div className="original__media">
-              <LoopVideo src={o.video} poster={o.poster} label={`${o.name}: ${o.label}`} />
+              <LoopVideo src={o.src} poster={o.poster} label={`${o.name}: ${o.label}`} />
               <Link to="/collections/new-arrivals" className="btn btn--ivory original__cta">
                 Find Their Look <Icon name="arrow" size={18} className="icon-arrow" />
               </Link>
@@ -372,13 +370,12 @@ const LOOK = [
   { handle: 'believe-in-yourself-tee', color: 'Orange', x: 44, y: 34, label: 'Top' },
   { handle: 'wide-leg-jeans', color: 'Black', x: 41, y: 64, label: 'Jeans' },
   { handle: 'aeroflex-mesh-sports-shoes', color: 'White', x: 58, y: 91, label: 'Shoes' },
-  { handle: 'utility-denim-jacket', color: 'Black', x: 27, y: 44, label: 'Layer it' },
 ]
 function CompleteTheLook() {
   const items = LOOK.map((l) => ({ ...l, p: getProduct(l.handle)! }))
   const [active, setActive] = useState(0)
   const [sel, setSel] = useState<Record<string, { on: boolean; size: string }>>(() =>
-    Object.fromEntries(items.map((it) => [it.handle, { on: it.handle !== 'utility-denim-jacket', size: '' }])),
+    Object.fromEntries(items.map((it) => [it.handle, { on: true, size: '' }])),
   )
   const [errors, setErrors] = useState<Record<string, boolean>>({})
   const [busy, setBusy] = useState(false)
@@ -422,17 +419,20 @@ function CompleteTheLook() {
               <span>{i + 1}</span>
             </button>
           ))}
-          <div className="look__card" key={active}>
-            <img src={items[active].p.colors.find((c) => c.name === items[active].color)!.images[0]} alt="" />
+          <Link
+            to={`/products/${items[active].handle}?color=${items[active].color}`}
+            className="look__card"
+            key={active}
+            aria-label={`View ${items[active].p.name}`}
+          >
+            <img src={productThumbnail(items[active].p.colors.find((c) => c.name === items[active].color)!.images[0])} alt="" />
             <div>
               <p className="eyebrow">{items[active].label}</p>
               <p className="look__card-name">{items[active].p.name}</p>
               <Price price={items[active].p.price} compareAt={items[active].p.compareAt} />
             </div>
-            <Link to={`/products/${items[active].handle}?color=${items[active].color}`} className="icon-btn" aria-label={`View ${items[active].p.name}`}>
-              <Icon name="arrow" />
-            </Link>
-          </div>
+            <Icon name="arrow" size={16} />
+          </Link>
         </div>
         <div className="look__panel reveal">
           <p className="eyebrow">Shop the look</p>
@@ -455,7 +455,7 @@ function CompleteTheLook() {
                     />
                   </label>
                   <Link to={`/products/${it.handle}?color=${it.color}`} className="look__thumb">
-                    <img src={img} alt="" loading="lazy" />
+                    <img src={productThumbnail(img)} alt="" loading="lazy" />
                   </Link>
                   <div className="look__info">
                     <Link to={`/products/${it.handle}?color=${it.color}`} className="look__name">

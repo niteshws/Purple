@@ -230,7 +230,7 @@ export default function Gifting() {
           </div>
         </div>
         <div className="gift-hero__media">
-          <Img src="/img/brand/packaging-hero.webp" alt="Plum and ivory Purple United gift boxes with tissue paper and a lilac knit sweater" eager />
+          <Img src="/img/campaign/wardrobe/gift-hero.webp" alt="Champagne, plum and oatmeal gift boxes with folded blue knitwear and ivory tissue" eager />
           <p className="signature gift-hero__quote">“Handle with joy.”</p>
         </div>
       </section>
@@ -265,8 +265,8 @@ export default function Gifting() {
       <section className="section gift-pack" aria-labelledby="pack-h">
         <div className="container gift-pack__grid">
           <div className="gift-pack__media">
-            <Img src="/img/brand/gift-box.webp" alt="A plum Purple United gift box tied with an ivory satin ribbon" ratio="796/585" />
-            <Img src="/img/brand/shipping-box.webp" alt="A kraft shipping carton with plum Purple United tape" ratio="1600/915" className="gift-pack__second" />
+            <Img src="/img/campaign/wardrobe/gift-box-detail.webp" alt="A plum gift box tied with an ivory satin ribbon" ratio="4/3" />
+            <Img src="/img/campaign/wardrobe/gift-shipping.webp" alt="A kraft shipping carton sealed with plum tape" ratio="16/9" className="gift-pack__second" />
           </div>
           <div className="gift-pack__text">
             <p className="eyebrow">
