@@ -54,8 +54,11 @@ export default function Register() {
 
   return (
     <AuthLayout
-      image="/img/campaign/wardrobe/shop-new.webp"
-      pos="35% 30%"
+      // Square 1254×1254 studio shot (same photo as the home "For her & for him" section).
+      // It fills the tall panel at 0.83× on standard screens, so it stays sharp; the old
+      // 1859×846 banner was stretched ~2.5× on high-density screens and looked blurry.
+      image="/img/campaign/wardrobe/home-paired.webp"
+      pos="40% 25%"
       caption={
         <>
           <p className="eyebrow">The Little Originals</p>
