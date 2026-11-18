@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Icon } from '../components/Icon'
 import { useMeta } from '../lib/hooks'
 import '../styles/home-option-two.css'
@@ -14,13 +14,6 @@ const CHAPTERS = [
   ['little-ones', 'Little ones'],
   ['off-duty', 'Soft season'],
 ] as const
-
-function moveDetail(event: PointerEvent<HTMLElement>) {
-  if (event.pointerType !== 'mouse') return
-  const bounds = event.currentTarget.getBoundingClientRect()
-  event.currentTarget.style.setProperty('--pointer-x', Math.max(0, Math.min(bounds.width - 150, event.clientX - bounds.left)) + 'px')
-  event.currentTarget.style.setProperty('--pointer-y', Math.max(0, Math.min(bounds.height - 60, event.clientY - bounds.top)) + 'px')
-}
 
 function CampaignPhoto({ name, alt, mobile = false, portrait = false, eager = false }: {
   name: string; alt: string; mobile?: boolean; portrait?: boolean; eager?: boolean
@@ -49,7 +42,7 @@ function FullCampaign({ name, title, alt, hero = false, ink = false }: {
 }) {
   const Heading = hero ? 'h1' : 'h2'
   return (
-    <section id={'h2-' + name} className={'h2-frame h2-campaign h2-campaign--' + name + (ink ? ' h2-campaign--ink' : '')} data-chapter={name} data-sr="1" aria-labelledby={'h2-title-' + name} onPointerMove={moveDetail}>
+    <section id={'h2-' + name} className={'h2-frame h2-campaign h2-campaign--' + name + (ink ? ' h2-campaign--ink' : '')} data-chapter={name} data-sr="1" aria-labelledby={'h2-title-' + name}>
       <CampaignPhoto name={name} alt={alt} mobile eager={hero} />
       <div className="h2-campaign__title">
         <Heading id={'h2-title-' + name}>{title}</Heading>
@@ -57,7 +50,6 @@ function FullCampaign({ name, title, alt, hero = false, ink = false }: {
           <a href="#h2-girls">Girls</a><a href="#h2-boys">Boys</a><a href="#h2-little-ones">Little ones</a>
         </nav>
       </div>
-      <span className="h2-hover-detail" aria-hidden="true"><span />Winter 26</span>
       {hero && <a href="#h2-party" className="h2-scroll-hint">Scroll to explore <Icon name="arrow" size={15} /></a>}
     </section>
   )
@@ -82,20 +74,19 @@ type CollageImage = typeof PHOTOS[keyof typeof PHOTOS]
 const ratio = (photo: CollageImage) => photo.width / photo.height
 const stackRatio = (...photos: CollageImage[]) => 1 / photos.reduce((sum, photo) => sum + 1 / ratio(photo), 0)
 
-function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw', heading = false }: {
-  photo: CollageImage; title: string; id?: string; position?: string; sizes?: string; heading?: boolean
+function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw', heading = false, light = false }: {
+  photo: CollageImage; title: string; id?: string; position?: string; sizes?: string; heading?: boolean; light?: boolean
 }) {
   const Heading = heading ? 'h2' : 'h3'
   return (
-    <article id={id} className="h2-frame h2-collage__tile" onPointerMove={moveDetail}>
+    <article id={id} className="h2-frame h2-collage__tile">
       <picture className="h2-photo">
         <img src={COLLAGE_ASSETS + photo.name + '.webp'}
           srcSet={COLLAGE_ASSETS + photo.name + '-small.webp ' + photo.small + 'w, ' + COLLAGE_ASSETS + photo.name + '.webp ' + photo.width + 'w'}
           sizes={sizes} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async"
           onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')} />
       </picture>
-      <div className={'h2-collage__label h2-collage__label--' + position}><Heading>{title}</Heading></div>
-      <span className="h2-hover-detail" aria-hidden="true"><span />Winter 26</span>
+      <div className={'h2-collage__label h2-collage__label--' + position + (light ? ' h2-collage__label--light' : '')}><Heading>{title}</Heading></div>
     </article>
   )
 }
@@ -174,7 +165,7 @@ export default function HomeOptionTwo() {
         <CollagePhoto photo={PHOTOS.crew} title="Own your way" sizes="(max-width: 600px) 100vw, 48vw" heading />
         <div className="h2-collage__stack">
           <CollagePhoto photo={PHOTOS.colour} title="Colour play" sizes="(max-width: 600px) 100vw, 53vw" />
-          <CollagePhoto photo={PHOTOS.together} title="Together" sizes="(max-width: 600px) 100vw, 53vw" />
+          <CollagePhoto photo={PHOTOS.together} title="Together" sizes="(max-width: 600px) 100vw, 53vw" light />
         </div>
       </section>
       <FullCampaign name="party" title="Party" alt="Blush partywear, natural smiles and a deep wine studio backdrop" />
@@ -185,9 +176,9 @@ export default function HomeOptionTwo() {
       <section id="h2-off-duty" className="h2-collage h2-collage--winter" data-chapter="off-duty" data-sr="1" aria-label="Soft season" style={{ gridTemplateColumns: `${stackRatio(PHOTOS.courtyard, PHOTOS.velvet)}fr ${ratio(PHOTOS.denim)}fr` }}>
         <div className="h2-collage__stack">
           <CollagePhoto photo={PHOTOS.courtyard} title="Soft season" sizes="(max-width: 600px) 100vw, 38vw" heading />
-          <CollagePhoto photo={PHOTOS.velvet} title="After hours" position="bottom-left" sizes="(max-width: 600px) 100vw, 38vw" />
+          <CollagePhoto photo={PHOTOS.velvet} title="After hours" position="bottom-left" sizes="(max-width: 600px) 100vw, 38vw" light />
         </div>
-        <CollagePhoto photo={PHOTOS.denim} title="Off duty" id="h2-denim" sizes="(max-width: 600px) 100vw, 63vw" />
+        <CollagePhoto photo={PHOTOS.denim} title="Off duty" id="h2-denim" sizes="(max-width: 600px) 100vw, 63vw" light />
       </section>
     </div>
   )
