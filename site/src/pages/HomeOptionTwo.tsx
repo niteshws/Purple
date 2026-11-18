@@ -4,12 +4,15 @@ import { useMeta } from '../lib/hooks'
 import '../styles/home-option-two.css'
 
 const ASSETS = '/img/home-option-two/mango-edit/'
+const COLLAGE_ASSETS = '/img/home-option-two/collage-edit/'
 const CHAPTERS = [
   ['new-now', 'New now'],
+  ['editorial', 'Everyday originals'],
+  ['coast', 'On the coast'],
+  ['city', 'Own your way'],
   ['party', 'Party'],
-  ['editorial', 'The edits'],
-  ['off-duty', 'Off duty'],
   ['little-ones', 'Little ones'],
+  ['off-duty', 'Soft season'],
 ] as const
 
 function moveDetail(event: PointerEvent<HTMLElement>) {
@@ -60,17 +63,47 @@ function FullCampaign({ name, title, alt, hero = false, ink = false }: {
   )
 }
 
-const EDITS = [
-  { name: 'co-ords', id: 'h2-girls', title: 'Co-ords', detail: 'Soft days', alt: 'An Indian girl wearing a pale blue striped co-ord with ribbon bows in a softly lit room' },
-  { name: 'street', id: 'h2-street', title: 'Streetwear', detail: 'Their own way', alt: 'An Indian girl in an olive cap, oversized ivory tee and dark wide-leg jeans on a stone city street' },
-  { name: 'playwear', id: 'h2-boys', title: 'Playwear', detail: 'Ready for anything', alt: 'An Indian boy in a wine-red cap, ivory tee and relaxed jeans sitting in a small boucle chair' },
-  { name: 'denim', id: 'h2-denim', title: 'Denim', detail: 'A new rhythm', alt: 'An Indian girl in charcoal wide-leg denim dungarees, an ivory shirt and cream headphones in a light studio' },
-] as const
+const PHOTOS = {
+  studio: { name: 'studio-boy', width: 1122, height: 1402, small: 640, alt: 'A boy in a navy cable-knit jumper and oat trousers, sitting in a sunlit artist’s studio' },
+  layers: { name: 'soft-layers', width: 1086, height: 1448, small: 640, alt: 'A girl wearing an ivory cable cardigan, grey skirt and lace-up boots in a leafy courtyard' },
+  outside: { name: 'coastal-boy', width: 1086, height: 1448, small: 640, alt: 'A boy in an olive knit and cream trousers looking back as he walks through coastal dunes' },
+  coast: { name: 'coastal-friends', width: 1672, height: 941, small: 960, alt: 'Three children in textured winter layers walking together on a sandy beach' },
+  crew: { name: 'city-crew', width: 1280, height: 1920, small: 640, alt: 'Three children wearing relaxed caramel and stone outerwear with hoodies and cargo trousers' },
+  colour: { name: 'colour-play', width: 1920, height: 1280, small: 960, alt: 'A child in a colourful jacket, grey hoodie and mustard shorts against a bright painted wall' },
+  together: { name: 'together', width: 1920, height: 1280, small: 960, alt: 'Three girls in sunglasses, denim and a gold jacket walking together outside a shop' },
+  baby: { name: 'baby-knit', width: 1122, height: 1402, small: 640, alt: 'A smiling baby in an ivory knitted romper sitting beside a sunny window' },
+  wonders: { name: 'small-wonders', width: 1280, height: 1920, small: 640, alt: 'A little girl in a black beret, leather jacket, striped shirt and patterned tights outdoors' },
+  courtyard: { name: 'courtyard', width: 1672, height: 941, small: 960, alt: 'Two children in ivory and plum winter layers walking through a sunlit stone courtyard' },
+  velvet: { name: 'velvet-evening', width: 1672, height: 941, small: 960, alt: 'Two smiling children in a velvet dress and an ivory blazer dancing before wine-red curtains' },
+  denim: { name: 'denim-days', width: 1920, height: 1280, small: 960, alt: 'A girl in a denim jacket holding the brim of a black hat in an autumn landscape' },
+} as const
+type CollageImage = typeof PHOTOS[keyof typeof PHOTOS]
+
+const ratio = (photo: CollageImage) => photo.width / photo.height
+const stackRatio = (...photos: CollageImage[]) => 1 / photos.reduce((sum, photo) => sum + 1 / ratio(photo), 0)
+
+function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw', heading = false }: {
+  photo: CollageImage; title: string; id?: string; position?: string; sizes?: string; heading?: boolean
+}) {
+  const Heading = heading ? 'h2' : 'h3'
+  return (
+    <article id={id} className="h2-frame h2-collage__tile" onPointerMove={moveDetail}>
+      <picture className="h2-photo">
+        <img src={COLLAGE_ASSETS + photo.name + '.webp'}
+          srcSet={COLLAGE_ASSETS + photo.name + '-small.webp ' + photo.small + 'w, ' + COLLAGE_ASSETS + photo.name + '.webp ' + photo.width + 'w'}
+          sizes={sizes} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async"
+          onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')} />
+      </picture>
+      <div className={'h2-collage__label h2-collage__label--' + position}><Heading>{title}</Heading></div>
+      <span className="h2-hover-detail" aria-hidden="true"><span />Winter 26</span>
+    </article>
+  )
+}
 
 export default function HomeOptionTwo() {
   const root = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState<string>('new-now')
-  useMeta('New Now — Purple United Kids', 'The new Purple United campaign: partywear, co-ords, denim and little originals.', { canonical: '/' })
+  useMeta('New Now — Purple United Kids', 'The new Purple United campaign: winter layers, coastal days, partywear and little originals.', { canonical: '/' })
 
   useEffect(() => {
     const element = root.current
@@ -129,18 +162,33 @@ export default function HomeOptionTwo() {
         {CHAPTERS.map(([name, label]) => <a key={name} href={'#h2-' + name} aria-label={label} aria-current={active === name ? 'location' : undefined}><span className="h2-chapters__name">{label}</span><span className="h2-chapters__dot" /></a>)}
       </nav>
       <FullCampaign name="new-now" title="New now" hero alt="Indian children’s winter knitwear campaign in a warm walnut-panelled studio" />
-      <FullCampaign name="party" title="Party" alt="Blush partywear, natural smiles and a deep wine studio backdrop" />
-      <section id="h2-editorial" className="h2-editorial-grid" data-chapter="editorial" data-sr="1" aria-label="Four new perspectives">
-        {EDITS.map((edit, index) => (
-          <article key={edit.name} id={edit.id} className="h2-frame h2-editorial" onPointerMove={moveDetail}>
-            <CampaignPhoto name={edit.name} alt={edit.alt} portrait />
-            <div className="h2-editorial__caption"><div><h2>{edit.title}</h2><span className="h2-editorial__detail">{edit.detail}</span></div><span className="h2-editorial__number" aria-hidden="true">0{index + 1} / 04</span></div>
-            <span className="h2-hover-detail" aria-hidden="true"><span />The new edit</span>
-          </article>
-        ))}
+      <section id="h2-editorial" className="h2-collage h2-collage--portraits" data-chapter="editorial" data-sr="1" aria-label="Everyday originals" style={{ gridTemplateColumns: `${ratio(PHOTOS.studio)}fr ${ratio(PHOTOS.layers)}fr ${ratio(PHOTOS.outside)}fr` }}>
+        <CollagePhoto photo={PHOTOS.studio} title="Everyday originals" id="h2-boys" position="top-right" sizes="(max-width: 600px) 100vw, 35vw" heading />
+        <CollagePhoto photo={PHOTOS.layers} title="Soft layers" id="h2-girls" position="bottom-left" sizes="(max-width: 600px) 100vw, 33vw" />
+        <CollagePhoto photo={PHOTOS.outside} title="Outside" sizes="(max-width: 600px) 100vw, 33vw" />
       </section>
-      <FullCampaign name="off-duty" title="Off duty" ink alt="An Indian girl in a relaxed washed denim co-ord lounging beside a charcoal sofa" />
-      <FullCampaign name="little-ones" title="Little ones" ink alt="Indian babywear in ivory and pale blue, photographed in soft natural nursery light" />
+      <section id="h2-coast" className="h2-collage h2-collage--coast" data-chapter="coast" data-sr="1" aria-label="On the coast">
+        <CollagePhoto photo={PHOTOS.coast} title="On the coast" position="bottom-right" heading />
+      </section>
+      <section id="h2-city" className="h2-collage h2-collage--city" data-chapter="city" data-sr="1" aria-label="Own your way" style={{ gridTemplateColumns: `${ratio(PHOTOS.crew)}fr ${stackRatio(PHOTOS.colour, PHOTOS.together)}fr` }}>
+        <CollagePhoto photo={PHOTOS.crew} title="Own your way" sizes="(max-width: 600px) 100vw, 48vw" heading />
+        <div className="h2-collage__stack">
+          <CollagePhoto photo={PHOTOS.colour} title="Colour play" sizes="(max-width: 600px) 100vw, 53vw" />
+          <CollagePhoto photo={PHOTOS.together} title="Together" sizes="(max-width: 600px) 100vw, 53vw" />
+        </div>
+      </section>
+      <FullCampaign name="party" title="Party" alt="Blush partywear, natural smiles and a deep wine studio backdrop" />
+      <section id="h2-little-ones" className="h2-collage h2-collage--little" data-chapter="little-ones" data-sr="1" aria-label="Little ones" style={{ gridTemplateColumns: `${ratio(PHOTOS.baby)}fr ${ratio(PHOTOS.wonders)}fr` }}>
+        <CollagePhoto photo={PHOTOS.baby} title="Little ones" position="top-right" sizes="(max-width: 600px) 100vw, 55vw" heading />
+        <CollagePhoto photo={PHOTOS.wonders} title="Small wonders" position="bottom-right" sizes="(max-width: 600px) 100vw, 46vw" />
+      </section>
+      <section id="h2-off-duty" className="h2-collage h2-collage--winter" data-chapter="off-duty" data-sr="1" aria-label="Soft season" style={{ gridTemplateColumns: `${stackRatio(PHOTOS.courtyard, PHOTOS.velvet)}fr ${ratio(PHOTOS.denim)}fr` }}>
+        <div className="h2-collage__stack">
+          <CollagePhoto photo={PHOTOS.courtyard} title="Soft season" sizes="(max-width: 600px) 100vw, 38vw" heading />
+          <CollagePhoto photo={PHOTOS.velvet} title="After hours" position="bottom-left" sizes="(max-width: 600px) 100vw, 38vw" />
+        </div>
+        <CollagePhoto photo={PHOTOS.denim} title="Off duty" id="h2-denim" sizes="(max-width: 600px) 100vw, 63vw" />
+      </section>
     </div>
   )
 }

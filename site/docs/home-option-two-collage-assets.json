@@ -1,0 +1,164 @@
+{
+  "source": "User attachments, 18 November 2026",
+  "processing": "EXIF orientation, proportional downscaling and WebP encoding only. No cropping, blur, retouching or generated variations.",
+  "unchanged": "Existing new-now and party campaign assets remain unchanged.",
+  "duplicate_attachments": "The three identical coastal group attachments are represented once.",
+  "images": [
+    {
+      "key": "coastal-boy",
+      "source_file": "codex-clipboard-46d48997-b478-43ab-a89f-0e3e0aa9960b.png",
+      "source_sha256": "3e74ff910ccb7b1c89d75b7c75eeb045cde08dd3104d72ec2b22214db27899b4",
+      "source_size": [
+        1086,
+        1448
+      ],
+      "width": 1086,
+      "height": 1448,
+      "small_width": 640,
+      "output": "/img/home-option-two/collage-edit/coastal-boy.webp"
+    },
+    {
+      "key": "courtyard",
+      "source_file": "codex-clipboard-64857217-80b4-43ad-96ad-b78f32903594.png",
+      "source_sha256": "6d9abf917d279ae86dafa7b2d632ba8c88f33d7d75385bbab4e9f0c5c9bd3a97",
+      "source_size": [
+        1672,
+        941
+      ],
+      "width": 1672,
+      "height": 941,
+      "small_width": 960,
+      "output": "/img/home-option-two/collage-edit/courtyard.webp"
+    },
+    {
+      "key": "studio-boy",
+      "source_file": "codex-clipboard-f82b8ff9-b4d9-4615-9869-68d18d25e3ca.png",
+      "source_sha256": "79bf13225b836e5354b06496263a39398f9b96360f81ab7c8affa3f4947f461f",
+      "source_size": [
+        1122,
+        1402
+      ],
+      "width": 1122,
+      "height": 1402,
+      "small_width": 640,
+      "output": "/img/home-option-two/collage-edit/studio-boy.webp"
+    },
+    {
+      "key": "soft-layers",
+      "source_file": "codex-clipboard-74f15223-1fc2-4325-9e33-48a5ed18ae09.png",
+      "source_sha256": "b09522501678252ba5cc0a2a4565625a78ced8640fe0592508b38d8d19fdf1d7",
+      "source_size": [
+        1086,
+        1448
+      ],
+      "width": 1086,
+      "height": 1448,
+      "small_width": 640,
+      "output": "/img/home-option-two/collage-edit/soft-layers.webp"
+    },
+    {
+      "key": "velvet-evening",
+      "source_file": "codex-clipboard-f41e5b49-8458-42c8-b78b-ffae9f8685ea.png",
+      "source_sha256": "dafb17609db1319521430f5c0089297a0786d8020d4896e60fef2da5e348fa39",
+      "source_size": [
+        1672,
+        941
+      ],
+      "width": 1672,
+      "height": 941,
+      "small_width": 960,
+      "output": "/img/home-option-two/collage-edit/velvet-evening.webp"
+    },
+    {
+      "key": "baby-knit",
+      "source_file": "codex-clipboard-b1154e7c-6098-4f54-b178-5291f1d6586f.png",
+      "source_sha256": "8a71541d7a2e56c2a6fda917041fa215d1a3eaddb8fda0e6fb1996f37e5b246e",
+      "source_size": [
+        1122,
+        1402
+      ],
+      "width": 1122,
+      "height": 1402,
+      "small_width": 640,
+      "output": "/img/home-option-two/collage-edit/baby-knit.webp"
+    },
+    {
+      "key": "coastal-friends",
+      "source_file": "codex-clipboard-f374a236-36fa-490d-995e-e404b754a5bf.png",
+      "source_sha256": "2a4b3241d987914bb7923e10f12372f59eb9887a9b0d0b235b4f2212383b6e97",
+      "source_size": [
+        1672,
+        941
+      ],
+      "width": 1672,
+      "height": 941,
+      "small_width": 960,
+      "output": "/img/home-option-two/collage-edit/coastal-friends.webp"
+    },
+    {
+      "key": "colour-play",
+      "source_file": "genderneutral-fall-outfit-kids.jpg",
+      "source_sha256": "31f1652419e82304eceffb135573198cf01b04966aebac8d35400f202d973355",
+      "source_size": [
+        5376,
+        3584
+      ],
+      "width": 1920,
+      "height": 1280,
+      "small_width": 960,
+      "output": "/img/home-option-two/collage-edit/colour-play.webp"
+    },
+    {
+      "key": "city-crew",
+      "source_file": "photorealistic-portrait-young-people-with-braids.jpg",
+      "source_sha256": "11831e808607ea4e9146d54749a47f1001e86fa6d9c398f9009c37214e624183",
+      "source_size": [
+        3333,
+        5000
+      ],
+      "width": 1280,
+      "height": 1920,
+      "small_width": 640,
+      "output": "/img/home-option-two/collage-edit/city-crew.webp"
+    },
+    {
+      "key": "small-wonders",
+      "source_file": "little-baby-girl-dressed-fashionable-outfit-park.jpg",
+      "source_sha256": "a76d3deff022b240dbb5f49d320a4d3dbfd7f306b7e6bf632bbff6d951140497",
+      "source_size": [
+        4480,
+        6720
+      ],
+      "width": 1280,
+      "height": 1920,
+      "small_width": 640,
+      "output": "/img/home-option-two/collage-edit/small-wonders.webp"
+    },
+    {
+      "key": "denim-days",
+      "source_file": "outdoor-fall-portrait-girl-with-hat-jeans-wear-nature-background-rural-landscape-country-style-near-lake-forest.jpg",
+      "source_sha256": "131b980cdbd52acc7f45a2550c3476a593a846a8731da224ca85b09f94ba26c4",
+      "source_size": [
+        5627,
+        3751
+      ],
+      "width": 1920,
+      "height": 1280,
+      "small_width": 960,
+      "output": "/img/home-option-two/collage-edit/denim-days.webp"
+    },
+    {
+      "key": "together",
+      "source_file": "three-fashionable-little-girls-with-bags-walking-from-shop.jpg",
+      "source_sha256": "6f25276e1c2d19247f8927d538020dc58fff28ebf6347989a0565349307bf2ef",
+      "source_size": [
+        5760,
+        3840
+      ],
+      "width": 1920,
+      "height": 1280,
+      "small_width": 960,
+      "output": "/img/home-option-two/collage-edit/together.webp"
+    }
+  ]
+}
