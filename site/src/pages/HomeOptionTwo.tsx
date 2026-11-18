@@ -92,6 +92,21 @@ function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw'
   )
 }
 
+function GiftingPhoto({ src, width, height, alt, title, lead = false }: {
+  src: string; width: number; height: number; alt: string; title: string; lead?: boolean
+}) {
+  const Heading = lead ? 'h2' : 'h3'
+  return (
+    <article className="h2-frame h2-collage__tile">
+      <picture className="h2-photo">
+        <img src={src} width={width} height={height} alt={alt} loading="lazy" decoding="async"
+          onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')} />
+      </picture>
+      <div className="h2-collage__label"><Heading id={lead ? 'h2-title-gifting' : undefined}>{title}</Heading></div>
+    </article>
+  )
+}
+
 export default function HomeOptionTwo() {
   const root = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState<string>('new-now')
@@ -181,14 +196,16 @@ export default function HomeOptionTwo() {
         </div>
         <CollagePhoto photo={PHOTOS.denim} title="Off duty" id="h2-denim" sizes="(max-width: 600px) 100vw, 63vw" />
       </section>
-      <section id="h2-gifting" className="h2-frame h2-collage h2-collage__tile" data-chapter="gifting" data-sr="1" aria-labelledby="h2-title-gifting">
-        <picture className="h2-photo">
-          <img src="/img/brand/packaging-hero.webp" width="1600" height="1064"
-            alt="Purple United plum and ivory gift boxes, shopping bags, tissue and gift cards with a folded ivory knit"
-            loading="lazy" decoding="async"
-            onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')} />
-        </picture>
-        <div className="h2-collage__label"><h2 id="h2-title-gifting">Gifting</h2></div>
+      <section id="h2-gifting" className="h2-collage h2-collage--gifting" data-chapter="gifting" data-sr="1" aria-labelledby="h2-title-gifting"
+        style={{ gridTemplateColumns: `${1600 / 1064}fr ${1 / (585 / 796 + 1038 / 1400)}fr` }}>
+        <GiftingPhoto src="/img/brand/packaging-hero.webp" width={1600} height={1064}
+          alt="Purple United plum and ivory gift boxes, shopping bags, tissue and gift cards with a folded ivory knit" title="Gifting" lead />
+        <div className="h2-collage__stack">
+          <GiftingPhoto src="/img/brand/gift-box.webp" width={796} height={585}
+            alt="A plum Purple United gift box finished with an ivory satin ribbon" title="Made special" />
+          <GiftingPhoto src="/img/brand/gift-card.webp" width={1400} height={1038}
+            alt="Purple United gift card and presentation packaging" title="Their choice" />
+        </div>
       </section>
     </div>
   )
