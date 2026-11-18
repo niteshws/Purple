@@ -21,9 +21,10 @@ Requires Node 20+. The app is a client-side SPA (React Router); when deploying, 
 - **Option 2**: the new editorial campaign homepage, available at `/?home=2`.
 - Use **Homepage design** beside **Appearance** in the footer to switch. The selection is saved in this browser; existing navigation returns to the selected homepage.
 - Option 2 is isolated in `src/pages/HomeOptionTwo.tsx` and `src/styles/home-option-two.css`. The original homepage and all inner page implementations are unchanged.
-- Option 2 mixes Option 1’s campaign, wardrobe and footwear imagery with two earlier Option 2 photographs, using minimal copy. Photographs retain their native proportions, with dedicated mobile campaign compositions and captions below the images on mobile and tablet. No image zoom, cover crop, or blur filters are applied.
-- Option 2 campaign cards and photos are non-clickable. Its department rail jumps to sections on the same homepage. The shared header and footer retain the existing site navigation.
-- Caption motion respects reduced-motion preferences; photographs remain fully opaque and visible without IntersectionObserver. Only the hero image loads eagerly; other photographs load on demand.
+- Option 2 follows the supplied Mango Kids PDF layout: continuous full-width campaigns, a two-column editorial wall, minimal overlaid labels and no image gutters. Twelve new generated compositions, including dedicated mobile versions, live in `public/img/home-option-two/mango-edit/`; prompts and reference provenance are recorded in `docs/home-option-two-mango-edit-prompts.json`.
+- Option 2 has its own slim header and compact footer in `src/components/HomeTwoChrome.tsx`. Option 1 keeps its original header, footer and content. Both homepage and appearance switches remain available in the footer.
+- Campaign photos are non-clickable. Department links and chapter navigation stay on the same homepage; header search, bag and account actions reuse the existing site features.
+- Every image receives a load/reveal animation without zoom, blur or cropping. Hover reveals editorial details; chapter dots and a reading-progress line follow the scroll position. Reduced-motion preferences disable animations. Images remain visible when IntersectionObserver is unavailable, and only the hero image loads eagerly.
 
 ## Stack
 

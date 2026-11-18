@@ -9,6 +9,7 @@ import { useRevealAll } from './lib/hooks'
 import { useThemeSync } from './lib/theme'
 import Home from './pages/Home'
 import { setHomeDesign, useHomeDesign } from './lib/home-design'
+import { HomeTwoHeader, HomeTwoFooter } from './components/HomeTwoChrome'
 
 const HomeOptionTwo = lazy(() => import('./pages/HomeOptionTwo'))
 
@@ -115,14 +116,17 @@ function PageFallback() {
 
 function Layout() {
   useThemeSync()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
+  const savedHome = useHomeDesign()
+  const requestedHome = new URLSearchParams(search).get('home')
+  const selectedHome = requestedHome === '1' || requestedHome === '2' ? requestedHome : savedHome
+  const optionTwo = pathname === '/' && selectedHome === '2'
   return (
     <>
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <AnnouncementBar />
-      <Header />
+      {optionTwo ? <HomeTwoHeader /> : <><AnnouncementBar /><Header /></>}
       <main id="main" tabIndex={-1}>
         <Suspense fallback={<PageFallback />}>
           <div className="page-enter" key={pathname}>
@@ -130,7 +134,7 @@ function Layout() {
           </div>
         </Suspense>
       </main>
-      <Footer />
+      {optionTwo ? <HomeTwoFooter /> : <Footer />}
       <MobileNav />
       <SearchOverlay />
       <CartDrawer />

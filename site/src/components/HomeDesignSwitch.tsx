@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Icon } from './Icon'
 import { setHomeDesign, useHomeDesign, type HomeDesign } from '../lib/home-design'
 
-export function HomeDesignSwitch() {
+export function HomeDesignSwitch({ tone = 'dark' }: { tone?: 'light' | 'dark' }) {
   const saved = useHomeDesign()
   const { pathname, search } = useLocation()
   const requested = new URLSearchParams(search).get('home')
@@ -28,7 +28,7 @@ export function HomeDesignSwitch() {
   }
 
   return (
-    <div className="seg seg--dark home-design">
+    <div className={'seg seg--' + tone + ' home-design'}>
       <span className="seg__label" id={id}>Homepage design</span>
       <div ref={group} className="seg__track home-design__track" role="radiogroup" aria-labelledby={id} onKeyDown={onKey}>
         {(['1', '2'] as const).map((design) => (

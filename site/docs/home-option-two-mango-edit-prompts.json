@@ -1,0 +1,123 @@
+{
+  "method": "Built-in imagegen",
+  "purpose": "New original Indian children's fashion campaign photographs inspired by the user's styling references; not photographs of actual inventory.",
+  "layoutReference": "screencapture-shop-mango-in-en-h-kids-2026-11-18-15_11_53.pdf",
+  "referenceImages": [
+    "codex-clipboard-c788151e-4695-4078-9b5d-76959dac174e.png",
+    "codex-clipboard-bf2e18d7-2365-41ce-aac2-8fc47303afb5.png",
+    "codex-clipboard-eacac601-a799-44e7-80d3-2f61ded1ebf9.png",
+    "codex-clipboard-8c42db7c-0d08-491e-9a78-52838e0f3aa2.png",
+    "codex-clipboard-83898c0d-180d-4144-9eca-2072fbe4180f.png",
+    "codex-clipboard-7b651e14-dd2c-4c46-82b0-19aa9a11a159.png"
+  ],
+  "assets": [
+    {
+      "name": "new-now",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Landscape 16:9 full-width hero. Two distinct Indian children, a girl aged9 with long dark wavy hair and a boy aged8 with short soft curls, seated naturally in separate low dark velvet chairs in a walnut-panelled room. Girl wears an oversized ivory textured knit cardigan and relaxed cocoa corduroy trousers; boy wears a royal plum cable-knit pullover, ivory collar and loose oat trousers. Real small smiles as they look at one another, hands relaxed and anatomically correct. Wide environmental photograph, their COMPLETE seated figures and shoes in frame, heads in upper third with 12% clear headroom. Subjects on the left and right thirds; leave a calm clear gap across the lower centre for live white 'NEW NOW' typography, with no important clothing or hands in this gap. Warm window side light, sophisticated brown, plum, oat and ivory tones, understated international kids campaign. Photographer at their eye level, real candid moment, not a stock photo.",
+      "size": [
+        1920,
+        1080
+      ],
+      "output": "public/img/home-option-two/mango-edit/new-now.webp"
+    },
+    {
+      "name": "new-now-mobile",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Dedicated portrait 3:4 mobile campaign photograph. A distinct Indian boy aged8 with curly black hair and warm medium-brown skin in an oversized royal plum cable-knit sweater, cream collar and relaxed oat corduroy trousers, simple cream sneakers. Standing with a gentle spontaneous grin in a walnut-panelled studio near a low dark velvet chair, warm window light. FULL FIGURE visible in upper 75% of image with generous headroom, leave the bottom25% as quiet dark walnut floor for live white typography. Real material texture and casual youthful posture. No hard cropping of head, hands or shoes.",
+      "size": [
+        1080,
+        1440
+      ],
+      "output": "public/img/home-option-two/mango-edit/new-now-mobile.webp"
+    },
+    {
+      "name": "party",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Landscape16:9 partywear campaign inspired by the supplied reference's candid movement, dark studio backdrop and tactile occasionwear. Two DIFFERENT Indian girls aged5and8 with natural black hair, one with a short loose bob and one with long hair and flyaways, genuine joyful smiles. One wears a deep wine sequinned long-sleeved party dress; the other wears a softly textured blush-rose feather-effect party dress with tasteful small dark dots, cream tights and Mary Jane shoes. They are dancing naturally near one another against a deep wine-black curtain, with real childlike posture and anatomically believable hands. FULL figures and shoes in frame, at least10% headroom. Place girls on left and right thirds with a clear dark central gap for a small white headline, keep important faces and clothes away from the centre gap. Warm directional fashion studio lighting, realistic sequins, soft fabric movement. The reference is STYLE inspiration only; new Indian models, no replication of their faces.",
+      "size": [
+        1920,
+        1080
+      ],
+      "output": "public/img/home-option-two/mango-edit/party.webp"
+    },
+    {
+      "name": "co-ords",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Portrait4:5 editorial photograph inspired by the supplied outfit and soft daylight, not its child's identity. A distinct Indian girl aged5 with warm medium-brown skin and long dark hair in loose pigtails with pale blue ribbon bows. Wearing a crisp pale blue and ivory pinstriped cotton peplum co-ord top with little shoulder bows and loose wide-leg trousers, cream ballet shoes. A gentle natural smile and relaxed hands behind her back, standing in a quiet light oat bedroom with linen curtains, subtle wooden cabinet and simple rug. FULL BODY with complete head, both shoes and at least10% headroom. Reserve a small clean strip of floor below the shoes for an editorial label. Natural side daylight, realistic cotton weave and creases, candid unretouched child face. No logos, no lettering on garments.",
+      "size": [
+        1280,
+        1600
+      ],
+      "output": "public/img/home-option-two/mango-edit/co-ords.webp"
+    },
+    {
+      "name": "street",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Portrait4:5 street fashion campaign inspired by the supplied reference's oversized proportions and relaxed street styling, not its child's identity. A distinct Indian girl aged8 with a natural dark ponytail, warm brown skin, wearing an olive baseball cap with NO logo, an oversized ivory tee with a small abstract botanical line drawing and NO lettering, relaxed dark washed wide-leg jeans and chunky cream sneakers. Lightly adjusting her cap brim with a believable hand, candid confident small smile, no sunglasses obscuring the face. Standing on a quiet stone pavement outside a grey neoclassical building with dark steps. FULL FIGURE inside frame, generous headroom, shoes fully visible with a clean strip of pavement beneath for a small live caption. Natural overcast editorial light, sharp true denim grain and fabric folds. No coffee cups or props.",
+      "size": [
+        1280,
+        1600
+      ],
+      "output": "public/img/home-option-two/mango-edit/street.webp"
+    },
+    {
+      "name": "playwear",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Portrait4:5 fashion editorial inspired by the supplied seated pose, red cap and relaxed outfit, not the reference child's identity. A distinct Indian boy aged7 with deep brown skin and short textured black hair wears a plain muted wine-red baseball cap with NO logo, an oversized soft ivory baseball tee with wine piping and no text, loose blue jeans, white chunky sneakers. Sitting sideways comfortably in a small rounded ivory boucle armchair in a moody grey play studio, one foot naturally on floor and one knee gently bent, hands relaxed with correct anatomy. Natural half-smile looking off camera, casual childlike body language. A small soft giraffe toy stands in the background at one side. FULL figure including head, chair and shoes, at least10% headroom, slight space below shoes for live caption. Soft window side lighting, real pores, detailed boucle, cotton and denim.",
+      "size": [
+        1280,
+        1600
+      ],
+      "output": "public/img/home-option-two/mango-edit/playwear.webp"
+    },
+    {
+      "name": "party-mobile",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Portrait3:4 dedicated mobile partywear campaign. A distinct Indian girl aged6 with a soft black bob, warm brown skin and a delighted natural smile, mid-step in a muted blush-rose textured feather-effect party dress with small dark dots, ivory tights and black Mary Jane shoes. Dark deep-wine studio curtain and warm walnut floor. Full figure in the upper75%, generous headroom; reserve the bottom25% as quiet dark floor for white live typography. Tactile dress texture, real fine hair, candid child energy. Reference is for styling and dark studio mood, not identity.",
+      "size": [
+        1080,
+        1440
+      ],
+      "output": "public/img/home-option-two/mango-edit/party-mobile.webp"
+    },
+    {
+      "name": "denim",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Portrait4:5 editorial inspired by the reference's headphones, tailored denim and white studio setting, not the child's identity. A distinct Indian girl aged10 with deep brown skin and naturally wavy shoulder-length black hair wears large cream over-ear headphones, a crisp ivory long-sleeved cotton shirt beneath charcoal denim wide-leg dungarees with a cinched waist, and simple ivory sneakers. Standing naturally near white studio steps, one hand lightly adjusting a headphone, a calm friendly authentic expression. FULL BODY with generous headroom and shoes completely inside frame. Room below shoes for a small live caption. Daylight editorial photography, visible topstitching and denim grain, realistic hands and skin. No logos or bag.",
+      "size": [
+        1280,
+        1600
+      ],
+      "output": "public/img/home-option-two/mango-edit/denim.webp"
+    },
+    {
+      "name": "off-duty",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Landscape16:9 editorial inspired by the supplied denim lounge styling and modern grey interior, not the child's identity. A distinct Indian girl aged9 with warm medium-brown skin, loose black hair and a casual small smile is seated comfortably on a pale grey studio floor beside a low charcoal leather sofa. Wearing an oversized washed blue-grey denim jacket over an ivory tee, relaxed matching wide-leg jeans, simple cream sneakers, and a plain dark baseball cap with no text. Natural childlike relaxed pose with knees gently bent, one hand resting on a knee, no sunglasses obscuring her face. Entire body, shoes and complete head visible. Place her on the LEFT third; keep centre and right as quiet textured grey studio wall and floor for live white headline. Ample top headroom. True denim fibres and realistic wrinkles, soft natural side light. No laptop, no text or logos.",
+      "size": [
+        1920,
+        1080
+      ],
+      "output": "public/img/home-option-two/mango-edit/off-duty.webp"
+    },
+    {
+      "name": "off-duty-mobile",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Portrait3:4 dedicated mobile editorial. A distinct Indian girl aged9 with deep medium-brown skin and loose black waves sits casually on a pale grey floor next to a low charcoal leather sofa, wearing an oversized washed blue-grey denim jacket, ivory tee, relaxed matching jeans and cream sneakers. Plain black baseball cap without logos, face unobscured, natural quiet smile. Full body with believable knees and hands in the upper75% and generous headroom; bottom25% is clear grey floor for live typography. Soft window side light, authentic unretouched face and sharp denim detail. The reference supplies styling and setting only, not identity.",
+      "size": [
+        1080,
+        1440
+      ],
+      "output": "public/img/home-option-two/mango-edit/off-duty-mobile.webp"
+    },
+    {
+      "name": "little-ones",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Landscape16:9 premium toddler fashion campaign. Two distinct Indian toddlers aged18months and2years, a girl with short soft black curls and a boy with fine straight black hair, sitting safely on a thick ivory wool rug in a calm oat and pale wood nursery. Girl wears a pale blue-and-ivory fine-striped cotton co-ord with little shoulder bows; boy wears an ivory rib-knit romper with wooden buttons and soft sky-blue cotton trousers. Natural little smiles while looking toward one another. Full bodies and complete heads with generous headroom, natural baby proportions and believable hands. Place them on LEFT and RIGHT thirds, leave a quiet clear central area of oat wall and rug for a live white headline without covering faces or clothing. Soft warm window daylight, photoreal cotton weave and knit fibres. Only simple furnishings, no excessive props or toys.",
+      "size": [
+        1920,
+        1080
+      ],
+      "output": "public/img/home-option-two/mango-edit/little-ones.webp"
+    },
+    {
+      "name": "little-ones-mobile",
+      "prompt": "Use case: photorealistic-natural. Create ONE premium professional children's fashion campaign photograph for Purple United. New original Indian child models, not the exact children from the references. Natural warm brown skin with subtle true pores, fine baby hair, individual hair strands, genuine relaxed expressions, believable child anatomy and hands, detailed real fabric weave and stitching. Childlike candid energy, sophisticated cinematic natural lighting, medium-format editorial photography, subtle analogue grain. Highest quality and resolution. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, distorted hands or extra limbs. Keep complete heads and full faces inside the frame with generous headroom. Portrait3:4 dedicated mobile toddler campaign. One distinct Indian baby aged16months with warm medium-brown skin, tiny natural milk teeth and fine black curls, sitting safely on a thick ivory wool rug beside a low bright window. Wearing a soft ivory rib-knit romper with wooden buttons, pale blue cotton trousers and cream knitted socks. Genuine small smile toward someone beside camera, realistic baby proportions, anatomically believable little hands relaxed on the rug. Full baby figure in the upper75%, generous headroom, bottom25% clear oat wool rug for live typography. Minimal light-wood nursery, soft daylight, beautiful true skin and fabric texture.",
+      "size": [
+        1080,
+        1440
+      ],
+      "output": "public/img/home-option-two/mango-edit/little-ones-mobile.webp"
+    }
+  ]
+}

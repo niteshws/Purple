@@ -1,133 +1,146 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, type PointerEvent } from 'react'
+import { Icon } from '../components/Icon'
 import { useMeta } from '../lib/hooks'
 import '../styles/home-option-two.css'
 
-type Photo = { src: string; width: number; height: number }
+const ASSETS = '/img/home-option-two/mango-edit/'
+const CHAPTERS = [
+  ['new-now', 'New now'],
+  ['party', 'Party'],
+  ['editorial', 'The edits'],
+  ['off-duty', 'Off duty'],
+  ['little-ones', 'Little ones'],
+] as const
 
-const PHOTOS = {
-  hero: { src: '/img/campaign/hero/little-originals-desktop.webp', width: 1983, height: 793 },
-  heroMobile: { src: '/img/campaign/hero/little-originals-mobile.webp', width: 960, height: 720 },
-  girls: { src: '/img/home-option-two/girls.webp', width: 1280, height: 1600 },
-  boys: { src: '/img/campaign/wardrobe/home-boys.webp', width: 1122, height: 1402 },
-  celebration: { src: '/img/campaign/hero/girls-edit-desktop.webp', width: 1983, height: 793 },
-  celebrationMobile: { src: '/img/campaign/hero/girls-edit-mobile.webp', width: 960, height: 720 },
-  infants: { src: '/img/campaign/hero/infant-edit-desktop.webp', width: 1983, height: 793 },
-  infantsMobile: { src: '/img/campaign/hero/infant-edit-mobile.webp', width: 960, height: 720 },
-  play: { src: '/img/home-option-two/outside-mobile.webp', width: 1080, height: 1440 },
-  footwear: { src: '/img/campaign/footwear-podiums.webp', width: 1800, height: 1673 },
-} satisfies Record<string, Photo>
+function moveDetail(event: PointerEvent<HTMLElement>) {
+  if (event.pointerType !== 'mouse') return
+  const bounds = event.currentTarget.getBoundingClientRect()
+  event.currentTarget.style.setProperty('--pointer-x', Math.max(0, Math.min(bounds.width - 150, event.clientX - bounds.left)) + 'px')
+  event.currentTarget.style.setProperty('--pointer-y', Math.max(0, Math.min(bounds.height - 60, event.clientY - bounds.top)) + 'px')
+}
 
-/** Native image proportions keep the entire photograph visible, including every face. */
-function CampaignPhoto({ photo, mobile, alt, eager = false }: {
-  photo: Photo; mobile?: Photo; alt: string; eager?: boolean
+function CampaignPhoto({ name, alt, mobile = false, portrait = false, eager = false }: {
+  name: string; alt: string; mobile?: boolean; portrait?: boolean; eager?: boolean
 }) {
   return (
-    <picture className="h2-picture">
-      {mobile && <source media="(max-width: 1023px)" srcSet={mobile.src} width={mobile.width} height={mobile.height} />}
+    <picture className="h2-photo">
+      {mobile && <source media="(max-width: 767px)" srcSet={ASSETS + name + '-mobile-640.webp 640w, ' + ASSETS + name + '-mobile.webp 1080w'} sizes="100vw" width="1080" height="1440" />}
       <img
-        src={photo.src}
-        width={photo.width}
-        height={photo.height}
+        src={ASSETS + name + '.webp'}
+        srcSet={portrait ? ASSETS + name + '-640.webp 640w, ' + ASSETS + name + '.webp 1280w' : ASSETS + name + '-1280.webp 1280w, ' + ASSETS + name + '.webp 1920w'}
+        sizes={portrait ? '(max-width: 600px) 100vw, 50vw' : '100vw'}
+        width={portrait ? 1280 : 1920}
+        height={portrait ? 1600 : 1080}
         alt={alt}
         loading={eager ? 'eager' : 'lazy'}
         fetchPriority={eager ? 'high' : undefined}
         decoding="async"
+        onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')}
       />
     </picture>
   )
 }
 
-function Campaign({ name, photo, mobile, alt, line1, line2, label, hero = false }: {
-  name: string; photo: Photo; mobile: Photo; alt: string; line1: string; line2: string;
-  label: string; hero?: boolean
+function FullCampaign({ name, title, alt, hero = false, ink = false }: {
+  name: string; title: string; alt: string; hero?: boolean; ink?: boolean
 }) {
   const Heading = hero ? 'h1' : 'h2'
-  const titleId = 'h2-' + name + '-title'
   return (
-    <section id={'h2-' + name} className={'h2-campaign h2-campaign--' + name} data-sr="1" aria-labelledby={titleId}>
-      <CampaignPhoto photo={photo} mobile={mobile} alt={alt} eager={hero} />
-      <div className={'h2-campaign__content' + (hero ? ' h2-arrive' : '')} data-h2-reveal={hero ? undefined : ''}>
-        <p className="h2-label">{label}</p>
-        <Heading id={titleId}>{line1}<br />{' '}{line2}</Heading>
+    <section id={'h2-' + name} className={'h2-frame h2-campaign h2-campaign--' + name + (ink ? ' h2-campaign--ink' : '')} data-chapter={name} data-sr="1" aria-labelledby={'h2-title-' + name} onPointerMove={moveDetail}>
+      <CampaignPhoto name={name} alt={alt} mobile eager={hero} />
+      <div className="h2-campaign__title">
+        <Heading id={'h2-title-' + name}>{title}</Heading>
+        <nav aria-label={title + ' departments'}>
+          <a href="#h2-girls">Girls</a><a href="#h2-boys">Boys</a><a href="#h2-little-ones">Little ones</a>
+        </nav>
       </div>
+      <span className="h2-hover-detail" aria-hidden="true"><span />Winter 26</span>
+      {hero && <a href="#h2-party" className="h2-scroll-hint">Scroll to explore <Icon name="arrow" size={15} /></a>}
     </section>
   )
 }
 
+const EDITS = [
+  { name: 'co-ords', id: 'h2-girls', title: 'Co-ords', detail: 'Soft days', alt: 'An Indian girl wearing a pale blue striped co-ord with ribbon bows in a softly lit room' },
+  { name: 'street', id: 'h2-street', title: 'Streetwear', detail: 'Their own way', alt: 'An Indian girl in an olive cap, oversized ivory tee and dark wide-leg jeans on a stone city street' },
+  { name: 'playwear', id: 'h2-boys', title: 'Playwear', detail: 'Ready for anything', alt: 'An Indian boy in a wine-red cap, ivory tee and relaxed jeans sitting in a small boucle chair' },
+  { name: 'denim', id: 'h2-denim', title: 'Denim', detail: 'A new rhythm', alt: 'An Indian girl in charcoal wide-leg denim dungarees, an ivory shirt and cream headphones in a light studio' },
+] as const
+
 export default function HomeOptionTwo() {
   const root = useRef<HTMLDivElement>(null)
-  useMeta('Little Originals — Purple United Kids', 'Big little energy. Explore girls, boys, infants, occasionwear and footwear in the Purple United winter edit.', { canonical: '/' })
+  const [active, setActive] = useState<string>('new-now')
+  useMeta('New Now — Purple United Kids', 'The new Purple United campaign: partywear, co-ords, denim and little originals.', { canonical: '/' })
 
   useEffect(() => {
     const element = root.current
-    if (!element || !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('h2-visible')
-          observer.unobserve(entry.target)
-        }
-      }
-    }, { threshold: 0.06, rootMargin: '0px 0px -16px 0px' })
-    element.classList.add('h2-motion')
-    element.querySelectorAll('[data-h2-reveal]').forEach((target) => observer.observe(target))
+    if (!element) return
+    const photos = Array.from(element.querySelectorAll<HTMLElement>('.h2-photo'))
+    photos.forEach((photo) => {
+      const img = photo.querySelector('img')
+      if (img?.complete && img.naturalWidth > 0) photo.classList.add('is-loaded')
+    })
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let reveals: IntersectionObserver | undefined
+    let chapters: IntersectionObserver | undefined
+    if ('IntersectionObserver' in window) {
+      if (!reduced.matches) element.classList.add('h2-animate')
+      reveals = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            reveals?.unobserve(entry.target)
+          }
+        })
+      }, { threshold: 0.05 })
+      photos.forEach((photo) => reveals?.observe(photo))
+      chapters = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive((entry.target as HTMLElement).dataset.chapter || 'new-now')
+        })
+      }, { rootMargin: '-35% 0px -35% 0px', threshold: 0 })
+      element.querySelectorAll('[data-chapter]').forEach((section) => chapters?.observe(section))
+    }
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const bounds = element.getBoundingClientRect()
+      const distance = Math.max(1, element.offsetHeight - window.innerHeight)
+      element.style.setProperty('--h2-progress', String(Math.max(0, Math.min(1, -bounds.top / distance))))
+    }
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    update()
     return () => {
-      observer.disconnect()
-      element.classList.remove('h2-motion')
+      reveals?.disconnect()
+      chapters?.disconnect()
+      cancelAnimationFrame(frame)
+      element.classList.remove('h2-animate')
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
     }
   }, [])
 
   return (
-    <div ref={root} className="home-two" data-sr-on="1">
-      <Campaign
-        name="hero" hero photo={PHOTOS.hero} mobile={PHOTOS.heroMobile}
-        alt="Three children laughing together in plum, rose and striped winter layers in a stone courtyard"
-        label="New now · Winter 26" line1="Little" line2="originals."
-      />
-
-      <nav className="h2-index" aria-label="Explore homepage departments">
-        <a href="#h2-girls">Girls</a>
-        <a href="#h2-boys">Boys</a>
-        <a href="#h2-infants">Infants</a>
-        <a href="#h2-footwear">Footwear</a>
+    <div ref={root} className="home-two home-two--mango" data-sr-on="1">
+      <div className="h2-reading-progress" aria-hidden="true" />
+      <nav className="h2-chapters" aria-label="Campaign chapters">
+        {CHAPTERS.map(([name, label]) => <a key={name} href={'#h2-' + name} aria-label={label} aria-current={active === name ? 'location' : undefined}><span className="h2-chapters__name">{label}</span><span className="h2-chapters__dot" /></a>)}
       </nav>
-
-      <section className="h2-departments" data-sr="1" aria-label="The girls and boys edits">
-        <article id="h2-girls" className="h2-department">
-          <CampaignPhoto photo={PHOTOS.girls} alt="A girl twirling in a mauve pleated dress and rose cardigan against a warm stucco wall" />
-          <div className="h2-department__caption" data-h2-reveal><div><span className="h2-label">2–14 years</span><h2>Girls.</h2></div></div>
-        </article>
-        <article id="h2-boys" className="h2-department">
-          <CampaignPhoto photo={PHOTOS.boys} alt="A boy in an olive utility jacket, relaxed brown trousers and white sneakers" />
-          <div className="h2-department__caption" data-h2-reveal><div><span className="h2-label">2–14 years</span><h2>Boys.</h2></div></div>
-        </article>
-      </section>
-
-      <Campaign
-        name="celebration" photo={PHOTOS.celebration} mobile={PHOTOS.celebrationMobile}
-        alt="Two smiling girls twirling in rose and deep wine party dresses beneath terracotta arches"
-        label="The occasion edit" line1="Party" line2="people."
-      />
-
-      <Campaign
-        name="infants" photo={PHOTOS.infants} mobile={PHOTOS.infantsMobile}
-        alt="Two little children smiling and playing together in ivory and rose knitwear by a sunlit window"
-        label="0–24 months" line1="Small" line2="wonders."
-      />
-
-      <section className="h2-discover" data-sr="1" aria-label="Playwear and footwear">
-        <article className="h2-department h2-discover__play">
-          <CampaignPhoto photo={PHOTOS.play} alt="A boy in an olive textured sweater looking back with a smile while exploring coastal dunes" />
-          <div className="h2-department__caption" data-h2-reveal><h2>Made to move.</h2></div>
-        </article>
-        <div className="h2-discover__side">
-          <article id="h2-footwear" className="h2-department">
-            <CampaignPhoto photo={PHOTOS.footwear} alt="Rose high-top sneakers, pink booties, lilac clogs and a butterfly bag on plum and blush display plinths" />
-            <div className="h2-department__caption" data-h2-reveal><h2>Go places.</h2></div>
+      <FullCampaign name="new-now" title="New now" hero alt="Indian children’s winter knitwear campaign in a warm walnut-panelled studio" />
+      <FullCampaign name="party" title="Party" alt="Blush partywear, natural smiles and a deep wine studio backdrop" />
+      <section id="h2-editorial" className="h2-editorial-grid" data-chapter="editorial" data-sr="1" aria-label="Four new perspectives">
+        {EDITS.map((edit, index) => (
+          <article key={edit.name} id={edit.id} className="h2-frame h2-editorial" onPointerMove={moveDetail}>
+            <CampaignPhoto name={edit.name} alt={edit.alt} portrait />
+            <div className="h2-editorial__caption"><div><h2>{edit.title}</h2><span className="h2-editorial__detail">{edit.detail}</span></div><span className="h2-editorial__number" aria-hidden="true">0{index + 1} / 04</span></div>
+            <span className="h2-hover-detail" aria-hidden="true"><span />The new edit</span>
           </article>
-          <div className="h2-discover__all" data-h2-reveal><p>Big little energy.</p></div>
-        </div>
+        ))}
       </section>
+      <FullCampaign name="off-duty" title="Off duty" ink alt="An Indian girl in a relaxed washed denim co-ord lounging beside a charcoal sofa" />
+      <FullCampaign name="little-ones" title="Little ones" ink alt="Indian babywear in ivory and pale blue, photographed in soft natural nursery light" />
     </div>
   )
 }
