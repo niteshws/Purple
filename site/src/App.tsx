@@ -8,6 +8,21 @@ import { Toasts } from './components/ui'
 import { useRevealAll } from './lib/hooks'
 import { useThemeSync } from './lib/theme'
 import Home from './pages/Home'
+import { setHomeDesign, useHomeDesign } from './lib/home-design'
+
+const HomeOptionTwo = lazy(() => import('./pages/HomeOptionTwo'))
+
+function Homepage() {
+  const saved = useHomeDesign()
+  const { search } = useLocation()
+  const requested = new URLSearchParams(search).get('home')
+  const design = requested === '1' || requested === '2' ? requested : saved
+  useEffect(() => {
+    // Persist explicit links once; other open tabs may keep a different preview.
+    if (requested === '1' || requested === '2') setHomeDesign(requested)
+  }, [requested])
+  return design === '2' ? <HomeOptionTwo /> : <Home />
+}
 
 const Collection = lazy(() => import('./pages/Collection'))
 const Product = lazy(() => import('./pages/Product'))
@@ -134,7 +149,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Homepage />} />
           <Route path="shop" element={<Navigate to="/collections/all" replace />} />
           <Route path="collections" element={<Navigate to="/collections/all" replace />} />
           <Route path="collections/:handle" element={<Collection />} />

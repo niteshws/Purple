@@ -15,6 +15,15 @@ npm run preview    # serve the production build
 
 Requires Node 20+. The app is a client-side SPA (React Router); when deploying, serve `index.html` for all routes.
 
+## Homepage options
+
+- **Option 1**: the original homepage, available at `/?home=1`.
+- **Option 2**: the new editorial campaign homepage, available at `/?home=2`.
+- Use **Homepage design** beside **Appearance** in the footer to switch. The selection is saved in this browser; existing navigation returns to the selected homepage.
+- Option 2 is isolated in `src/pages/HomeOptionTwo.tsx` and `src/styles/home-option-two.css`. The original homepage and all inner page implementations are unchanged.
+- Nine original campaign compositions (including three dedicated mobile photographs) and their responsive WebP sizes live in `public/img/home-option-two/`. Full desktop campaigns are 1920 × 1080, editorial portraits 1280 × 1600, and mobile campaigns 1080 × 1440. These are generated concept images, not photographs of actual inventory. Prompts and provenance are recorded in `docs/home-option-two-campaigns.json`.
+- Motion respects reduced-motion preferences; campaign content and links remain visible without IntersectionObserver. Only the hero image loads eagerly; other photographs load on demand.
+
 ## Stack
 
 - React 19 + TypeScript + Vite

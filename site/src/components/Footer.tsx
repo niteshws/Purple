@@ -5,6 +5,7 @@ import { Crest } from './ui'
 import { CONTACT, STORE_COUNT } from '../data/site'
 import { validEmail, useDialog } from '../lib/hooks'
 import { AppearanceSegmented } from './Appearance'
+import { HomeDesignSwitch } from './HomeDesignSwitch'
 
 export function Newsletter({ tone = 'dark', compact }: { tone?: 'dark' | 'light'; compact?: boolean }) {
   const [email, setEmail] = useState('')
@@ -195,6 +196,7 @@ export function Footer() {
           </p>
           <div className="site-footer__appearance">
             <AppearanceSegmented tone="dark" />
+            <HomeDesignSwitch />
           </div>
           <nav aria-label="Legal" className="site-footer__legal-links">
             <Link to="/help#returns">Returns policy</Link>

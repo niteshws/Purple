@@ -1,0 +1,90 @@
+{
+  "generation": "Built-in imagegen; generated concept campaign photography, not real product photographs.",
+  "references": [
+    "2026-11-18 12-14-47.mp4 (Zara)",
+    "2026-11-18 12-15-49.mp4 (Mango Kids)"
+  ],
+  "assets": [
+    {
+      "name": "hero",
+      "prompt": "Use case: photorealistic-natural. Asset type: Purple United premium childrenswear homepage hero campaign. Create one photorealistic professional fashion photograph, landscape 16:9 composition, 1920x1080 intended output, no text or logos. Two DIFFERENT Indian children ages 7 and 9, one girl with natural wavy black hair and warm medium-brown skin wearing a beautiful ivory cable-knit cardigan over a soft oat dress and chunky boots, one boy with a short tousled black haircut and deeper brown skin wearing a muted plum textured wool overshirt, ivory tee and relaxed beige trousers. They are moving playfully across an old limestone courtyard in warm late-afternoon winter sunshine. Candid genuine small smiles, childlike natural posture, not posed like adult models. Full bodies clearly visible in the RIGHT 60 percent of the frame. The LEFT 38 percent is uninterrupted warm pale stone wall with soft tree shadows, ample NEGATIVE SPACE reserved for live plum typography; do not put faces, hands or clothing in this left area. Camera low but natural, 50mm editorial lens, very subtle 35mm film grain, cinematic natural soft side light, sophisticated muted ivory/oat/plum colours. Authentic Indian faces, natural visible skin texture and fine facial hair, individual flyaway hair strands, beautifully resolved knit stitches, fabric folds and stitching. Believable child anatomy, normal fingers, candid movement. Premium international kids fashion campaign art direction, warmth and spontaneity. Avoid plastic skin, airbrushed faces, exaggerated smiles, doll faces, warped hands, floating feet, extra limbs, CGI, oversharpening, stock photo look, text, brand marks or watermark.",
+      "size": [
+        1920,
+        1080
+      ],
+      "output": "public/img/home-option-two/hero.webp"
+    },
+    {
+      "name": "hero-mobile",
+      "prompt": "Use case: photorealistic-natural. Create a single high-end professional Indian childrenswear fashion campaign photograph for Purple United. Photorealistic natural Indian facial features and warm brown skin with visible fine pores, individual authentic hair strands, true fabric textures, believable child anatomy and hands. Sophisticated candid editorial lighting and nuanced filmic colour, subtle 35mm grain, genuine expressions, never adult glamour poses. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, exaggerated smiles, distorted fingers or stock-photo aesthetic. Dedicated MOBILE hero, portrait 3:4, intended1080x1440. A 6-year-old Indian girl with shoulder-length tousled black curls, deep brown eyes and an unforced cheerful small smile walking toward the camera in an oversized ivory cable-knit cardigan over a grey-oat skirt and suede lace boots. Warm pale limestone courtyard with a vine and gentle tree shadows, quiet late-afternoon sun. She is placed in the UPPER TWO THIRDS of the composition, her full figure including boots visible there. Leave the BOTTOM QUARTER as empty softly shadowed pale courtyard pavement for dark live text. Wide environmental portrait, natural eye-level camera, editorial 50mm lens. She must be a distinct child from any other section.",
+      "size": [
+        1080,
+        1440
+      ],
+      "output": "public/img/home-option-two/hero-mobile.webp"
+    },
+    {
+      "name": "girls",
+      "prompt": "Use case: photorealistic-natural. Create a single high-end professional Indian childrenswear fashion campaign photograph for Purple United. Photorealistic natural Indian facial features and warm brown skin with visible fine pores, individual authentic hair strands, true fabric textures, believable child anatomy and hands. Sophisticated candid editorial lighting and nuanced filmic colour, subtle 35mm grain, genuine expressions, never adult glamour poses. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, exaggerated smiles, distorted fingers or stock-photo aesthetic. Vertical 4:5 editorial portrait intended1280x1600. A 9-year-old Indian girl from Tamil Nadu with rich dark-brown skin and long black hair in a loose braid with natural flyaways. She is caught mid-turn with a gentle genuine smile looking just past the camera, her mauve pleated long-sleeve dress moving in the breeze, layered under a cropped dusky-rose knit cardigan, cream socks and simple ballet shoes. Full body with breathing room around her, weathered salmon-rose stucco wall and stone steps behind, minimal architectural setting, soft overcast daylight with a warm highlight on her face, tactile knit and pleat detail. Spontaneous childlike movement. No copy will overlay the photograph.",
+      "size": [
+        1280,
+        1600
+      ],
+      "output": "public/img/home-option-two/girls.webp"
+    },
+    {
+      "name": "boys",
+      "prompt": "Use case: photorealistic-natural. Create a single high-end professional Indian childrenswear fashion campaign photograph for Purple United. Photorealistic natural Indian facial features and warm brown skin with visible fine pores, individual authentic hair strands, true fabric textures, believable child anatomy and hands. Sophisticated candid editorial lighting and nuanced filmic colour, subtle 35mm grain, genuine expressions, never adult glamour poses. No text, logos, watermark, plastic skin, excessive retouching, doll faces, CGI, exaggerated smiles, distorted fingers or stock-photo aesthetic. Vertical 4:5 editorial fashion photograph intended1280x1600. A 10-year-old Indian boy with medium-brown skin, slightly unruly straight black hair and a relaxed quiet half-smile sits sideways on a simple low walnut stool in a warm ivory artist's studio. He wears an oversized deep navy cable-knit sweater over a pale striped shirt, relaxed oat corduroy trousers, cream canvas high-top sneakers. One foot on the floor and one resting naturally on the stool rung, hands relaxed on knees with believable fingers. Natural window side light makes beautiful shadows on the textured wall. Whole body visible, candid gaze toward someone off camera, sophisticated off-centre framing with space above his head. Authentic face and sharp textile detail, photographed on medium-format camera. No copy overlays this image.",
+      "size": [
+        1280,
+        1600
+      ],
+      "output": "public/img/home-option-two/boys.webp"
+    },
+    {
+      "name": "occasion",
+      "prompt": "Use case: photorealistic-natural. Single professional editorial Indian children's fashion photograph for Purple United. Photorealism, natural warm brown skin with true fine pores and tiny imperfections, authentic individual hair strands, realistic child proportions and hands, visible material and clothing texture. Genuine relaxed child expressions, sophisticated international campaign lighting, mild analogue film grain, premium art direction. No words, logos, watermark, exaggerated smiles, plastic skin, retouched doll faces, extra fingers, bad anatomy, CGI, stock photography. Landscape cinematic 16:9, intended1920x1080. Two distinct Indian children, a 7-year-old girl with a chin-length straight dark bob and brown skin wearing a beautiful deep wine velvet long-sleeved party dress with an ivory collar and cream tights, and an 8-year-old boy with deep brown skin and short black curls in an ivory tailored wool jacket over a muted plum shirt, relaxed dark trousers. Candid dancing steps and a real smile in a grand minimal room with floor-to-ceiling deep wine plum curtains, warm walnut parquet floor, subtle warm side light like a real fashion shoot. Both children's full figures are on RIGHT half. LEFT 42% is dark softly lit empty plum drapery reserved for white live typography. Children never intrude into this text area. Fine velvet pile, wool fibres, dress motion, faces natural and in focus, hands anatomically believable, no props.",
+      "size": [
+        1920,
+        1080
+      ],
+      "output": "public/img/home-option-two/occasion.webp"
+    },
+    {
+      "name": "occasion-mobile",
+      "prompt": "Use case: photorealistic-natural. Single professional editorial Indian children's fashion photograph for Purple United. Photorealism, natural warm brown skin with true fine pores and tiny imperfections, authentic individual hair strands, realistic child proportions and hands, visible material and clothing texture. Genuine relaxed child expressions, sophisticated international campaign lighting, mild analogue film grain, premium art direction. No words, logos, watermark, exaggerated smiles, plastic skin, retouched doll faces, extra fingers, bad anatomy, CGI, stock photography. Dedicated portrait mobile fashion banner 3:4 intended1080x1440. A distinct 7-year-old Indian girl with a loose dark ponytail and medium brown skin wearing a deep royal plum velvet A-line dress with an ivory Peter Pan collar, ivory tights and black Mary Jane shoes, standing mid-step beside wine velvet drapery in a softly lit old studio with walnut floor. Delighted gentle natural smile at someone beside camera. Frame her full figure on upper TWO THIRDS, leave LOWER QUARTER as empty dark wine velvet and dark floor for live white text. Natural warm window light from side shows velvet pile and skin texture. Elegantly simple composition with no jewellery or props.",
+      "size": [
+        1080,
+        1440
+      ],
+      "output": "public/img/home-option-two/occasion-mobile.webp"
+    },
+    {
+      "name": "infant",
+      "prompt": "Use case: photorealistic-natural. Single professional editorial Indian children's fashion photograph for Purple United. Photorealism, natural warm brown skin with true fine pores and tiny imperfections, authentic individual hair strands, realistic child proportions and hands, visible material and clothing texture. Genuine relaxed child expressions, sophisticated international campaign lighting, mild analogue film grain, premium art direction. No words, logos, watermark, exaggerated smiles, plastic skin, retouched doll faces, extra fingers, bad anatomy, CGI, stock photography. Portrait4:5 intended1280x1600. An adorable 14-month-old Indian baby with warm medium-brown skin, short fine curly dark hair, tiny natural milk teeth and a spontaneous little smile. Sitting safely on a thick oat wool blanket on the floor next to a low bright window in a quiet neutral nursery. Wearing a softly textured ivory rib-knit cotton romper with tiny wooden buttons and knitted cream socks. Natural baby proportions, slight rosy cheek texture, simple believable hands resting on the blanket. Candid moment looking a little off camera, daylight softly wraps face, warm cream and oat palette, no toys or extra objects, beautiful shallow depth of field with detailed knit fabric and natural fine hair. No text overlay will cover image.",
+      "size": [
+        1280,
+        1600
+      ],
+      "output": "public/img/home-option-two/infant.webp"
+    },
+    {
+      "name": "outside",
+      "prompt": "Use case: photorealistic-natural. A single premium professional childrenswear editorial campaign photograph for Purple United. True photorealism, distinct Indian children with natural expressions and warm brown skin, authentic individual hair strands and realistic fine skin texture, genuine spontaneous smiles, believable age-appropriate anatomy, detailed tactile garments. Soft cinematic natural light, sophisticated muted fashion colours, subtle film grain, international editorial art direction. No text, logos, watermark, overretouched doll faces, stock-photo styling, CGI, distorted hands, extra limbs or exaggerated expressions. Landscape16:9 intended1920x1080. Three distinct Indian children ages5,8and10 exploring a quiet wide sandy coastline under soft winter blue skies. They wear relaxed textured ivory and muted dusty olive knitwear with oat corduroy trousers and a soft dusky-rose layered dress. Natural windswept black hair, one girl with shoulder-length waves, a younger boy with short curls, another girl with long hair. Full bodies spread naturally across the central60% walking along the sand, one laughing at something on the beach, another looking toward the ocean, no posed handholding. Pale blue-grey sea, low sandy dune grass, wide open sky. Low eye-level camera, layered wide composition with beautiful negative space around children, warm late afternoon sun mixed with cool coastal air. This is an authentic candid campaign moment with correct footprints and natural clothing movement. No text will overlay faces or bodies.",
+      "size": [
+        1920,
+        1080
+      ],
+      "output": "public/img/home-option-two/outside.webp"
+    },
+    {
+      "name": "outside-mobile",
+      "prompt": "Use case: photorealistic-natural. A single premium professional childrenswear editorial campaign photograph for Purple United. True photorealism, distinct Indian children with natural expressions and warm brown skin, authentic individual hair strands and realistic fine skin texture, genuine spontaneous smiles, believable age-appropriate anatomy, detailed tactile garments. Soft cinematic natural light, sophisticated muted fashion colours, subtle film grain, international editorial art direction. No text, logos, watermark, overretouched doll faces, stock-photo styling, CGI, distorted hands, extra limbs or exaggerated expressions. Dedicated MOBILE portrait3:4 intended1080x1440. A 9-year-old Indian boy with short loose black curls, deep warm brown skin and a small natural grin glances back over his shoulder while exploring pale sandy dunes near the ocean. Oversized textured dusty olive sweater, cream corduroy trousers, beige canvas sneakers. Full figure with breathing room, he is in the centre of lower two thirds, soft coastal breeze in clothes, pale winter-blue sky fills upper third, minimal dune grass on one side, subtle blue-grey ocean horizon. Childlike adventurous posture, authentic candid movement, warm low side sunlight on face, beautiful true fabric detail, photographer at child's eye-level. No text overlay.",
+      "size": [
+        1080,
+        1440
+      ],
+      "output": "public/img/home-option-two/outside-mobile.webp"
+    }
+  ]
+}

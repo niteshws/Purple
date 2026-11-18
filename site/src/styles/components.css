@@ -2767,5 +2767,21 @@ body:has(.askp.is-open) .concierge {
 }
 .site-footer__appearance {
   grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px 32px;
   margin-top: 14px;
+}
+.home-design__track {
+  grid-template-columns: repeat(2, auto);
+}
+.home-design .seg__opt {
+  white-space: nowrap;
+}
+@media (max-width: 400px) {
+  .site-footer {
+    /* Keep the design options clear of the floating chat controls. */
+    padding-bottom: 124px;
+  }
 }
