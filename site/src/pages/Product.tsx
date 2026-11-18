@@ -4,6 +4,7 @@ import { Icon } from '../components/Icon'
 import { Accordion, Breadcrumbs, Price, QtyStepper, Field } from '../components/ui'
 import { ProductCard } from '../components/ProductCard'
 import { getProduct, products, productThumbnail, stockFor, isProductSoldOut, formatINR, AGE_LABELS, type Product as P } from '../data/products'
+import { trendingProducts } from '../data/trending'
 import { POLICY } from '../data/site'
 import { useRecent, useUI, useWishlist } from '../store'
 import { addToBag, toggleWish } from '../lib/commerce'
@@ -414,7 +415,7 @@ function ProductView({ p }: { p: P }) {
         </section>
 
         {recentProducts.length > 0 && (
-          <section className="pdp-section section--sm" aria-labelledby="rv-h" style={{ paddingBottom: 'var(--section)' }}>
+          <section className="pdp-section section--sm" aria-labelledby="rv-h">
             <div className="section-head">
               <div className="section-head__text">
                 <h2 id="rv-h" className="h3">
@@ -424,12 +425,25 @@ function ProductView({ p }: { p: P }) {
             </div>
             <div className="rail rail--products" tabIndex={0} aria-label="Recently viewed — scroll horizontally">
               {recentProducts.map((x) => (
-                <ProductCard key={x.handle} product={x} compact />
+                <ProductCard key={x.handle} product={x} initialImageIndex={x.collections.includes('most-trending') ? 2 : undefined} compact />
               ))}
             </div>
           </section>
         )}
-        {recentProducts.length === 0 && <div style={{ height: 'var(--section)' }} />}
+        <section className="pdp-section section--sm" aria-labelledby="trending-h" style={{ paddingBottom: 'var(--section)' }}>
+          <div className="section-head">
+            <div className="section-head__text">
+              <h2 id="trending-h" className="h3">
+                Most <em>Trending</em>
+              </h2>
+            </div>
+          </div>
+          <div className="rail rail--products" tabIndex={0} aria-label="Most Trending — scroll horizontally">
+            {trendingProducts.filter((x) => x.handle !== p.handle).map((x) => (
+              <ProductCard key={x.handle} product={x} />
+            ))}
+          </div>
+        </section>
       </div>
 
       <div className={`pdp-sticky${sticky && !soldOut ? ' is-on' : ''}`} aria-hidden={!sticky}>
@@ -454,21 +468,16 @@ function Gallery({ slides, index, onIndex, onZoom, badge }: { slides: Slide[]; i
   const start = useRef<{ x: number; y: number; t: number } | null>(null)
   const [drag, setDrag] = useState(0)
   const go = (i: number) => onIndex(Math.max(0, Math.min(slides.length - 1, i)))
+  const detailImages = slides.map((slide, i) => ({ ...slide, index: i })).filter((slide) => slide.index !== index).slice(0, 2)
   return (
     <div className="gallery" role="group" aria-roledescription="carousel" aria-label="Product images">
-      {/* Plain toggle buttons: these never had tab panels or arrow-key tab behaviour (WCAG 4.1.2). */}
-      <div className="gallery__thumbs" role="group" aria-label="Choose image">
-        {slides.map((s, i) => (
-          <button key={i} type="button" className="gallery__thumb" aria-current={i === index} aria-label={`Image ${i + 1}`} onClick={() => onIndex(i)}>
-            <img src={productThumbnail(s.src)} alt="" />
-          </button>
-        ))}
-      </div>
       <div
         className="gallery__main"
         role="group"
         tabIndex={0}
         onKeyDown={(e) => {
+          if (e.target !== e.currentTarget) return
+          if (['ArrowRight', 'ArrowLeft', 'Enter'].includes(e.key)) e.preventDefault()
           if (e.key === 'ArrowRight') go(index + 1)
           if (e.key === 'ArrowLeft') go(index - 1)
           if (e.key === 'Enter') onZoom()
@@ -519,6 +528,24 @@ function Gallery({ slides, index, onIndex, onZoom, badge }: { slides: Slide[]; i
           ))}
         </div>
       </div>
+      {detailImages.length > 0 && (
+        <div className="gallery__details" role="group" aria-label="More product views">
+          {detailImages.map((image) => (
+            <button
+              key={image.src}
+              type="button"
+              className="gallery__detail"
+              aria-label={`Open image ${image.index + 1} in full-screen zoom`}
+              onClick={() => {
+                onIndex(image.index)
+                onZoom()
+              }}
+            >
+              <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

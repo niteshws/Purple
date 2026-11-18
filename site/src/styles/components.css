@@ -695,6 +695,42 @@
 .pcard__img--alt {
   opacity: 0;
 }
+.pcard__image-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 0;
+  color: var(--plum);
+  background: transparent;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-fast);
+}
+.pcard__image-arrow .icon {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.95)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+.pcard__image-arrow--prev {
+  left: 8px;
+}
+.pcard__image-arrow--next {
+  right: 8px;
+}
+.pcard:hover .pcard__image-arrow,
+.pcard:focus-within .pcard__image-arrow {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (hover: none) {
+  .pcard__image-arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
 @media (hover: hover) {
   .pcard:hover .pcard__img {
     transform: scale(1.035);
@@ -2042,14 +2078,14 @@ body:has(.askp.is-open) .concierge {
   position: fixed;
   right: 20px;
   bottom: 20px;
-  width: min(408px, calc(100vw - 32px));
+  width: min(420px, calc(100vw - 32px));
   height: min(680px, calc(100dvh - 40px));
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   background: var(--canvas);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-overlay);
-  overflow: hidden;
+  overflow: clip;
   animation: modalIn 360ms var(--ease-out);
   transform-origin: bottom right;
 }
@@ -2098,15 +2134,19 @@ body:has(.askp.is-open) .concierge {
 
 /* Conversation */
 .askp__log {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 16px 14px 8px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: var(--oat-2);
+  gap: 12px;
+  background: var(--paper);
 }
 .askp-msg {
+  flex-shrink: 0;
   max-width: 88%;
   padding: 10px 14px;
   font-size: var(--fs-14);
@@ -2122,7 +2162,7 @@ body:has(.askp.is-open) .concierge {
 }
 .askp-msg--bot {
   align-self: flex-start;
-  background: var(--paper);
+  background: var(--oat-2);
   border-top-left-radius: 4px;
   color: var(--ink);
 }
@@ -2135,7 +2175,8 @@ body:has(.askp.is-open) .concierge {
 .askp-msg--results {
   max-width: 100%;
   width: 100%;
-  padding: 12px;
+  padding: 0;
+  background: transparent;
   display: grid;
   gap: 10px;
 }
@@ -2179,6 +2220,15 @@ body:has(.askp.is-open) .concierge {
 .askp-looks {
   display: grid;
   gap: 10px;
+}
+.askp-looks summary {
+  padding-block: 10px;
+  font-size: var(--fs-13);
+  color: var(--accent);
+  cursor: pointer;
+}
+.askp-looks .askp-look + .askp-look {
+  margin-top: 10px;
 }
 
 /* Look card */
@@ -2234,26 +2284,19 @@ body:has(.askp.is-open) .concierge {
   line-height: 1.45;
 }
 
-/* Product cards — a swipeable row */
+/* Product suggestions stay in the conversation's vertical reading order. */
 .askp-cards {
   list-style: none;
-  margin: 0 -12px;
-  padding: 2px 12px 6px;
+  margin: 0;
+  padding: 0;
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 168px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 12px;
-  overscroll-behavior-x: contain;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line-strong) transparent;
 }
 .askp-card {
-  scroll-snap-align: start;
+  min-width: 0;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 84px minmax(0, 1fr);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   overflow: hidden;
@@ -2261,7 +2304,7 @@ body:has(.askp.is-open) .concierge {
 }
 .askp-card__img {
   display: block;
-  aspect-ratio: 4 / 5;
+  min-height: 128px;
   background: var(--oat);
   overflow: hidden;
 }
@@ -2271,6 +2314,7 @@ body:has(.askp.is-open) .concierge {
   object-fit: cover;
 }
 .askp-card__body {
+  min-width: 0;
   padding: 8px 10px 10px;
   display: grid;
   gap: 3px;
@@ -2305,10 +2349,6 @@ body:has(.askp.is-open) .concierge {
   line-height: 1.4;
   color: var(--mauve-ink);
 }
-.askp-card__why svg {
-  flex: none;
-  margin-top: 2px;
-}
 .askp-card__actions {
   display: flex;
   align-items: center;
@@ -2316,11 +2356,10 @@ body:has(.askp.is-open) .concierge {
   margin-top: 6px;
 }
 .askp-card__actions .btn {
-  flex: 1;
+  min-height: 34px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
   padding: 0 10px;
-}
-.askp-card__wish.is-on {
-  color: var(--accent);
 }
 .askp-full {
   display: inline-flex;
@@ -2347,8 +2386,6 @@ body:has(.askp.is-open) .concierge {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  max-height: 132px;
-  overflow-y: auto;
   padding: 2px;
 }
 .askp__replies .chip {
@@ -2391,15 +2428,20 @@ body:has(.askp.is-open) .concierge {
 }
 .askp__starters {
   display: grid;
-  gap: 4px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 .askp-starter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   text-align: left;
-  min-height: 32px;
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
   font-size: var(--fs-13);
-  font-style: italic;
   color: var(--ink-70);
   transition: background var(--t-fast);
 }
@@ -2464,6 +2506,40 @@ body:has(.askp.is-open) .concierge {
   color: var(--ink-55);
   text-align: center;
 }
+.askp-select {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  font-size: var(--fs-13);
+}
+.askp-select .select {
+  width: 100%;
+}
+.askp-refine {
+  width: 130px;
+  min-height: 36px;
+  height: 36px;
+  padding: 6px 32px 6px 12px;
+  font-size: var(--fs-13);
+}
+.askp__notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  background: var(--oat-2);
+  font-size: var(--fs-12);
+  line-height: 1.4;
+}
+.askp__notice button {
+  flex: none;
+  min-height: 32px;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 @media (max-width: 600px) {
   .askp {
@@ -2503,19 +2579,6 @@ body:has(.askp.is-open) .concierge {
   }
   .askp__field {
     font-size: 16px; /* stops iOS zooming into the field */
-  }
-  /* One swipeable row of answers keeps the conversation in view on phones */
-  .askp__replies {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    margin-inline: -12px;
-    padding: 2px 12px;
-    scroll-padding-inline: 12px;
-    scrollbar-width: none;
-  }
-  .askp__replies .chip {
-    flex: none;
   }
 }
 @keyframes askpSheet {

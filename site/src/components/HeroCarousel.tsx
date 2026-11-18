@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useCallback, useEffect, useEffectEvent, useRef, useState, type KeyboardEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from './Icon'
 
-/* Homepage campaign hero — four editorial slides that auto-advance.
+/* Homepage campaign hero — video playback completes before image slides auto-advance.
    - Crossfade + slow push-in on the image, staggered text entrance per slide.
    - Always auto-advances (hover and focus do not pause it); only the visible pause
      control stops it (WCAG 2.2.2). A background tab holds the slide until it is visible.
@@ -20,6 +20,9 @@ export interface HeroSlide {
   mobile: string
   alt: string
   pos?: string
+  video?: string
+  poster?: string
+  videoPos?: string
 }
 
 export const HERO_SLIDES: HeroSlide[] = [
@@ -32,6 +35,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     cta: { label: 'Shop the collection', to: '/collections/new-arrivals' },
     desktop: '/img/campaign/hero/little-originals-desktop.webp',
     mobile: '/img/campaign/hero/little-originals-mobile.webp',
+    video: '/video/hero/little-originals.mp4',
     alt: 'Three children laughing as they walk through a sunlit sandstone courtyard in corduroy, knits and a quilted jacket',
     pos: '72% 40%',
   },
@@ -68,6 +72,9 @@ export const HERO_SLIDES: HeroSlide[] = [
     cta: { label: 'Shop infants', to: '/collections/infants' },
     desktop: '/img/campaign/hero/infant-edit-desktop.webp',
     mobile: '/img/campaign/hero/infant-edit-mobile.webp',
+    video: '/video/hero/luxury-gifting.mp4',
+    poster: '/video/hero/luxury-gifting-poster.jpg',
+    videoPos: 'right center',
     alt: 'A baby and a toddler in soft knit cardigans laughing as they share a wooden ring toy on a woven rug',
     pos: '70% 40%',
   },
@@ -75,10 +82,65 @@ export const HERO_SLIDES: HeroSlide[] = [
 
 const INTERVAL = 3000
 
+function HeroVideo({ slide, active, paused, onEnded, onError, onProgress }: {
+  slide: HeroSlide
+  active: boolean
+  paused: boolean
+  onEnded: () => void
+  onError: () => void
+  onProgress: (progress: number) => void
+}) {
+  const ref = useRef<HTMLVideoElement>(null)
+  const playbackError = useEffectEvent(onError)
+
+  useEffect(() => {
+    if (active && ref.current) ref.current.currentTime = 0
+  }, [active])
+
+  useEffect(() => {
+    const video = ref.current
+    if (!video) return
+    const syncPlayback = () => {
+      if (active && !paused && document.visibilityState === 'visible') {
+        video.play().catch((error: DOMException) => {
+          if (error.name !== 'AbortError') playbackError()
+        })
+      } else video.pause()
+    }
+    syncPlayback()
+    document.addEventListener('visibilitychange', syncPlayback)
+    return () => {
+      video.pause()
+      document.removeEventListener('visibilitychange', syncPlayback)
+    }
+  }, [active, paused])
+
+  return (
+    <video
+      ref={ref}
+      src={slide.video}
+      poster={slide.poster ?? slide.desktop}
+      style={{ objectPosition: slide.videoPos }}
+      muted
+      playsInline
+      preload="metadata"
+      aria-hidden="true"
+      onEnded={() => active && !paused && onEnded()}
+      onError={onError}
+      onTimeUpdate={(e) => {
+        const video = e.currentTarget
+        if (active && Number.isFinite(video.duration) && video.duration > 0) onProgress(video.currentTime / video.duration)
+      }}
+    />
+  )
+}
+
 export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] }) {
   const [index, setIndex] = useState(0)
   const [userPaused, setUserPaused] = useState(false)
   const [loaded, setLoaded] = useState<Set<number>>(() => new Set([0]))
+  const [failedVideos, setFailedVideos] = useState<Set<string>>(() => new Set())
+  const [videoProgress, setVideoProgress] = useState(0)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const n = slides.length
 
@@ -92,6 +154,7 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
     (i: number) => {
       const next = (i + n) % n
       setLoaded((l) => (l.has(next) ? l : new Set(l).add(next)))
+      setVideoProgress(0)
       setIndex(next)
     },
     [n],
@@ -99,25 +162,22 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
 
   const paused = userPaused
 
-  // Advance every INTERVAL. If the tab is in the background when the timer fires,
-  // hold the slide and restart the countdown once the page is visible again.
-  const [tick, setTick] = useState(0)
+  // Image slides use a timer. Video slides advance after their full playback.
+  const currentVideo = !!slides[index]?.video && !failedVideos.has(slides[index].key)
   useEffect(() => {
-    if (paused) return
-    const t = setTimeout(() => {
-      if (document.visibilityState === 'visible') go(index + 1)
-      else {
-        const onVis = () => {
-          if (document.visibilityState === 'visible') {
-            document.removeEventListener('visibilitychange', onVis)
-            setTick((x) => x + 1)
-          }
-        }
-        document.addEventListener('visibilitychange', onVis)
-      }
-    }, INTERVAL)
-    return () => clearTimeout(t)
-  }, [index, paused, go, tick])
+    if (paused || currentVideo || n < 2) return
+    let timer: ReturnType<typeof setTimeout>
+    const schedule = () => {
+      clearTimeout(timer)
+      if (document.visibilityState === 'visible') timer = setTimeout(() => go(index + 1), INTERVAL)
+    }
+    schedule()
+    document.addEventListener('visibilitychange', schedule)
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('visibilitychange', schedule)
+    }
+  }, [index, paused, go, currentVideo, n])
 
   const onKey = (e: KeyboardEvent) => {
     if (e.key === 'ArrowRight') {
@@ -160,21 +220,34 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
               aria-hidden={!active}
               inert={!active ? true : undefined}
             >
-              <picture className="hero-c__media">
-                {loaded.has(i) && <source media="(max-width: 767px)" srcSet={s.mobile} />}
-                {loaded.has(i) ? (
-                  <img
-                    src={s.desktop}
-                    alt={s.alt}
-                    width={1983}
-                    height={793}
-                    decoding="async"
-                    fetchPriority={i === 0 ? 'high' : 'low'}
-                    loading={i === 0 ? 'eager' : 'lazy'}
-                    style={{ objectPosition: s.pos }}
+              {s.video && !failedVideos.has(s.key) ? (
+                <div className="hero-c__media">
+                  <HeroVideo
+                    slide={s}
+                    active={active}
+                    paused={paused}
+                    onEnded={() => go(i + 1)}
+                    onError={() => setFailedVideos((failed) => new Set(failed).add(s.key))}
+                    onProgress={setVideoProgress}
                   />
-                ) : null}
-              </picture>
+                </div>
+              ) : (
+                <picture className="hero-c__media">
+                  {loaded.has(i) && <source media="(max-width: 767px)" srcSet={s.mobile} />}
+                  {loaded.has(i) ? (
+                    <img
+                      src={s.desktop}
+                      alt={s.alt}
+                      width={1983}
+                      height={793}
+                      decoding="async"
+                      fetchPriority={i === 0 ? 'high' : 'low'}
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                      style={{ objectPosition: s.pos }}
+                    />
+                  ) : null}
+                </picture>
+              )}
               <div className="hero-c__shade" aria-hidden="true" />
               <div className="container hero-c__content on-dark">
                 <p className="eyebrow hero-c__in" style={{ ['--i' as string]: 0 }}>
@@ -217,7 +290,13 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
               aria-label={`Show slide ${i + 1}: ${s.eyebrow}`}
               aria-current={i === index}
             >
-              <span className="hero-c__dot-fill" key={`${i}-${index}`} style={{ animationDuration: `${INTERVAL}ms` }} />
+              <span
+                className="hero-c__dot-fill"
+                key={`${i}-${index}`}
+                style={i === index && currentVideo
+                  ? { animation: 'none', transform: `scaleX(${videoProgress})` }
+                  : { animationDuration: `${INTERVAL}ms` }}
+              />
             </button>
           ))}
         </div>

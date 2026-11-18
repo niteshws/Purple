@@ -1,0 +1,137 @@
+{
+  "tool": "built-in image_gen",
+  "generatedOn": "2026-11-18",
+  "note": "Generated concept outfits for Most Trending. Demo product details and prices; not verified live catalogue inventory.",
+  "products": [
+    {
+      "handle": "trending-denim-bow-cargo-set",
+      "images": [
+        {
+          "view": 1,
+          "generatedSource": "exec-c1243cd7-a262-46df-b061-bae08ca05734.png",
+          "asset": "/img/products/trending-denim-bow-cargo-set-1.webp",
+          "thumbnail": "/img/products/card/trending-denim-bow-cargo-set-1.webp",
+          "prompt": "Use case: product-mockup. Create one high-resolution photorealistic luxury children's fashion catalogue photograph for a premium Indian kidswear website, inspired by the attached blue bow T-shirt and cargo-trouser reference. An Indian girl aged about 7, natural joyful expression, long wavy dark brown hair with small ivory barrette. Outfit: pristine ivory cotton short-sleeve T-shirt with ONE large dusty-denim-blue appliqué bow on the chest, delicately stitched tiny pearl accents, no writing; elegant dusty blue wide-leg cotton cargo trousers with side flap pockets and clean drape; white low-top sneakers. All clothing child-appropriate. Full body head to shoes, facing camera, hands casually in trouser pockets. Minimal warm ivory studio floor and seamless plaster wall, subtle window sunlight with soft shadow, crisp fabric texture, realistic anatomy, refined fashion campaign quality, beautiful sharp focus. Square 1:1 frame, subject entirely within central 60% width, 10% air ABOVE head and below shoes; preserve these margins for web cropping. One child, one photo, no collage, no text, no logo, no watermark, no purple background. Show the full outfit clearly."
+        },
+        {
+          "view": 2,
+          "generatedSource": "exec-85e47285-976f-4fa2-a5ca-ba0be8fe69a9.png",
+          "asset": "/img/products/trending-denim-bow-cargo-set-2.webp",
+          "thumbnail": "/img/products/card/trending-denim-bow-cargo-set-2.webp",
+          "prompt": "Use case: identity-preserve. Input image is the approved first photograph of a new premium kidswear product, serving as the exact product, child, colours and studio reference. Create ONE DIFFERENT catalogue photograph from this same photoshoot. Keep the EXACT same child, same age and face, exact same garments, construction, appliqué/embroidery/print, colours, footwear and accessories; do not redesign any garment. Change only pose and camera angle: full-body three-quarter view from the child's right, child gently turning towards camera with a natural smile, arms relaxed (not identical to the reference), show the side seams, fit and fabric drape. Preserve warm ivory plaster backdrop and soft window-light photographic treatment. Square 1:1 frame; show full head, hair, hands and shoes entirely, with generous safe air around them, child within central 60% width. Crisp premium commercial photography, realistic fabric texture and anatomy, no text/logo/watermark, no collage. This is the second distinct product gallery image, not a duplicate of the front photograph."
+        },
+        {
+          "view": 3,
+          "generatedSource": "exec-f8e34a74-e353-4661-a44b-d651716debd3.png",
+          "asset": "/img/products/trending-denim-bow-cargo-set-3.webp",
+          "thumbnail": "/img/products/card/trending-denim-bow-cargo-set-3.webp",
+          "prompt": "Use case: product-mockup. Input image is an approved exact garment reference. Generate ONE new professional catalogue photograph: an elegant overhead FLAT LAY of the garments by themselves, no person, no mannequin. Keep the precise original garment design, fabrics, colour, print/embroidery/appliqué and construction from the reference, not a redesigned outfit. Product to show: ONLY the ivory T-shirt with the exact dusty blue bow appliqué and pearl accents, and the matching dusty blue wide-leg cargo trousers. Lay the trousers below and slightly offset from the tee so the front and cargo flap pockets are visible. Do not include the child's shoes, hat, hair clips, tights, handbag or any unrelated styling accessories. Lay garments on a warm pale ivory studio surface with natural soft window light and realistic soft contact shadows. Sharp true-colour fabric detail, refined premium catalogue styling. Square 1:1 photograph, garments fully visible with comfortable margins on every edge, use most of frame naturally. No logos, writing, watermark, text labels, panels or collage. This is the third matching gallery photograph of this exact product."
+        }
+      ]
+    },
+    {
+      "handle": "trending-lilac-butterfly-cargo-set",
+      "images": [
+        {
+          "view": 1,
+          "generatedSource": "exec-b6a7ef60-6c0d-4fd9-86eb-4a5731f4dd07.png",
+          "asset": "/img/products/trending-lilac-butterfly-cargo-set-1.webp",
+          "thumbnail": "/img/products/card/trending-lilac-butterfly-cargo-set-1.webp",
+          "prompt": "Use case: product-mockup. Generate ONE high-resolution photorealistic premium children's fashion catalogue photograph for Purple United Kids inspired by the user's outfit references, with original people and designs. Outfit styled for a real child, refined fabric texture and beautiful craftsmanship. Minimal warm ivory plaster studio wall and floor, natural soft window sunlight and subtle shadows, elegant sharp photographic focus, true fabric colours and realistic anatomy. Square 1:1 frame, FULL BODY entirely visible from head to shoes, centre subject in middle 60% width, leave clear comfortable air above head and below feet for a website product card and square gallery. No text, logo, watermark, brand emblem or collage. No extreme poses, no additional people or clutter. Subject and exact wardrobe: An Indian girl about 6, shoulder-length chestnut brown hair, small lilac bow hair clip. Refined white short-sleeved cotton tee with a delicate lavender butterfly illustration and tiny embroidered flowers on the front (no words), lilac cotton cargo joggers with elastic waist, cuffed ankles and two flap cargo pockets, fresh white sneakers. Full-body front pose, standing naturally with one hand casually in a trouser pocket."
+        },
+        {
+          "view": 2,
+          "generatedSource": "exec-f17ebb1d-c825-4d0c-9434-086eeae90855.png",
+          "asset": "/img/products/trending-lilac-butterfly-cargo-set-2.webp",
+          "thumbnail": "/img/products/card/trending-lilac-butterfly-cargo-set-2.webp",
+          "prompt": "Use case: identity-preserve. Input image is the approved first photograph of a new premium kidswear product, serving as the exact product, child, colours and studio reference. Create ONE DIFFERENT catalogue photograph from this same photoshoot. Keep the EXACT same child, same age and face, exact same garments, construction, appliqué/embroidery/print, colours, footwear and accessories; do not redesign any garment. Change only pose and camera angle: full-body three-quarter view from the child's right, child gently turning towards camera with a natural smile, arms relaxed (not identical to the reference), show the side seams, fit and fabric drape. Preserve warm ivory plaster backdrop and soft window-light photographic treatment. Square 1:1 frame; show full head, hair, hands and shoes entirely, with generous safe air around them, child within central 60% width. Crisp premium commercial photography, realistic fabric texture and anatomy, no text/logo/watermark, no collage. This is the second distinct product gallery image, not a duplicate of the front photograph."
+        },
+        {
+          "view": 3,
+          "generatedSource": "exec-518114a1-fccf-44bb-9025-bfd93a7b1395.png",
+          "asset": "/img/products/trending-lilac-butterfly-cargo-set-3.webp",
+          "thumbnail": "/img/products/card/trending-lilac-butterfly-cargo-set-3.webp",
+          "prompt": "Use case: product-mockup. Input image is an approved exact garment reference. Generate ONE new professional catalogue photograph: an elegant overhead FLAT LAY of the garments by themselves, no person, no mannequin. Keep the precise original garment design, fabrics, colour, print/embroidery/appliqué and construction from the reference, not a redesigned outfit. Product to show: ONLY the white butterfly-and-flower embroidered T-shirt, and the exact lilac cargo joggers with gathered waist, buttoned flap pockets and cuffed ankles. Place the joggers below and slightly offset from the tee. Do not include the child's shoes, hat, hair clips, tights, handbag or any unrelated styling accessories. Lay garments on a warm pale ivory studio surface with natural soft window light and realistic soft contact shadows. Sharp true-colour fabric detail, refined premium catalogue styling. Square 1:1 photograph, garments fully visible with comfortable margins on every edge, use most of frame naturally. No logos, writing, watermark, text labels, panels or collage. This is the third matching gallery photograph of this exact product."
+        }
+      ]
+    },
+    {
+      "handle": "trending-daisy-ruffle-dress",
+      "images": [
+        {
+          "view": 1,
+          "generatedSource": "exec-d6595fce-2159-4de8-b4cf-ae791b404658.png",
+          "asset": "/img/products/trending-daisy-ruffle-dress-1.webp",
+          "thumbnail": "/img/products/card/trending-daisy-ruffle-dress-1.webp",
+          "prompt": "Use case: product-mockup. Generate ONE high-resolution photorealistic premium children's fashion catalogue photograph for Purple United Kids inspired by the user's outfit references, with original people and designs. Outfit styled for a real child, refined fabric texture and beautiful craftsmanship. Minimal warm ivory plaster studio wall and floor, natural soft window sunlight and subtle shadows, elegant sharp photographic focus, true fabric colours and realistic anatomy. Square 1:1 frame, FULL BODY entirely visible from head to shoes, centre subject in middle 60% width, leave clear comfortable air above head and below feet for a website product card and square gallery. No text, logo, watermark, brand emblem or collage. No extreme poses, no additional people or clutter. Subject and exact wardrobe: An Indian girl about 6, dark brown softly curled hair with a small ivory bow clip. Premium lavender cotton occasion dress with delicate small ivory daisies with pale yellow centres, square neckline, ruffles along shoulder and bodice edges, long puffed sleeves with gently elasticated wrists, softly gathered waist and two tiered ruffle skirt ending below knee. Ivory tights and ivory Mary Jane shoes, tiny ivory bow handbag. Full body front view, relaxed elegant smile."
+        },
+        {
+          "view": 2,
+          "generatedSource": "exec-35898ba9-e095-40cc-92a8-0b12873d8910.png",
+          "asset": "/img/products/trending-daisy-ruffle-dress-2.webp",
+          "thumbnail": "/img/products/card/trending-daisy-ruffle-dress-2.webp",
+          "prompt": "Use case: identity-preserve. Input image is the approved first photograph of a new premium kidswear product, serving as the exact product, child, colours and studio reference. Create ONE DIFFERENT catalogue photograph from this same photoshoot. Keep the EXACT same child, same age and face, exact same garments, construction, appliqué/embroidery/print, colours, footwear and accessories; do not redesign any garment. Change only pose and camera angle: full-body three-quarter view from the child's right, child gently turning towards camera with a natural smile, arms relaxed (not identical to the reference), show the side seams, fit and fabric drape. Preserve warm ivory plaster backdrop and soft window-light photographic treatment. Square 1:1 frame; show full head, hair, hands and shoes entirely, with generous safe air around them, child within central 60% width. Crisp premium commercial photography, realistic fabric texture and anatomy, no text/logo/watermark, no collage. This is the second distinct product gallery image, not a duplicate of the front photograph."
+        },
+        {
+          "view": 3,
+          "generatedSource": "exec-e6f2db43-2f33-4071-9508-4de911ebaafb.png",
+          "asset": "/img/products/trending-daisy-ruffle-dress-3.webp",
+          "thumbnail": "/img/products/card/trending-daisy-ruffle-dress-3.webp",
+          "prompt": "Use case: product-mockup. Input image is an approved exact garment reference. Generate ONE new professional catalogue photograph: an elegant overhead FLAT LAY of the garments by themselves, no person, no mannequin. Keep the precise original garment design, fabrics, colour, print/embroidery/appliqué and construction from the reference, not a redesigned outfit. Product to show: ONLY the exact lavender daisy-patterned dress. Preserve the same square neckline, bodice ruffles, gathered waist, long sleeves, two tiered ruffle skirt and tiny daisy pattern. Fully extend the dress with the skirt gently spread and sleeves relaxed. Do not include the child's shoes, hat, hair clips, tights, handbag or any unrelated styling accessories. Lay garments on a warm pale ivory studio surface with natural soft window light and realistic soft contact shadows. Sharp true-colour fabric detail, refined premium catalogue styling. Square 1:1 photograph, garments fully visible with comfortable margins on every edge, use most of frame naturally. No logos, writing, watermark, text labels, panels or collage. This is the third matching gallery photograph of this exact product."
+        }
+      ]
+    },
+    {
+      "handle": "trending-red-pocket-short-set",
+      "images": [
+        {
+          "view": 1,
+          "generatedSource": "exec-65874f5d-17bf-426c-b5e5-ad7e16d1b550.png",
+          "asset": "/img/products/trending-red-pocket-short-set-1.webp",
+          "thumbnail": "/img/products/card/trending-red-pocket-short-set-1.webp",
+          "prompt": "Use case: product-mockup. Generate ONE high-resolution photorealistic premium children's fashion catalogue photograph for Purple United Kids inspired by the user's outfit references, with original people and designs. Outfit styled for a real child, refined fabric texture and beautiful craftsmanship. Minimal warm ivory plaster studio wall and floor, natural soft window sunlight and subtle shadows, elegant sharp photographic focus, true fabric colours and realistic anatomy. Square 1:1 frame, FULL BODY entirely visible from head to shoes, centre subject in middle 60% width, leave clear comfortable air above head and below feet for a website product card and square gallery. No text, logo, watermark, brand emblem or collage. No extreme poses, no additional people or clutter. Subject and exact wardrobe: An Indian boy about 5, short tousled dark brown hair, natural cheerful smile. Premium rich red short-sleeve cotton crew neck tee with a small same-fabric chest patch pocket, tailored deep navy cotton cargo shorts ending just above knee with side flap pockets, plain navy baseball cap with NO letters, white socks, white-and-forest-green sneakers without brand emblems. Full-body front view, one hand touching cap, other hand in shorts pocket."
+        },
+        {
+          "view": 2,
+          "generatedSource": "exec-3eca833f-13fe-4dbc-b10b-36f8ad07fc0e.png",
+          "asset": "/img/products/trending-red-pocket-short-set-2.webp",
+          "thumbnail": "/img/products/card/trending-red-pocket-short-set-2.webp",
+          "prompt": "Use case: identity-preserve. Input image is the approved first photograph of a new premium kidswear product, serving as the exact product, child, colours and studio reference. Create ONE DIFFERENT catalogue photograph from this same photoshoot. Keep the EXACT same child, same age and face, exact same garments, construction, appliqué/embroidery/print, colours, footwear and accessories; do not redesign any garment. Change only pose and camera angle: full-body three-quarter view from the child's right, child gently turning towards camera with a natural smile, arms relaxed (not identical to the reference), show the side seams, fit and fabric drape. Preserve warm ivory plaster backdrop and soft window-light photographic treatment. Square 1:1 frame; show full head, hair, hands and shoes entirely, with generous safe air around them, child within central 60% width. Crisp premium commercial photography, realistic fabric texture and anatomy, no text/logo/watermark, no collage. This is the second distinct product gallery image, not a duplicate of the front photograph."
+        },
+        {
+          "view": 3,
+          "generatedSource": "exec-83a8d55e-9174-4864-bb6a-19f0e88a9b99.png",
+          "asset": "/img/products/trending-red-pocket-short-set-3.webp",
+          "thumbnail": "/img/products/card/trending-red-pocket-short-set-3.webp",
+          "prompt": "Use case: product-mockup. Input image is an approved exact garment reference. Generate ONE new professional catalogue photograph: an elegant overhead FLAT LAY of the garments by themselves, no person, no mannequin. Keep the precise original garment design, fabrics, colour, print/embroidery/appliqué and construction from the reference, not a redesigned outfit. Product to show: ONLY the exact red cotton crew-neck T-shirt with a red chest patch pocket, and the exact deep navy cargo shorts with flap pockets. Arrange the shorts below and slightly offset from the tee. Do not include the child's shoes, hat, hair clips, tights, handbag or any unrelated styling accessories. Lay garments on a warm pale ivory studio surface with natural soft window light and realistic soft contact shadows. Sharp true-colour fabric detail, refined premium catalogue styling. Square 1:1 photograph, garments fully visible with comfortable margins on every edge, use most of frame naturally. No logos, writing, watermark, text labels, panels or collage. This is the third matching gallery photograph of this exact product."
+        }
+      ]
+    },
+    {
+      "handle": "trending-navy-zip-tracksuit",
+      "images": [
+        {
+          "view": 1,
+          "generatedSource": "exec-74d666e0-cd66-455b-9c05-71b8eecce52f.png",
+          "asset": "/img/products/trending-navy-zip-tracksuit-1.webp",
+          "thumbnail": "/img/products/card/trending-navy-zip-tracksuit-1.webp",
+          "prompt": "Use case: product-mockup. Generate ONE high-resolution photorealistic premium children's fashion catalogue photograph for Purple United Kids inspired by the user's outfit references, with original people and designs. Outfit styled for a real child, refined fabric texture and beautiful craftsmanship. Minimal warm ivory plaster studio wall and floor, natural soft window sunlight and subtle shadows, elegant sharp photographic focus, true fabric colours and realistic anatomy. Square 1:1 frame, FULL BODY entirely visible from head to shoes, centre subject in middle 60% width, leave clear comfortable air above head and below feet for a website product card and square gallery. No text, logo, watermark, brand emblem or collage. No extreme poses, no additional people or clutter. Subject and exact wardrobe: An Indian boy about 8, natural curly brown hair, friendly smile. Luxury deep navy cotton loopback tracksuit: an open zip-through hooded sweatshirt, silver central zip and two front welt pockets, tonal ribbed cuffs and hem, matching navy tapered joggers with drawstring waist and cuffed ankles; a pristine white tee with a tiny abstract geometric navy mountain shape, navy-and-white running shoes with no brand emblems. Full-body front view, relaxed standing pose, both shoes planted on floor, no ball."
+        },
+        {
+          "view": 2,
+          "generatedSource": "exec-9ef7e0f2-5b63-42a1-a14a-8edff1c60122.png",
+          "asset": "/img/products/trending-navy-zip-tracksuit-2.webp",
+          "thumbnail": "/img/products/card/trending-navy-zip-tracksuit-2.webp",
+          "prompt": "Use case: identity-preserve. Input image is the approved first photograph of a new premium kidswear product, serving as the exact product, child, colours and studio reference. Create ONE DIFFERENT catalogue photograph from this same photoshoot. Keep the EXACT same child, same age and face, exact same garments, construction, appliqué/embroidery/print, colours, footwear and accessories; do not redesign any garment. Change only pose and camera angle: full-body three-quarter view from the child's right, child gently turning towards camera with a natural smile, arms relaxed (not identical to the reference), show the side seams, fit and fabric drape. Preserve warm ivory plaster backdrop and soft window-light photographic treatment. Square 1:1 frame; show full head, hair, hands and shoes entirely, with generous safe air around them, child within central 60% width. Crisp premium commercial photography, realistic fabric texture and anatomy, no text/logo/watermark, no collage. This is the second distinct product gallery image, not a duplicate of the front photograph."
+        },
+        {
+          "view": 3,
+          "generatedSource": "exec-58808888-fc53-49dd-b8c8-74ec296aa382.png",
+          "asset": "/img/products/trending-navy-zip-tracksuit-3.webp",
+          "thumbnail": "/img/products/card/trending-navy-zip-tracksuit-3.webp",
+          "prompt": "Use case: product-mockup. Input image is an approved exact garment reference. Generate ONE new professional catalogue photograph: an elegant overhead FLAT LAY of the garments by themselves, no person, no mannequin. Keep the precise original garment design, fabrics, colour, print/embroidery/appliqué and construction from the reference, not a redesigned outfit. Product to show: ONLY the exact deep navy hooded zip-through sweatshirt and its matching tapered navy joggers. Keep the silver zip, hood, cuffs, welt pockets, drawstring waistband and cuffed ankles. Arrange jacket open only slightly (with no tee inside) and joggers below and slightly offset. Do not include the child's shoes, hat, hair clips, tights, handbag or any unrelated styling accessories. Lay garments on a warm pale ivory studio surface with natural soft window light and realistic soft contact shadows. Sharp true-colour fabric detail, refined premium catalogue styling. Square 1:1 photograph, garments fully visible with comfortable margins on every edge, use most of frame naturally. No logos, writing, watermark, text labels, panels or collage. This is the third matching gallery photograph of this exact product."
+        }
+      ]
+    }
+  ]
+}

@@ -223,6 +223,7 @@ export default function AskPurple() {
               Budget per piece
             </label>
             <select id="ask-budget" className="select" value={prefs.budget} onChange={(e) => set('budget', Number(e.target.value))}>
+              {!BUDGETS.some((b) => b.v === prefs.budget) && <option value={prefs.budget}>Up to {formatINR(prefs.budget)}</option>}
               {BUDGETS.map((b) => (
                 <option key={b.v} value={b.v}>
                   {b.l}

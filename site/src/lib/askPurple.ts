@@ -300,7 +300,7 @@ export function parseMessage(raw: string): Partial<Prefs> {
     let n = Number(money[1])
     if (money[2] || (/\bk\b/.test(money[0]) && n < 100)) n *= 1000
     if (n >= 300) {
-      out.budget = BUDGETS.filter((b) => b.v).map((b) => b.v).find((v) => n <= v) ?? 0
+      out.budget = n
       rest = t.replace(money[0], ' ')
     }
   }

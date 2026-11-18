@@ -6,9 +6,10 @@ import { type Product, stockFor, isProductSoldOut, AGE_LABELS, productThumbnail 
 import { useWishlist } from '../store'
 import { addToBag, toggleWish } from '../lib/commerce'
 
-export function ProductCard({ product: p, priority, initialColor, compact }: { product: Product; priority?: boolean; initialColor?: string; compact?: boolean }) {
+export function ProductCard({ product: p, priority, initialColor, initialImageIndex, compact }: { product: Product; priority?: boolean; initialColor?: string; initialImageIndex?: number; compact?: boolean }) {
   const [colorName, setColorName] = useState(initialColor && p.colors.some((c) => c.name === initialColor) ? initialColor : p.colors.find((c) => !c.soldOut)?.name ?? p.colors[0].name)
   const color = p.colors.find((c) => c.name === colorName)!
+  const [imageIndex, setImageIndex] = useState<number | null>(initialImageIndex !== undefined && initialImageIndex >= 0 && initialImageIndex < color.images.length ? initialImageIndex : null)
   const [quick, setQuick] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
   const wished = useWishlist((s) => s.items.some((i) => i.handle === p.handle))
@@ -25,6 +26,13 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
   const alt = color.images[1]
   const otherColor = !alt ? p.colors.find((c) => c.name !== colorName && !c.soldOut) : undefined
   const hoverImg = alt ?? otherColor?.images[0]
+  const changeImage = (direction: number, button: HTMLButtonElement) => {
+    // Continue from the visible hover preview until an image is explicitly selected.
+    const preview = button.parentElement?.querySelector('.pcard__img--alt')
+    const previewVisible = preview && Number(getComputedStyle(preview).opacity) > 0.5
+    const current = imageIndex ?? (previewVisible ? 1 : 0)
+    setImageIndex((current + direction + color.images.length) % color.images.length)
+  }
   const lowStockSizes = p.sizes.filter((s) => {
     const n = stockFor(p, colorName, s)
     return n > 0 && n <= 2
@@ -69,9 +77,32 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
     <article className={`pcard${soldOut ? ' is-soldout' : ''}${compact ? ' pcard--compact' : ''}`}>
       <div className="pcard__media">
         <Link to={href} className="pcard__imglink" tabIndex={-1} aria-hidden="true">
-          <img className="pcard__img" src={productThumbnail(color.images[0])} alt="" loading={priority ? 'eager' : 'lazy'} decoding="async" width={840} height={840} />
-          {hoverImg && <img className="pcard__img pcard__img--alt" src={productThumbnail(hoverImg)} alt="" loading="lazy" decoding="async" width={840} height={840} />}
+          <img className="pcard__img" src={productThumbnail(color.images[imageIndex ?? 0])} alt="" loading={priority ? 'eager' : 'lazy'} decoding="async" width={840} height={840} />
+          {imageIndex === null && hoverImg && <img className="pcard__img pcard__img--alt" src={productThumbnail(hoverImg)} alt="" loading="lazy" decoding="async" width={840} height={840} />}
         </Link>
+        {color.images.length > 1 && (
+          <>
+            <button
+              type="button"
+              className="pcard__image-arrow pcard__image-arrow--prev"
+              aria-label={`Previous image of ${p.name}`}
+              onClick={(e) => changeImage(-1, e.currentTarget)}
+            >
+              <Icon name="chevron-left" size={28} strokeWidth={2.25} />
+            </button>
+            <button
+              type="button"
+              className="pcard__image-arrow pcard__image-arrow--next"
+              aria-label={`Next image of ${p.name}`}
+              onClick={(e) => changeImage(1, e.currentTarget)}
+            >
+              <Icon name="chevron-right" size={28} strokeWidth={2.25} />
+            </button>
+            <span className="sr-only" role="status">
+              Image {(imageIndex ?? 0) + 1} of {color.images.length} for {p.name}, {colorName}
+            </span>
+          </>
+        )}
         <div className="pcard__badges">
           {soldOut ? <span className="tag tag--muted">Sold out</span> : p.isNew ? <span className="tag">New</span> : null}
           {!soldOut && color.soldOut && <span className="tag tag--muted">Colour sold out</span>}
@@ -133,7 +164,10 @@ export function ProductCard({ product: p, priority, initialColor, compact }: { p
                     title={c.name}
                     className={`swatch${c.name === colorName ? ' is-active' : ''}${c.soldOut ? ' is-soldout' : ''}`}
                     style={{ ['--sw' as string]: c.hex }}
-                    onClick={() => setColorName(c.name)}
+                    onClick={() => {
+                      setColorName(c.name)
+                      setImageIndex(null)
+                    }}
                   />
                 ))}
               </div>

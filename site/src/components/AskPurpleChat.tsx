@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { Icon } from './Icon'
 import { Price } from './ui'
 import { allColorFamilies, formatINR, type Occasion, type Style } from '../data/products'
-import { useWishlist } from '../store'
-import { addToBag, toggleWish } from '../lib/commerce'
+import { useUI } from '../store'
+import { addToBag } from '../lib/commerce'
 import { useDialog, useLockScroll, useMedia } from '../lib/hooks'
 import {
   AGES,
@@ -41,8 +41,8 @@ import {
    what it can and only asks for what's missing. Rule-based demo, not live AI.
    ========================================================================== */
 
-type Step = 'resume' | 'age' | 'gender' | 'occasion' | 'styles' | 'budget' | 'sizes' | 'apparel' | 'shoe' | 'colors' | 'done'
-const ORDER: Step[] = ['age', 'gender', 'occasion', 'styles', 'budget', 'sizes', 'colors']
+type Step = 'intro' | 'resume' | 'age' | 'gender' | 'occasion' | 'styles' | 'budget' | 'sizes' | 'apparel' | 'shoe' | 'colors' | 'done'
+const ORDER: Step[] = ['age', 'gender']
 
 type Results = { picks: Pick[]; looks: Look[]; total: number; apparel: string; shoe: string; more: boolean }
 type Msg = { id: string; from: 'bot' | 'user'; text?: string; results?: Results; empty?: boolean }
@@ -50,7 +50,7 @@ type Msg = { id: string; from: 'bot' | 'user'; text?: string; results?: Results;
 let uid = 0
 // Time-based prefix keeps ids unique even if this module is reloaded mid-conversation (dev hot reload).
 const nextId = () => `${Date.now().toString(36)}-${++uid}`
-const PAGE = 6
+const PAGE = 3
 
 const GENDERS = [
   { v: 'girl', l: 'A girl' },
@@ -58,10 +58,15 @@ const GENDERS = [
   { v: 'any', l: 'Show me everything' },
 ] as const
 
-const STARTERS = ['A festive look for my 6 year old daughter', 'Birthday outfit for a 4 year old boy under ₹3,000', 'Cosy everyday pieces for a baby']
+const STARTERS = [
+  { label: 'Birthday · girl, 4 years', message: 'Birthday outfit for a 4 year old girl under ₹3,000' },
+  { label: 'Everyday · boy, 6 years', message: 'Cosy everyday layers for a 6 year old boy' },
+]
 
 function question(step: Step, p: Prefs): string {
   switch (step) {
+    case 'intro':
+      return 'Tell me their age and what you’re looking for, or let me guide you.'
     case 'resume':
       return `Welcome back. Last time you were shopping for ${summarize(p)}. Shall I pick up from there?`
     case 'age':
@@ -104,9 +109,13 @@ function understood(patch: Partial<Prefs>) {
 const join = (b: string[]) => (b.length < 2 ? b.join('') : `${b.slice(0, -1).join(', ')} and ${b[b.length - 1]}`)
 
 /* ---------- Product card inside the chat ---------- */
-function ChatPick({ x, onNavigate }: { x: Pick; onNavigate: () => void }) {
-  const wished = useWishlist((s) => s.items.some((i) => i.handle === x.p.handle))
-  const [busy, setBusy] = useState(false)
+function ChatPick({ x, onNavigate, onNotice }: { x: Pick; onNavigate: () => void; onNotice: (text: string, bag?: boolean) => void }) {
+  const [added, setAdded] = useState(false)
+  useEffect(() => {
+    if (!added) return
+    const timer = setTimeout(() => setAdded(false), 4000)
+    return () => clearTimeout(timer)
+  }, [added])
   const img = x.p.colors.find((c) => c.name === x.color)!.images[0]
   const href = `/products/${x.p.handle}?color=${encodeURIComponent(x.color)}`
   return (
@@ -123,31 +132,20 @@ function ChatPick({ x, onNavigate }: { x: Pick; onNavigate: () => void }) {
           {x.color} · {x.size}
         </p>
         <Price price={x.p.price} compareAt={x.p.compareAt} className="askp-card__price" />
-        <p className="askp-card__why">
-          <Icon name="sparkle" size={12} aria-hidden="true" /> {x.reasons[0]}
-        </p>
+        {!x.exact && <p className="askp-card__why">Nearest available size</p>}
         <div className="askp-card__actions">
           <button
             type="button"
-            className={`btn btn--sm${busy ? ' is-loading' : ''}`}
+            className="btn btn--sm"
+            disabled={added}
             onClick={() => {
-              setBusy(true)
-              setTimeout(() => {
-                addToBag(x.p.handle, x.color, x.size, 1, { openDrawer: false })
-                setBusy(false)
-              }, 350)
+              if (addToBag(x.p.handle, x.color, x.size, 1, { openDrawer: false, silent: true, onError: onNotice })) {
+                setAdded(true)
+                onNotice(`${x.p.name} added to your bag.`, true)
+              }
             }}
           >
-            Add<span className="sr-only"> {x.p.name}, size</span> {x.size}
-          </button>
-          <button
-            type="button"
-            className={`icon-btn askp-card__wish${wished ? ' is-on' : ''}`}
-            aria-pressed={wished}
-            aria-label={wished ? `Remove ${x.p.name} from wishlist` : `Save ${x.p.name} to wishlist`}
-            onClick={() => toggleWish(x.p.handle, x.color)}
-          >
-            <Icon name={wished ? 'heart-fill' : 'heart'} size={18} />
+            {added ? <><Icon name="check" size={14} /> Added</> : <>Add to bag<span className="sr-only"> {x.p.name}, size {x.size}</span></>}
           </button>
         </div>
       </div>
@@ -197,6 +195,7 @@ export function AskPurpleChat() {
   const [step, setStep] = useState<Step | null>(null)
   const [typing, setTyping] = useState(false)
   const [draft, setDraft] = useState('')
+  const [notice, setNotice] = useState<{ id: number; text: string; bag: boolean } | null>(null)
   const shown = useRef(0) // how many ranked picks are on screen for the current brief
   const timers = useRef<number[]>([])
   const panelRef = useRef<HTMLDivElement>(null)
@@ -209,6 +208,12 @@ export function AskPurpleChat() {
   useDialog(open, panelRef, () => setOpen(false), inputRef)
   useLockScroll(open && mobile)
   useEffect(() => () => timers.current.forEach(clearTimeout), [])
+  useEffect(() => {
+    if (!notice) return
+    const timer = setTimeout(() => setNotice(null), 4000)
+    return () => clearTimeout(timer)
+  }, [notice])
+  const notify = (text: string, bag = false) => setNotice({ id: Date.now(), text, bag })
 
   const later = (fn: () => void, ms: number) => {
     timers.current.push(window.setTimeout(fn, reduced ? Math.min(ms, 120) : ms))
@@ -222,12 +227,12 @@ export function AskPurpleChat() {
       setTyping(false)
       setMsgs((m) => [...m, ...lines.map((l) => ({ id: nextId(), from: 'bot' as const, ...(typeof l === 'string' ? { text: l } : l) }))])
       setStep(then)
-    }, 520 + Math.min(900, lines.reduce((n, l) => n + (typeof l === 'string' ? l.length : 80), 0) * 6))
+    }, 350)
   }
 
   const results = (p: Prefs, lead: string[] = []) => {
     const rec = recommend(p)
-    shown.current = Math.min(PAGE, rec.ranked.length)
+    shown.current = Math.min(PAGE, rec.all.length)
     if (!rec.total) {
       botSay([...lead, { text: `Nothing quite fits ${summarize(p)} — yet. Try a higher budget, fewer styles or a different occasion.`, empty: true }], 'done')
       return
@@ -235,7 +240,7 @@ export function AskPurpleChat() {
     botSay(
       [
         ...lead,
-        `Here’s what I found for ${summarize(p)} — ${rec.total} matching ${rec.total === 1 ? 'piece' : 'pieces'} in ${rec.apparelTarget} clothing and ${rec.shoeTarget} shoes. Every pick says why it was chosen.`,
+        `Here are a few picks for ${summarize(p)}. I’ve suggested sizes for their age. You can change these in Refine.`,
         { results: { picks: rec.all.slice(0, PAGE), looks: rec.looks, total: rec.total, apparel: rec.apparelTarget, shoe: rec.shoeTarget, more: rec.all.length > PAGE } },
       ],
       'done',
@@ -280,6 +285,7 @@ export function AskPurpleChat() {
     shown.current = 0
     setMsgs([])
     setDraft('')
+    setNotice(null)
     if (fresh) clearPrefs()
     const resume = !fresh && hasSavedPrefs()
     const p = resume ? loadPrefs() : DEFAULT_PREFS
@@ -287,10 +293,9 @@ export function AskPurpleChat() {
     setAnswered(new Set())
     botSay(
       [
-        'Hello, I’m Ask Purple — your personal stylist. Tell me about the child you’re shopping for and I’ll put together looks from the collection, in their size.',
-        resume ? question('resume', p) : 'You can tap an answer or just type, like “a party dress for my 5 year old”. First — how old are they?',
+        resume ? question('resume', p) : 'Hi, I’m Ask Purple. Tell me their age and what you’re shopping for — I’ll find a few pieces to match.',
       ],
-      resume ? 'resume' : 'age',
+      resume ? 'resume' : 'intro',
     )
   }
 
@@ -306,7 +311,10 @@ export function AskPurpleChat() {
     if (!log) return
     const last = log.lastElementChild as HTMLElement | null
     const behavior: ScrollBehavior = reduced ? 'auto' : 'smooth'
-    if (last?.classList.contains('askp-msg--results')) log.scrollTo({ top: last.offsetTop - 64, behavior })
+    if (last?.classList.contains('askp-msg--results')) {
+      const top = log.scrollTop + last.getBoundingClientRect().top - log.getBoundingClientRect().top - 16
+      log.scrollTo({ top, behavior })
+    }
     else log.scrollTo({ top: log.scrollHeight, behavior })
   }, [msgs, typing, step, reduced])
 
@@ -315,7 +323,7 @@ export function AskPurpleChat() {
     if (!open || !step) return
     const panel = panelRef.current
     if (panel && (document.activeElement === document.body || !panel.contains(document.activeElement))) {
-      ;(repliesRef.current?.querySelector<HTMLElement>('button') ?? inputRef.current)?.focus({ preventScroll: true })
+      ;(repliesRef.current?.querySelector<HTMLElement>('button, select') ?? inputRef.current)?.focus({ preventScroll: true })
     }
   }, [step, open])
 
@@ -326,11 +334,10 @@ export function AskPurpleChat() {
   const addLook = (items: Pick[]) => {
     let n = 0
     items.forEach((x) => {
-      if (addToBag(x.p.handle, x.color, x.size, 1, { openDrawer: false, silent: true })) n++
+      if (addToBag(x.p.handle, x.color, x.size, 1, { openDrawer: false, silent: true, onError: notify })) n++
     })
     if (n) {
-      say('Add this look to my bag')
-      botSay([`Done — ${n} ${n === 1 ? 'piece' : 'pieces'} added to your bag in the sizes shown.`], 'done')
+      notify(`${n} ${n === 1 ? 'piece' : 'pieces'} added to your bag.`, true)
     }
   }
 
@@ -380,7 +387,7 @@ export function AskPurpleChat() {
       }
       if (step === 'resume' && /^\s*(no|nope|start fresh|fresh|new)\b/i.test(text)) {
         commit(DEFAULT_PREFS, new Set())
-        return botSay([question('age', DEFAULT_PREFS)], 'age')
+        return botSay([question('intro', DEFAULT_PREFS)], 'intro')
       }
       if (step === 'sizes' && yes) {
         const a = new Set(answered).add('sizes')
@@ -389,6 +396,7 @@ export function AskPurpleChat() {
       }
       if (/\b(more|another|other)\b/i.test(text) && step === 'done') return more()
       if (skip && step && step !== 'done' && step !== 'resume') {
+        if (step === 'intro' || step === 'age') return botSay(['Their age helps me find the right sizes. How old are they?'], 'age')
         const patchFor: Partial<Prefs> = step === 'occasion' ? { occasion: '' } : step === 'styles' ? { styles: [] } : step === 'colors' ? { colors: [] } : step === 'budget' ? { budget: 0 } : step === 'gender' ? { gender: 'any' } : {}
         const p = { ...prefs, ...patchFor }
         const a = new Set(answered).add(step === 'apparel' || step === 'shoe' ? 'sizes' : step)
@@ -436,6 +444,12 @@ export function AskPurpleChat() {
   const replies = (() => {
     if (!step || typing) return null
     switch (step) {
+      case 'intro':
+        return (
+          <button type="button" className="chip askp-chip--primary" onClick={() => botSay([question('age', prefs)], 'age')}>
+            Help me choose <Icon name="arrow" size={14} />
+          </button>
+        )
       case 'resume':
         return (
           <>
@@ -448,11 +462,15 @@ export function AskPurpleChat() {
           </>
         )
       case 'age':
-        return AGES.map((x) => (
-          <button key={x.v} type="button" className="chip" onClick={() => answer('age', { age: x.v }, x.l)}>
-            {x.l}
-          </button>
-        ))
+        return (
+          <label className="askp-select">
+            <span>Child’s age</span>
+            <select className="select" value="" onChange={(e) => answer('age', { age: e.target.value }, ageLabel(e.target.value))}>
+              <option value="" disabled>Select age</option>
+              {AGES.map((x) => <option key={x.v} value={x.v}>{x.l}</option>)}
+            </select>
+          </label>
+        )
       case 'gender':
         return GENDERS.map((g) => (
           <button key={g.v} type="button" className="chip" onClick={() => answer('gender', { gender: g.v }, g.l)}>
@@ -505,29 +523,25 @@ export function AskPurpleChat() {
         )
       case 'apparel':
         return (
-          <>
-            <button type="button" className="chip askp-chip--primary" onClick={() => answer('apparel', { apparelSize: '' }, `Suggested: ${suggestApparel(prefs.age)}`)}>
-              Suggested: {suggestApparel(prefs.age)}
-            </button>
-            {(isInfant(prefs.age) ? INFANT_SIZES : KID_SIZES).map((s) => (
-              <button key={s} type="button" className="chip" onClick={() => answer('apparel', { apparelSize: s }, s)}>
-                {s}
-              </button>
-            ))}
-          </>
+          <label className="askp-select">
+            <span>Clothing size</span>
+            <select className="select" value="" onChange={(e) => answer('apparel', { apparelSize: e.target.value === 'auto' ? '' : e.target.value }, e.target.value === 'auto' ? `Suggested: ${suggestApparel(prefs.age)}` : e.target.value)}>
+              <option value="" disabled>Select size</option>
+              <option value="auto">Suggested: {suggestApparel(prefs.age)}</option>
+              {(isInfant(prefs.age) ? INFANT_SIZES : KID_SIZES).map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </label>
         )
       case 'shoe':
         return (
-          <>
-            <button type="button" className="chip askp-chip--primary" onClick={() => answer('shoe', { shoeSize: '' }, `Suggested: ${suggestShoe(prefs.age)}`)}>
-              Suggested: {suggestShoe(prefs.age)}
-            </button>
-            {(isInfant(prefs.age) ? INFANT_SHOE_SIZES : SHOE_SIZES).map((s) => (
-              <button key={s} type="button" className="chip" onClick={() => answer('shoe', { shoeSize: s }, s)}>
-                {s}
-              </button>
-            ))}
-          </>
+          <label className="askp-select">
+            <span>Shoe size</span>
+            <select className="select" value="" onChange={(e) => answer('shoe', { shoeSize: e.target.value === 'auto' ? '' : e.target.value }, e.target.value === 'auto' ? `Suggested: ${suggestShoe(prefs.age)}` : e.target.value)}>
+              <option value="" disabled>Select size</option>
+              <option value="auto">Suggested: {suggestShoe(prefs.age)}</option>
+              {(isInfant(prefs.age) ? INFANT_SHOE_SIZES : SHOE_SIZES).map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </label>
         )
       case 'colors':
         return (
@@ -575,37 +589,26 @@ export function AskPurpleChat() {
           )
         return (
           <>
-            <button type="button" className="chip askp-chip--primary" onClick={more}>
+            <button type="button" className="chip askp-chip--primary" onClick={more} disabled={![...msgs].reverse().find((m) => m.results)?.results?.more}>
               <Icon name="sparkle" size={14} /> More picks
             </button>
-            <button type="button" className="chip" onClick={() => refine('occasion', 'Change the occasion')}>
-              Occasion
-            </button>
-            <button type="button" className="chip" onClick={() => refine('budget', 'Change my budget')}>
-              Budget
-            </button>
-            <button type="button" className="chip" onClick={() => refine('styles', 'Change the style')}>
-              Style
-            </button>
-            <button type="button" className="chip" onClick={() => refine('colors', 'Change colours')}>
-              Colours
-            </button>
-            <button type="button" className="chip" onClick={() => refine('age', 'Change their age')}>
-              Age
-            </button>
-            <button type="button" className="chip" onClick={() => refine('sizes', 'Change sizes')}>
-              Sizes
-            </button>
-            <button type="button" className="chip askp-chip--quiet" onClick={() => { say('Start again'); start(true) }}>
-              Start again
-            </button>
+            <select className="select askp-refine" aria-label="Refine suggestions" value="" onChange={(e) => refine(e.target.value as Step, `Change ${e.target.selectedOptions[0].text.toLowerCase()}`)}>
+              <option value="" disabled>Refine</option>
+              <option value="age">Age</option>
+              <option value="gender">Shopping for</option>
+              <option value="occasion">Occasion</option>
+              <option value="budget">Budget</option>
+              <option value="sizes">Sizes</option>
+              <option value="styles">Style</option>
+              <option value="colors">Colours</option>
+            </select>
           </>
         )
       }
     }
   })()
 
-  const showStarters = step === 'age' && !answered.size && msgs.length <= 2
+  const showStarters = step === 'intro' && !answered.size
 
   return (
     <div className={`askp${open ? ' is-open' : ''}`}>
@@ -637,20 +640,20 @@ export function AskPurpleChat() {
             {msgs.map((m) =>
               m.results ? (
                 <div key={m.id} className="askp-msg askp-msg--bot askp-msg--results">
+                  <p className="askp-label">Picked for you</p>
+                  <ul role="list" className="askp-cards" aria-label="Suggested pieces">
+                    {m.results.picks.map((x) => (
+                      <ChatPick key={x.p.handle} x={x} onNavigate={closeOnMobile} onNotice={notify} />
+                    ))}
+                  </ul>
                   {m.results.looks.length > 0 && (
-                    <div className="askp-looks">
-                      <p className="askp-label">Complete looks</p>
+                    <details className="askp-looks">
+                      <summary>See complete looks</summary>
                       {m.results.looks.map((l) => (
                         <ChatLook key={l.title} look={l} onAdd={addLook} onNavigate={closeOnMobile} />
                       ))}
-                    </div>
+                    </details>
                   )}
-                  <p className="askp-label">{m.results.looks.length ? 'Top picks for you' : 'More picks'}</p>
-                  <ul role="list" className="askp-cards" aria-label="Suggested pieces">
-                    {m.results.picks.map((x) => (
-                      <ChatPick key={x.p.handle} x={x} onNavigate={closeOnMobile} />
-                    ))}
-                  </ul>
                   <Link to="/ask-purple" className="askp-full" onClick={() => { savePrefs(prefs); setOpen(false) }}>
                     See all {m.results.total} on the Ask Purple page <Icon name="arrow" size={15} />
                   </Link>
@@ -669,21 +672,27 @@ export function AskPurpleChat() {
                 <span />
               </p>
             )}
+            {showStarters && (
+              <div className="askp__starters" role="group" aria-label="Try a styling request">
+                {STARTERS.map((s) => (
+                  <button key={s.label} type="button" className="askp-starter" onClick={() => handleText(s.message)}>
+                    {s.label} <Icon name="arrow" size={14} />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="askp__foot">
+            {notice && (
+              <div className="askp__notice" role="status">
+                <span>{notice.text}</span>
+                {notice.bag && <button type="button" onClick={() => { setOpen(false); useUI.getState().setCart(true) }}>View bag</button>}
+              </div>
+            )}
             {replies && (
               <div className="askp__replies" ref={repliesRef} role="group" aria-label={step ? question(step, prefs) : 'Suggestions'}>
                 {replies}
-              </div>
-            )}
-            {showStarters && (
-              <div className="askp__starters" role="group" aria-label="Or try asking">
-                {STARTERS.map((s) => (
-                  <button key={s} type="button" className="askp-starter" onClick={() => handleText(s)}>
-                    “{s}”
-                  </button>
-                ))}
               </div>
             )}
             <form className="askp__input" onSubmit={submit}>
@@ -696,7 +705,7 @@ export function AskPurpleChat() {
                 className="askp__field"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder="Type your answer or ask anything…"
+                placeholder="Age, occasion, or what you need…"
                 autoComplete="off"
                 enterKeyHint="send"
               />
@@ -704,14 +713,18 @@ export function AskPurpleChat() {
                 <Icon name="arrow" size={18} />
               </button>
             </form>
-            <p className="askp__note">Demo stylist — simple rules over the catalogue, not live AI.</p>
+            <p className="askp__note">Demo stylist · suggestions from our catalogue</p>
           </div>
         </div>
       )}
       <button
         type="button"
         className="askp__fab"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+          const ui = useUI.getState()
+          ui.toasts.filter((t) => t.group === 'bag').forEach((t) => ui.dismiss(t.id))
+          setOpen((o) => !o)
+        }}
         aria-expanded={open}
         aria-label={open ? 'Close Ask Purple' : 'Open Ask Purple stylist chat'}
       >

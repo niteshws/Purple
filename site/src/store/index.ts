@@ -344,6 +344,8 @@ export interface Toast {
   body?: string
   image?: string
   kind?: 'success' | 'info' | 'error'
+  duration?: number
+  group?: string
   action?: { label: string; to?: string; onClick?: () => void }
 }
 interface UIState {
@@ -384,11 +386,16 @@ export const useUI = create<UIState>()((set, get) => ({
   openSizeGuide: (s) => set({ sizeGuide: s }),
   toast: (t) => {
     const id = tid++
-    set((s) => ({ toasts: [...s.toasts.slice(-2), { ...t, id }] }))
+    const remaining = get().toasts.filter((x) => !t.group || x.group !== t.group).slice(-2)
+    get().toasts.filter((x) => !remaining.includes(x)).forEach((x) => {
+      clearTimeout(toastTimers.get(x.id))
+      toastTimers.delete(x.id)
+    })
+    set({ toasts: [...remaining, { ...t, id }] })
     // A toast whose button is the only way to do something (e.g. "Undo") stays until dismissed,
     // so nobody runs out of time to reach it. Everything else auto-dismisses (WCAG 2.2.1).
-    if (t.action?.onClick && !t.action.to) return
-    toastTimers.set(id, setTimeout(() => get().dismiss(id), TOAST_MS))
+    if (t.duration === undefined && t.action?.onClick && !t.action.to) return
+    toastTimers.set(id, setTimeout(() => get().dismiss(id), t.duration ?? TOAST_MS))
   },
   dismiss: (id) => {
     clearTimeout(toastTimers.get(id))
@@ -396,9 +403,11 @@ export const useUI = create<UIState>()((set, get) => ({
     set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) }))
   },
   holdToast: (id) => {
+    if (get().toasts.find((t) => t.id === id)?.duration !== undefined) return
     clearTimeout(toastTimers.get(id))
   },
   releaseToast: (id) => {
+    if (get().toasts.find((t) => t.id === id)?.duration !== undefined) return
     if (!toastTimers.has(id)) return
     clearTimeout(toastTimers.get(id))
     toastTimers.set(id, setTimeout(() => get().dismiss(id), TOAST_MS))
