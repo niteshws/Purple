@@ -45,6 +45,7 @@ body:has(.home-two) :is(.askp__fab, .concierge__fab):is(:hover, :focus-visible) 
   transform: translate(0, -50%);
 }
 .h2-frame {
+  overflow: clip;
   position: relative;
   display: block;
   min-width: 0;
@@ -180,8 +181,19 @@ body:has(.home-two) :is(.askp__fab, .concierge__fab):is(:hover, :focus-visible) 
 .h2-chapters a:hover .h2-chapters__name,
 .h2-chapters a:focus-visible .h2-chapters__name { opacity: 1; }
 .h2-reading-progress { position: fixed; z-index: 51; top: var(--sticky-top, 76px); left: 0; right: 0; height: 2px; background: #a8758f; transform: scaleX(var(--h2-progress)); transform-origin: left; pointer-events: none; }
-.h2-animate .h2-photo { opacity: .35; transition: opacity 1000ms var(--ease-out) var(--h2-reveal-delay, 0ms); }
-.h2-animate .h2-photo.is-loaded.is-visible { opacity: 1; }
+.h2-animate .h2-photo {
+  opacity: .2;
+  translate: 0 32px;
+  clip-path: inset(12% 0 0 0);
+  transition: opacity 1100ms var(--ease-out), translate 1200ms var(--ease-out), clip-path 1200ms var(--ease-out);
+  transition-delay: var(--h2-reveal-delay, 0ms);
+}
+.h2-animate .h2-photo[data-reveal-direction='left'] { translate: -32px 0; clip-path: inset(0 12% 0 0); }
+.h2-animate .h2-photo[data-reveal-direction='right'] { translate: 32px 0; clip-path: inset(0 0 0 12%); }
+.h2-animate .h2-photo.is-loaded.is-visible { opacity: 1; translate: 0 0; clip-path: inset(0); }
+@media (min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .h2-animate .h2-photo img { scale: 1.035; translate: 0 var(--h2-parallax, 0px); }
+}
 .h2-animate :is(.h2-collage__label, .h2-campaign__title h1, .h2-campaign__title h2, .h2-campaign__title nav, .h2-scroll-hint, .h2-film__toggle) {
   opacity: 0;
   animation: h2-enter 800ms var(--ease-out) both;
@@ -217,7 +229,7 @@ body:has(.home-two) :is(.h2-header, .h2-footer) a:hover { opacity: .75; }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-two *, .home-two *::before, .home-two *::after { animation: none !important; transition: none !important; }
-  .h2-animate .h2-photo { opacity: 1; }
+  .h2-animate .h2-photo { opacity: 1; translate: none !important; clip-path: none !important; }
   .h2-photo img { transform: none !important; }
   .h2-collage__label { translate: none !important; }
   .h2-collage__label :is(h2,h3) { transform: none !important; }

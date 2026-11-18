@@ -125,11 +125,13 @@ export default function HomeOptionTwo() {
         tile.style.setProperty('--h2-reveal-delay', Math.min(index, 2) * 80 + 'ms')
       })
     })
-    photos.forEach((photo) => {
+    photos.forEach((photo, index) => {
+      photo.dataset.revealDirection = ['left', 'up', 'right'][index % 3]
       const img = photo.querySelector('img')
       if (img?.complete && img.naturalWidth > 0) photo.classList.add('is-loaded')
     })
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const parallax = window.matchMedia('(min-width: 901px) and (pointer: fine)')
     let reveals: IntersectionObserver | undefined
     let chapters: IntersectionObserver | undefined
     if ('IntersectionObserver' in window) {
@@ -157,6 +159,15 @@ export default function HomeOptionTwo() {
       const bounds = element.getBoundingClientRect()
       const distance = Math.max(1, element.offsetHeight - window.innerHeight)
       element.style.setProperty('--h2-progress', String(Math.max(0, Math.min(1, -bounds.top / distance))))
+      if (!reduced.matches && parallax.matches) {
+        const positions = photos.map((photo) => ({ photo, bounds: photo.getBoundingClientRect() }))
+        positions.forEach(({ photo, bounds: photoBounds }) => {
+          if (photoBounds.bottom < 0 || photoBounds.top > window.innerHeight) return
+          const progress = (window.innerHeight / 2 - photoBounds.top - photoBounds.height / 2) / window.innerHeight
+          const limit = Math.min(10, photoBounds.height * .012)
+          photo.style.setProperty('--h2-parallax', Math.max(-limit, Math.min(limit, progress * 16)) + 'px')
+        })
+      } else photos.forEach((photo) => photo.style.removeProperty('--h2-parallax'))
     }
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(update) }
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -167,6 +178,7 @@ export default function HomeOptionTwo() {
       chapters?.disconnect()
       cancelAnimationFrame(frame)
       element.classList.remove('h2-animate')
+      photos.forEach((photo) => { delete photo.dataset.revealDirection; photo.style.removeProperty('--h2-parallax') })
       element.querySelectorAll<HTMLElement>('[style*="--h2-reveal-delay"]').forEach((tile) => tile.style.removeProperty('--h2-reveal-delay'))
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
