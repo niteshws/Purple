@@ -57,6 +57,8 @@ body:has(.home-two) :is(.askp__fab, .concierge__fab):is(:hover, :focus-visible) 
 .h2-photo img { display: block; width: 100%; margin: 0; }
 .h2-photo { line-height: 0; }
 .h2-photo img { height: auto; object-fit: contain; }
+.h2-film { background: #2e1428; line-height: 0; }
+.h2-film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; }
 .h2-campaign__title {
   position: absolute;
   top: 50%;

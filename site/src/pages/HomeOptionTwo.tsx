@@ -14,6 +14,7 @@ const CHAPTERS = [
   ['little-ones', 'Little ones'],
   ['off-duty', 'Soft season'],
   ['gifting', 'Gifting'],
+  ['flagship', 'Flagship film'],
 ] as const
 
 function CampaignPhoto({ name, alt, mobile = false, portrait = false, eager = false }: {
@@ -206,6 +207,12 @@ export default function HomeOptionTwo() {
           <GiftingPhoto src="/img/brand/gift-card.webp" width={1400} height={1038}
             alt="Purple United gift card and presentation packaging" title="Their choice" />
         </div>
+      </section>
+      <section id="h2-flagship" className="h2-frame h2-film" data-chapter="flagship" data-sr="1" aria-label="Purple United flagship walkthrough">
+        <video controls playsInline preload="none" poster="/video/flagship-poster.webp" aria-label="Purple United Kids flagship store walkthrough with music">
+          <source src="/video/home-option-two-flagship.mp4" type="video/mp4" />
+          Your browser does not support video playback.
+        </video>
       </section>
     </div>
   )
