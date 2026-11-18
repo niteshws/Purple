@@ -138,12 +138,9 @@ export default function HomeOptionTwo() {
       if (!reduced.matches) element.classList.add('h2-animate')
       reveals = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            reveals?.unobserve(entry.target)
-          }
+          entry.target.classList.toggle('is-visible', entry.isIntersecting && entry.intersectionRatio >= .05)
         })
-      }, { threshold: 0.05 })
+      }, { rootMargin: '-3% 0px -3% 0px', threshold: [0, .05] })
       photos.forEach((photo) => reveals?.observe(photo))
       sections.forEach((section) => reveals?.observe(section))
       chapters = new IntersectionObserver((entries) => {
