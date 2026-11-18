@@ -2,12 +2,11 @@ import { useCallback, useEffect, useEffectEvent, useRef, useState, type Keyboard
 import { Link } from 'react-router-dom'
 import { Icon } from './Icon'
 
-/* Homepage campaign hero — video playback completes before image slides auto-advance.
-   - Crossfade + slow push-in on the image, staggered text entrance per slide.
+/* Video-only homepage campaign hero — each slide advances after playback ends.
+   - Crossfade between videos, staggered text entrance per slide.
    - Always auto-advances (hover and focus do not pause it); only the visible pause
      control stops it (WCAG 2.2.2). A background tab holds the slide until it is visible.
-   - prefers-reduced-motion: slides still change, but without the push-in motion (CSS).
-   - Separate desktop (2.5:1) and mobile (4:3) crops via <picture>. */
+   - No image posters or image fallbacks, including during loading and playback errors. */
 
 export interface HeroSlide {
   key: string
@@ -16,12 +15,7 @@ export interface HeroSlide {
   line2: string
   copy: string
   cta: { label: string; to: string }
-  desktop: string
-  mobile: string
-  alt: string
-  pos?: string
-  video?: string
-  poster?: string
+  video: string
   videoPos?: string
 }
 
@@ -33,11 +27,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     line2: 'their own.',
     copy: 'Considered clothes for curious minds, big imaginations and the joy of growing up.',
     cta: { label: 'Shop the collection', to: '/collections/new-arrivals' },
-    desktop: '/img/campaign/hero/little-originals-desktop.webp',
-    mobile: '/img/campaign/hero/little-originals-mobile.webp',
     video: '/video/hero/little-originals.mp4',
-    alt: 'Three children laughing as they walk through a sunlit sandstone courtyard in corduroy, knits and a quilted jacket',
-    pos: '72% 40%',
   },
   {
     key: 'boys-edit',
@@ -46,11 +36,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     line2: 'Big smiles.',
     copy: 'Cosy knits and easy layers for every giggle, playful pause and day together.',
     cta: { label: 'Shop everyday favourites', to: '/collections/everyday-essentials' },
-    desktop: '/img/campaign/hero/boys-edit-desktop.webp',
-    mobile: '/img/campaign/hero/boys-edit-mobile.webp',
     video: '/video/hero/children-playing-photo-studio-1080p.mp4',
-    alt: 'Two brothers holding hands and balancing along an old stone wall in denim, cargos and utility jackets',
-    pos: '72% 40%',
   },
   {
     key: 'infant-edit',
@@ -59,13 +45,8 @@ export const HERO_SLIDES: HeroSlide[] = [
     line2: 'Lots of love.',
     copy: 'Thoughtful little treasures for birthdays, new arrivals and every just-because moment.',
     cta: { label: 'Explore gifting', to: '/gifting' },
-    desktop: '/img/campaign/hero/infant-edit-desktop.webp',
-    mobile: '/img/campaign/hero/infant-edit-mobile.webp',
     video: '/video/hero/luxury-gifting.mp4',
-    poster: '/video/hero/luxury-gifting-poster.jpg',
     videoPos: 'right center',
-    alt: 'A baby and a toddler in soft knit cardigans laughing as they share a wooden ring toy on a woven rug',
-    pos: '70% 40%',
   },
 ]
 
@@ -108,11 +89,10 @@ function HeroVideo({ slide, active, paused, onEnded, onError, onProgress }: {
     <video
       ref={ref}
       src={slide.video}
-      poster={slide.poster ?? slide.desktop}
       style={{ objectPosition: slide.videoPos }}
       muted
       playsInline
-      preload="metadata"
+      preload={active ? 'auto' : 'metadata'}
       aria-hidden="true"
       onEnded={() => active && !paused && onEnded()}
       onError={onError}
@@ -127,22 +107,14 @@ function HeroVideo({ slide, active, paused, onEnded, onError, onProgress }: {
 export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] }) {
   const [index, setIndex] = useState(0)
   const [userPaused, setUserPaused] = useState(false)
-  const [loaded, setLoaded] = useState<Set<number>>(() => new Set([0]))
   const [failedVideos, setFailedVideos] = useState<Set<string>>(() => new Set())
   const [videoProgress, setVideoProgress] = useState(0)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const n = slides.length
 
-  // Warm the next slides once the first image is on screen.
-  useEffect(() => {
-    const t = setTimeout(() => setLoaded(new Set(slides.map((_, i) => i))), 1200)
-    return () => clearTimeout(t)
-  }, [slides])
-
   const go = useCallback(
     (i: number) => {
       const next = (i + n) % n
-      setLoaded((l) => (l.has(next) ? l : new Set(l).add(next)))
       setVideoProgress(0)
       setIndex(next)
     },
@@ -151,8 +123,8 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
 
   const paused = userPaused
 
-  // Image slides use a timer. Video slides advance after their full playback.
-  const currentVideo = !!slides[index]?.video && !failedVideos.has(slides[index].key)
+  // Skip failed videos after a short delay without displaying an image fallback.
+  const currentVideo = !failedVideos.has(slides[index]?.key)
   useEffect(() => {
     if (paused || currentVideo || n < 2) return
     let timer: ReturnType<typeof setTimeout>
@@ -209,34 +181,16 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
               aria-hidden={!active}
               inert={!active ? true : undefined}
             >
-              {s.video && !failedVideos.has(s.key) ? (
-                <div className="hero-c__media">
-                  <HeroVideo
-                    slide={s}
-                    active={active}
-                    paused={paused}
-                    onEnded={() => go(i + 1)}
-                    onError={() => setFailedVideos((failed) => new Set(failed).add(s.key))}
-                    onProgress={setVideoProgress}
-                  />
-                </div>
-              ) : (
-                <picture className="hero-c__media">
-                  {loaded.has(i) && <source media="(max-width: 767px)" srcSet={s.mobile} />}
-                  {loaded.has(i) ? (
-                    <img
-                      src={s.desktop}
-                      alt={s.alt}
-                      width={1983}
-                      height={793}
-                      decoding="async"
-                      fetchPriority={i === 0 ? 'high' : 'low'}
-                      loading={i === 0 ? 'eager' : 'lazy'}
-                      style={{ objectPosition: s.pos }}
-                    />
-                  ) : null}
-                </picture>
-              )}
+              <div className="hero-c__media">
+                <HeroVideo
+                  slide={s}
+                  active={active}
+                  paused={paused}
+                  onEnded={() => go(i + 1)}
+                  onError={() => setFailedVideos((failed) => new Set(failed).add(s.key))}
+                  onProgress={setVideoProgress}
+                />
+              </div>
               <div className="hero-c__shade" aria-hidden="true" />
               <div className="container hero-c__content on-dark">
                 <p className="eyebrow hero-c__in" style={{ ['--i' as string]: 0 }}>
