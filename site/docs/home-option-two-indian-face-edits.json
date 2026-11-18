@@ -1,0 +1,27 @@
+{
+  "mode": "Built-in image_gen edit tool",
+  "scope": "Only five Option 2 image references and responsive variants",
+  "prompts": [
+    {
+      "image": "own-your-way",
+      "prompt": "Use case: precise-object-edit. Edit the supplied photograph for Purple United Homepage Option 2, OWN YOUR WAY. Change only the child's face to that of a photorealistic Indian boy of the same age, with natural Indian facial features and warm medium brown skin. Match exposed hands/neck skin naturally. Preserve EXACT outfit, rust beanie with its lettering, hair shape, denim shearling jacket, mustard jumper, brown trousers, shoes, pose, expression, eye direction, body proportions, bicycle, blue wall, light poles, background, sunlight, shadows, colour grade, photographic style, camera angle and complete original framing. Do not restyle, recrop, add objects, beautify or smooth skin. Realistic pores and anatomy. Preserve original portrait aspect ratio. Output only the edited photograph."
+    },
+    {
+      "image": "colour-play",
+      "prompt": "Use case: precise-object-edit. Edit target is the supplied COLOUR PLAY photograph. Change only the face to a photorealistic Indian child of the same toddler age, warm medium brown skin and natural Indian facial features; harmonize visible neck/hands/legs skin. Preserve exact expression and gaze, curly hairstyle shape, pose, proportions, all outfit details: multicolour printed jacket, grey hoodie, mustard shorts, tan boots; preserve colourful mural, ground, objects, lighting, camera, complete framing and photographic colour grade. No outfit or style changes, no added objects, no cropping. Authentic skin texture, realistic anatomy, no plastic retouching. Keep original landscape 3:2 aspect ratio. Output edited photograph only.",
+      "correction": "Precise edit of this photograph: remove ONLY the small black bindi/dot on the child's forehead, replace with natural matching skin. Keep the Indian child's face, expression, hairstyle, clothes, shoes, hands, body, colourful mural, ground, lighting, crop, photographic style and every other detail EXACTLY unchanged. No other edits. Output same3:2 landscape photograph."
+    },
+    {
+      "image": "together",
+      "prompt": "Use case: precise-object-edit. Edit supplied TOGETHER photograph: change only the faces of all THREE girls to distinct photorealistic Indian girls of the same respective ages. Natural Indian facial features, varied medium brown skin, consistent exposed skin. Preserve all sunglasses exactly (including flower sunglasses), original hairstyle shapes, expressions, poses, hand holding, heights, body proportions, all clothing exactly: white coat and polka dot top, gold sequin jacket and black top/jeans, pale denim jacket and dotted blouse/shorts, shoes and shopping bags. Preserve building, orange shutters and bollards, street, camera, lighting, colour grade, framing, original landscape3:2 aspect. No new accessories, bindis, jewellery, text or objects. Do not restyle outfits. Natural skin texture and professional campaign realism. Only edited photograph."
+    },
+    {
+      "image": "small-wonders",
+      "prompt": "Use case: precise-object-edit. Edit supplied SMALL WONDERS photograph. Change only the toddler girl's face to a photorealistic Indian girl of the same age, natural Indian facial features with warm medium brown skin; harmonize neck and hands. Keep hairstyle shape, expression, gaze, proportions, pose and EVERYTHING else unchanged: black beret, leather biker jacket with exact zips/buttons, pink striped shirt, denim skirt, pink/black cat tights, black studded boots, background cafe umbrellas, street, blurred trees, camera, lighting, framing and photographic style. No bindi, jewellery, added accessories, text, crop or styling changes. Preserve 2:3 portrait aspect ratio and authentic skin texture. Output only edited photo."
+    },
+    {
+      "image": "denim-days",
+      "prompt": "Use case: precise-object-edit. Edit supplied OFF DUTY photograph. Change only face to a photorealistic Indian girl of the same age, natural Indian facial features and warm medium brown skin; harmonize hands and neck. Preserve same slight smile, eye direction, hair silhouette and curls, pose holding hat brim, black felt hat, exact dark blue denim jacket seams/buttons, pale blue dress with white lace neckline, background bokeh, wooden railing, lighting, colour grade, framing and style. No outfit changes, no accessories, bindi, jewellery or new objects. Keep landscape3:2 aspect and full original composition. Natural pores and believable anatomy, no plastic skin. Only edited photograph."
+    }
+  ]
+}

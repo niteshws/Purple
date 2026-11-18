@@ -62,14 +62,14 @@ const PHOTOS = {
   layers: { name: 'soft-layers', width: 1086, height: 1448, small: 640, alt: 'A girl wearing an ivory cable cardigan, grey skirt and lace-up boots in a leafy courtyard' },
   outside: { name: 'coastal-boy', width: 1086, height: 1448, small: 640, alt: 'A boy in an olive knit and cream trousers looking back as he walks through coastal dunes' },
   coast: { name: 'coastal-friends', width: 1672, height: 941, small: 960, alt: 'Three children in textured winter layers walking together on a sandy beach' },
-  crew: { name: 'own-your-way', width: 1280, height: 1792, small: 640, alt: 'A child in a rust knitted beanie, shearling-lined denim jacket and mustard jumper sitting outdoors beside a bicycle' },
-  colour: { name: 'colour-play', width: 1920, height: 1280, small: 960, alt: 'A child in a colourful jacket, grey hoodie and mustard shorts against a bright painted wall' },
-  together: { name: 'together', width: 1920, height: 1280, small: 960, alt: 'Three girls in sunglasses, denim and a gold jacket walking together outside a shop' },
+  crew: { name: 'own-your-way-indian', width: 1280, height: 1792, small: 640, alt: 'A child in a rust knitted beanie, shearling-lined denim jacket and mustard jumper sitting outdoors beside a bicycle' },
+  colour: { name: 'colour-play-indian', width: 1920, height: 1280, small: 960, alt: 'A child in a colourful jacket, grey hoodie and mustard shorts against a bright painted wall' },
+  together: { name: 'together-indian', width: 1920, height: 1280, small: 960, alt: 'Three girls in sunglasses, denim and a gold jacket walking together outside a shop' },
   baby: { name: 'baby-knit', width: 1122, height: 1402, small: 640, alt: 'A smiling baby in an ivory knitted romper sitting beside a sunny window' },
-  wonders: { name: 'small-wonders', width: 1280, height: 1920, small: 640, alt: 'A little girl in a black beret, leather jacket, striped shirt and patterned tights outdoors' },
+  wonders: { name: 'small-wonders-indian', width: 1280, height: 1920, small: 640, alt: 'A little girl in a black beret, leather jacket, striped shirt and patterned tights outdoors' },
   courtyard: { name: 'courtyard', width: 1672, height: 941, small: 960, alt: 'Two children in ivory and plum winter layers walking through a sunlit stone courtyard' },
   velvet: { name: 'velvet-evening', width: 1672, height: 941, small: 960, alt: 'Two smiling children in a velvet dress and an ivory blazer dancing before wine-red curtains' },
-  denim: { name: 'denim-days', width: 1920, height: 1280, small: 960, alt: 'A girl in a denim jacket holding the brim of a black hat in an autumn landscape' },
+  denim: { name: 'denim-days-indian', width: 1920, height: 1280, small: 960, alt: 'A girl in a denim jacket holding the brim of a black hat in an autumn landscape' },
 } as const
 type CollageImage = typeof PHOTOS[keyof typeof PHOTOS]
 
