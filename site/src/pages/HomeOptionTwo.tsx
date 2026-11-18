@@ -188,7 +188,7 @@ export default function HomeOptionTwo() {
       <nav className="h2-chapters" aria-label="Campaign chapters">
         {CHAPTERS.map(([name, label]) => <a key={name} href={'#h2-' + name} aria-label={label} aria-current={active === name ? 'location' : undefined}><span className="h2-chapters__name">{label}</span><span className="h2-chapters__dot" /></a>)}
       </nav>
-      <FullCampaign name="new-now" title="New now" hero alt="Indian children’s winter knitwear campaign in a warm walnut-panelled studio" />
+      <FullCampaign name="new-now" title="New wives" hero alt="Indian children’s winter knitwear campaign in a warm walnut-panelled studio" />
       <section id="h2-editorial" className="h2-collage h2-collage--portraits" data-chapter="editorial" data-sr="1" aria-label="Everyday originals" style={{ gridTemplateColumns: `${ratio(PHOTOS.studio)}fr ${ratio(PHOTOS.layers)}fr ${ratio(PHOTOS.outside)}fr` }}>
         <CollagePhoto photo={PHOTOS.studio} title="Everyday originals" id="h2-boys" position="top-right" sizes="(max-width: 600px) 100vw, 35vw" heading />
         <CollagePhoto photo={PHOTOS.layers} title="Soft layers" id="h2-girls" position="bottom-left" sizes="(max-width: 600px) 100vw, 33vw" />
