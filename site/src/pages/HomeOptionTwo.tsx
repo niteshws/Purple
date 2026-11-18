@@ -74,8 +74,8 @@ type CollageImage = typeof PHOTOS[keyof typeof PHOTOS]
 const ratio = (photo: CollageImage) => photo.width / photo.height
 const stackRatio = (...photos: CollageImage[]) => 1 / photos.reduce((sum, photo) => sum + 1 / ratio(photo), 0)
 
-function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw', heading = false, light = false }: {
-  photo: CollageImage; title: string; id?: string; position?: string; sizes?: string; heading?: boolean; light?: boolean
+function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw', heading = false }: {
+  photo: CollageImage; title: string; id?: string; position?: string; sizes?: string; heading?: boolean
 }) {
   const Heading = heading ? 'h2' : 'h3'
   return (
@@ -86,7 +86,7 @@ function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw'
           sizes={sizes} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async"
           onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')} />
       </picture>
-      <div className={'h2-collage__label h2-collage__label--' + position + (light ? ' h2-collage__label--light' : '')}><Heading>{title}</Heading></div>
+      <div className={'h2-collage__label h2-collage__label--' + position}><Heading>{title}</Heading></div>
     </article>
   )
 }
@@ -165,7 +165,7 @@ export default function HomeOptionTwo() {
         <CollagePhoto photo={PHOTOS.crew} title="Own your way" sizes="(max-width: 600px) 100vw, 48vw" heading />
         <div className="h2-collage__stack">
           <CollagePhoto photo={PHOTOS.colour} title="Colour play" sizes="(max-width: 600px) 100vw, 53vw" />
-          <CollagePhoto photo={PHOTOS.together} title="Together" sizes="(max-width: 600px) 100vw, 53vw" light />
+          <CollagePhoto photo={PHOTOS.together} title="Together" sizes="(max-width: 600px) 100vw, 53vw" />
         </div>
       </section>
       <FullCampaign name="party" title="Party" alt="Blush partywear, natural smiles and a deep wine studio backdrop" />
@@ -176,9 +176,9 @@ export default function HomeOptionTwo() {
       <section id="h2-off-duty" className="h2-collage h2-collage--winter" data-chapter="off-duty" data-sr="1" aria-label="Soft season" style={{ gridTemplateColumns: `${stackRatio(PHOTOS.courtyard, PHOTOS.velvet)}fr ${ratio(PHOTOS.denim)}fr` }}>
         <div className="h2-collage__stack">
           <CollagePhoto photo={PHOTOS.courtyard} title="Soft season" sizes="(max-width: 600px) 100vw, 38vw" heading />
-          <CollagePhoto photo={PHOTOS.velvet} title="After hours" position="bottom-left" sizes="(max-width: 600px) 100vw, 38vw" light />
+          <CollagePhoto photo={PHOTOS.velvet} title="After hours" position="bottom-left" sizes="(max-width: 600px) 100vw, 38vw" />
         </div>
-        <CollagePhoto photo={PHOTOS.denim} title="Off duty" id="h2-denim" sizes="(max-width: 600px) 100vw, 63vw" light />
+        <CollagePhoto photo={PHOTOS.denim} title="Off duty" id="h2-denim" sizes="(max-width: 600px) 100vw, 63vw" />
       </section>
     </div>
   )

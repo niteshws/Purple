@@ -5,6 +5,45 @@
   --h2-progress: 0;
 }
 body:has(.home-two) .page-enter { animation: none; }
+/* Keep the shared chat panels; only Option 2's launchers become icon buttons. */
+body:has(.home-two) :is(.askp__fab, .concierge__fab) {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  justify-content: center;
+  gap: 0;
+}
+body:has(.home-two) .askp__fab .askp__fab-icon,
+body:has(.home-two) .concierge__fab > svg { width: 42px; height: 42px; }
+body:has(.home-two) .concierge__fab > svg { padding: 10px; }
+body:has(.home-two) :is(.askp__fab-label, .concierge__fab-label) {
+  position: absolute;
+  display: block;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translate(4px, -50%);
+  padding: 8px 12px;
+  border-radius: 4px;
+  background: #2e1428;
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(46,20,40,.15);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms, transform 180ms var(--ease-out), visibility 180ms;
+}
+body:has(.home-two) :is(.askp__fab, .concierge__fab):is(:hover, :focus-visible) :is(.askp__fab-label, .concierge__fab-label) {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+}
 .h2-frame {
   position: relative;
   display: block;
@@ -25,7 +64,8 @@ body:has(.home-two) .page-enter { animation: none; }
   transform: translate(-50%, -50%);
   width: min(80%, 800px);
   text-align: center;
-  color: #f8f3eb;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(46,20,40,.5);
 }
 .h2-campaign__title h1,
 .h2-campaign__title h2 {
@@ -52,7 +92,6 @@ body:has(.home-two) .page-enter { animation: none; }
 .h2-campaign__title nav a:hover,
 .h2-campaign__title nav a:focus-visible { text-decoration: underline; }
 .h2-campaign__title :focus-visible { outline-color: #d9b87a; }
-.h2-campaign--ink .h2-campaign__title { color: #2e1428; }
 .h2-campaign--new-now .h2-campaign__title { top: min(50%, 45svh); }
 .h2-campaign--ink .h2-campaign__title :focus-visible { outline-color: #4a2240; }
 .h2-campaign--off-duty .h2-campaign__title { left: 66%; top: 57%; width: 50%; }
@@ -73,13 +112,13 @@ body:has(.home-two) .page-enter { animation: none; }
   top: clamp(16px, 1.8vw, 34px);
   left: clamp(16px, 1.8vw, 34px);
   max-width: calc(100% - 32px);
-  color: #2e1428;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(46,20,40,.5);
   pointer-events: none;
 }
 .h2-collage__label--top-right { left: auto; right: clamp(16px, 1.8vw, 34px); }
 .h2-collage__label--bottom-left { top: auto; bottom: clamp(16px, 1.8vw, 34px); }
 .h2-collage__label--bottom-right { top: auto; left: auto; right: clamp(16px, 1.8vw, 34px); bottom: clamp(16px, 1.8vw, 34px); }
-.h2-collage__label--light { color: #f8f3eb; text-shadow: 0 1px 6px rgba(46,20,40,.45); }
 .h2-collage__label h2,
 .h2-collage__label h3 {
   position: relative;
@@ -138,4 +177,5 @@ body:has(.home-two) .page-enter { animation: none; }
 @media (prefers-reduced-motion: reduce) {
   .home-two *, .home-two *::before, .home-two *::after { animation: none !important; transition: none !important; }
   .h2-animate .h2-photo { opacity: 1; }
+  body:has(.home-two) :is(.askp__fab-label, .concierge__fab-label) { transition: none; }
 }
