@@ -13,6 +13,7 @@ const CHAPTERS = [
   ['party', 'Party'],
   ['little-ones', 'Little ones'],
   ['off-duty', 'Soft season'],
+  ['gifting', 'Gifting'],
 ] as const
 
 function CampaignPhoto({ name, alt, mobile = false, portrait = false, eager = false }: {
@@ -60,7 +61,7 @@ const PHOTOS = {
   layers: { name: 'soft-layers', width: 1086, height: 1448, small: 640, alt: 'A girl wearing an ivory cable cardigan, grey skirt and lace-up boots in a leafy courtyard' },
   outside: { name: 'coastal-boy', width: 1086, height: 1448, small: 640, alt: 'A boy in an olive knit and cream trousers looking back as he walks through coastal dunes' },
   coast: { name: 'coastal-friends', width: 1672, height: 941, small: 960, alt: 'Three children in textured winter layers walking together on a sandy beach' },
-  crew: { name: 'city-crew', width: 1280, height: 1920, small: 640, alt: 'Three children wearing relaxed caramel and stone outerwear with hoodies and cargo trousers' },
+  crew: { name: 'own-your-way', width: 1280, height: 1792, small: 640, alt: 'A child in a rust knitted beanie, shearling-lined denim jacket and mustard jumper sitting outdoors beside a bicycle' },
   colour: { name: 'colour-play', width: 1920, height: 1280, small: 960, alt: 'A child in a colourful jacket, grey hoodie and mustard shorts against a bright painted wall' },
   together: { name: 'together', width: 1920, height: 1280, small: 960, alt: 'Three girls in sunglasses, denim and a gold jacket walking together outside a shop' },
   baby: { name: 'baby-knit', width: 1122, height: 1402, small: 640, alt: 'A smiling baby in an ivory knitted romper sitting beside a sunny window' },
@@ -162,10 +163,10 @@ export default function HomeOptionTwo() {
         <CollagePhoto photo={PHOTOS.coast} title="On the coast" position="bottom-right" heading />
       </section>
       <section id="h2-city" className="h2-collage h2-collage--city" data-chapter="city" data-sr="1" aria-label="Own your way" style={{ gridTemplateColumns: `${ratio(PHOTOS.crew)}fr ${stackRatio(PHOTOS.colour, PHOTOS.together)}fr` }}>
-        <CollagePhoto photo={PHOTOS.crew} title="Own your way" sizes="(max-width: 600px) 100vw, 48vw" heading />
+        <CollagePhoto photo={PHOTOS.crew} title="Own your way" sizes="(max-width: 600px) 100vw, 49vw" heading />
         <div className="h2-collage__stack">
-          <CollagePhoto photo={PHOTOS.colour} title="Colour play" sizes="(max-width: 600px) 100vw, 53vw" />
-          <CollagePhoto photo={PHOTOS.together} title="Together" sizes="(max-width: 600px) 100vw, 53vw" />
+          <CollagePhoto photo={PHOTOS.colour} title="Colour play" sizes="(max-width: 600px) 100vw, 52vw" />
+          <CollagePhoto photo={PHOTOS.together} title="Together" sizes="(max-width: 600px) 100vw, 52vw" />
         </div>
       </section>
       <FullCampaign name="party" title="Party" alt="Blush partywear, natural smiles and a deep wine studio backdrop" />
@@ -179,6 +180,15 @@ export default function HomeOptionTwo() {
           <CollagePhoto photo={PHOTOS.velvet} title="After hours" position="bottom-left" sizes="(max-width: 600px) 100vw, 38vw" />
         </div>
         <CollagePhoto photo={PHOTOS.denim} title="Off duty" id="h2-denim" sizes="(max-width: 600px) 100vw, 63vw" />
+      </section>
+      <section id="h2-gifting" className="h2-frame h2-collage h2-collage__tile" data-chapter="gifting" data-sr="1" aria-labelledby="h2-title-gifting">
+        <picture className="h2-photo">
+          <img src="/img/brand/packaging-hero.webp" width="1600" height="1064"
+            alt="Purple United plum and ivory gift boxes, shopping bags, tissue and gift cards with a folded ivory knit"
+            loading="lazy" decoding="async"
+            onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')} />
+        </picture>
+        <div className="h2-collage__label"><h2 id="h2-title-gifting">Gifting</h2></div>
       </section>
     </div>
   )

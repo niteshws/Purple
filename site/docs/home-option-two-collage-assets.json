@@ -159,6 +159,25 @@
       "height": 1280,
       "small_width": 960,
       "output": "/img/home-option-two/collage-edit/together.webp"
+    },
+    {
+      "key": "own-your-way",
+      "source_file": "little-kid-with-bike-outdoors.jpg",
+      "source_sha256": "42c6e08a6d6a5df3786b049fc3a3f180d32859527023372be15fe50371b478e6",
+      "source_size": [
+        2982,
+        4175
+      ],
+      "width": 1280,
+      "height": 1792,
+      "small_width": 640,
+      "output": "/img/home-option-two/collage-edit/own-your-way.webp"
     }
-  ]
+  ],
+  "gifting_image": {
+    "source": "Existing Option 1 gifting image, reused without changes",
+    "output": "/img/brand/packaging-hero.webp",
+    "width": 1600,
+    "height": 1064
+  }
 }
