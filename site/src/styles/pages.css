@@ -254,54 +254,98 @@
   }
 }
 
-/* ---------- Editorial (new season) ---------- */
-.editorial {
-  padding-top: var(--section-sm);
+/* ---------- Option 1 · interactive occasion lookbook ---------- */
+.occasion-book {
+  padding-block: clamp(48px, 5vw, 80px) 28px;
+  background: radial-gradient(ellipse at 78% 45%, var(--rose-2), transparent 62%), var(--paper);
+  overflow: hidden;
 }
-.editorial__grid {
-  display: grid;
-  grid-template-columns: 1.45fr 1fr;
-  gap: clamp(24px, 4vw, 72px);
-  align-items: start;
-}
-.editorial__main {
-  margin-top: clamp(0px, 4vw, 64px);
-}
-.editorial__side {
-  display: grid;
-  gap: clamp(28px, 3vw, 44px);
-}
-.editorial__portrait {
-  width: 72%;
-  justify-self: end;
-}
-.editorial__text {
-  display: grid;
-  gap: 16px;
-  justify-items: start;
-}
-.editorial__sig {
-  font-size: 22px;
-  color: var(--mauve-ink);
-}
-.editorial__ctas {
+.occasion-book__masthead {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  gap: 16px 26px;
-  margin-top: 8px;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--plum-line);
 }
-@media (max-width: 900px) {
-  .editorial__grid {
-    grid-template-columns: 1fr;
-  }
-  .editorial__portrait {
-    width: 62%;
-    margin-top: -22%;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 0 0 8px var(--ivory);
-  }
+.occasion-book__masthead > span { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--mauve-ink); }
+.occasion-book__masthead > span span { margin-left: 20px; font-size: 20px; }
+.occasion-book__layout { display: grid; grid-template-columns: .86fr 1.4fr; gap: clamp(36px, 5vw, 80px); align-items: center; padding-block: 54px 40px; }
+.occasion-book__story { max-width: 460px; }
+.occasion-book__kicker { font: italic 21px var(--font-signature); color: var(--mauve-ink); margin-bottom: 14px; }
+.occasion-book h2 { font: 400 clamp(40px, 4.2vw, 65px)/1.12 var(--font-display); letter-spacing: -.045em; color: var(--accent); }
+.occasion-book h2 em { color: var(--gold); font-weight: 400; }
+.occasion-book__intro { margin-top: 22px; color: var(--ink-70); font-size: 16px; line-height: 1.8; }
+.occasion-book__hint { display: flex; align-items: center; gap: 10px; margin-top: 30px; margin-bottom: 10px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--mauve-ink); }
+.occasion-book__hint > span { font-size: 18px; }
+.occasion-book__choices { border-top: 1px solid var(--plum-line); }
+.occasion-book__choice { width: 100%; display: grid; grid-template-columns: 30px 1fr 20px; align-items: center; text-align: left; gap: 12px; padding: 17px 12px 17px 0; border-bottom: 1px solid var(--plum-line); color: var(--ink-70); transition: color 200ms, background 200ms, padding 250ms; }
+.occasion-book__choice-number { font: italic 16px var(--font-signature); color: var(--gold); }
+.occasion-book__choice strong { display: block; font: 400 22px var(--font-display); }
+.occasion-book__choice small { display: block; font-size: 10px; margin-top: 5px; }
+.occasion-book__choice > svg { opacity: .3; transform: rotate(-35deg); transition: transform 250ms, opacity 250ms; }
+.occasion-book__choice:hover, .occasion-book__choice.is-selected { background: var(--ivory-2); padding-left: 12px; color: var(--accent); }
+.occasion-book__choice.is-selected > svg, .occasion-book__choice:hover > svg { opacity: 1; transform: rotate(0); }
+.occasion-book__edit { margin-top: 25px; min-height: 172px; }
+.occasion-book__edit-copy { animation: occasion-copy-in 400ms both; }
+.occasion-book__edit h3 { font: italic 24px var(--font-signature); color: var(--accent); }
+.occasion-book__edit p { font-size: 13px; line-height: 1.9; color: var(--ink-70); margin-top: 8px; max-width: 390px; }
+.occasion-book__shop { display: inline-flex; gap: 20px; align-items: center; margin-top: 18px; padding-bottom: 9px; border-bottom: 1px solid var(--accent); color: var(--accent); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+.occasion-book__collage { position: relative; min-width: 0; padding: 25px 0 64px; }
+.occasion-book__orbit { position: absolute; inset: 0 -20% 10% 8%; border: 1px solid var(--plum-line); border-radius: 50%; transform: rotate(-25deg); pointer-events: none; }
+.occasion-book__feature { position: relative; width: 72%; z-index: 1; transform: rotate(-3deg); padding: 10px 10px 0; background: var(--surface-hi); box-shadow: 0 18px 45px rgb(46 20 40 / .12); transition: transform 500ms; }
+.occasion-book__feature:hover { transform: rotate(-1deg) translateY(-4px); }
+.occasion-book__feature > a { display: block; position: relative; aspect-ratio: .82; overflow: hidden; background: var(--oat); }
+.occasion-book__feature img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 600ms, transform 900ms; }
+.occasion-book__feature img.is-selected { opacity: 1; }
+.occasion-book__feature:hover img { transform: scale(1.025); }
+.occasion-book__image-link { position: absolute; bottom: 16px; left: 16px; right: 16px; display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--glass); color: var(--accent); font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
+.occasion-book__caption { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 17px 6px 18px; color: var(--accent); }
+.occasion-book__caption > span:first-child { font-size: 9px; letter-spacing: .12em; white-space: nowrap; }
+.occasion-book__caption > span:last-child { font: italic 20px var(--font-signature); text-align: right; }
+.occasion-book__stamp { position: absolute; z-index: 3; left: 57%; top: -8px; width: 116px; aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--ivory); background: var(--plum); transform: rotate(12deg); font-size: 10px; line-height: 1.8; box-shadow: 0 0 0 5px var(--paper), 0 0 0 6px var(--plum-line); }
+.occasion-book__stamp em { font: italic 20px var(--font-signature); }
+.occasion-book__stamp > span { font-size: 22px; }
+.occasion-book__snapshots { position: absolute; width: 32%; top: 22%; right: -1%; z-index: 2; display: grid; gap: 28px; }
+.occasion-book__snapshot { display: block; background: var(--surface-hi); padding: 7px 7px 0; box-shadow: 0 10px 30px rgb(46 20 40 / .14); transform: rotate(7deg); text-align: left; transition: transform 350ms, box-shadow 350ms; }
+.occasion-book__snapshot:nth-child(2) { transform: rotate(-5deg); }
+.occasion-book__snapshot:hover, .occasion-book__snapshot:focus-visible { transform: rotate(0) translateY(-6px); box-shadow: 0 16px 32px rgb(46 20 40 / .22); }
+.occasion-book__snapshot > img { width: 100%; aspect-ratio: 1.22; object-fit: cover; }
+.occasion-book__snapshot > span { display: flex; align-items: center; gap: 7px; padding: 11px 3px; color: var(--accent); font-size: 9px; }
+.occasion-book__snapshot i { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.occasion-book__snapshot svg { margin-left: auto; }
+.occasion-book__handwriting { position: absolute; bottom: 5px; left: 15%; font: italic clamp(22px, 2vw, 29px) var(--font-signature); color: var(--mauve-ink); transform: rotate(-5deg); }
+.occasion-book__footer { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid var(--plum-line); padding-top: 21px; font-size: 10px; color: var(--ink-70); }
+.occasion-book__footer > span:first-child { letter-spacing: .08em; text-transform: uppercase; }
+.occasion-book__collage.is-in .occasion-book__feature { animation: occasion-photo-in 900ms var(--ease-out) backwards; }
+.occasion-book__collage.is-in .occasion-book__snapshots { animation: occasion-copy-in 900ms 200ms both; }
+@keyframes occasion-photo-in { from { opacity: 0; transform: translateY(30px) rotate(-7deg); } to { opacity: 1; transform: translateY(0) rotate(-3deg); } }
+@keyframes occasion-copy-in { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+@media (max-width: 1050px) {
+  .occasion-book__layout { grid-template-columns: .9fr 1.1fr; gap: 32px; }
+  .occasion-book__stamp { width: 95px; left: 58%; }
+  .occasion-book__stamp em { font-size: 17px; }
+  .occasion-book__caption > span:last-child { font-size: 16px; }
+}
+@media (max-width: 760px) {
+  .occasion-book__masthead > span { display: none; }
+  .occasion-book__masthead .eyebrow { font-size: 10px; }
+  .occasion-book__layout { grid-template-columns: 1fr; padding-top: 32px; gap: 24px; }
+  .occasion-book__story { max-width: none; }
+  .occasion-book h2 { font-size: clamp(42px, 9vw, 62px); }
+  .occasion-book__intro br { display: none; }
+  .occasion-book__collage { grid-row: 2; margin: 0 4px; }
+  .occasion-book__feature { width: 73%; }
+  .occasion-book__edit { min-height: 160px; }
+  .occasion-book__caption { padding: 13px 0; }
+  .occasion-book__caption > span:last-child { font-size: 15px; }
+  .occasion-book__snapshots { width: 35%; top: 22%; gap: 18px; }
+  .occasion-book__snapshot > span { font-size: 8px; gap: 4px; padding-block: 9px; }
+  .occasion-book__snapshot svg { width: 11px; }
+  .occasion-book__footer { flex-direction: column; gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .occasion-book *, .occasion-book *::before, .occasion-book *::after { animation: none !important; transition: none !important; }
 }
 
 /* ---------- New arrivals ---------- */

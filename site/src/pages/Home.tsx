@@ -104,37 +104,70 @@ function Categories() {
 }
 
 /* ---------------- 3 · New season editorial ---------------- */
+const OCCASION_EDITS = [
+  { name: 'Festive gatherings', note: 'For a season of togetherness', title: 'Gather beautifully.', copy: 'Ivory tailoring, embroidered details and a little golden-hour magic. Made for the moments everyone comes together.', image: 'home-occasions.webp', alt: 'Children in ivory tailoring and an embroidered tulle dress on a sunlit terrace', to: '/collections/festive-dressing', cta: 'Shop festive dressing', caption: 'A little golden-hour magic', color: '#d9b87a' },
+  { name: 'Party days', note: 'A little more twirl, please', title: 'Let the joy in.', copy: 'Big bows, soft shimmer and party-ready layers. For candle wishes, dance-floor twirls and one more slice of cake.', image: 'shop-celebration.webp', alt: 'Children in a cream suit and peach party dress beside a birthday cake', to: '/collections/celebration-party', cta: 'Shop party looks', caption: 'RSVP: ready to twirl', color: '#d9a093' },
+  { name: 'First milestones', note: 'Little days. Lasting memories.', title: 'Keep this moment.', copy: 'Gentle textures and thoughtful little details for first celebrations, family portraits and memories to hold onto.', image: 'shop-special.webp', alt: 'A baby in an ivory romper sitting beside a girl in a golden embroidered dress', to: '/collections/special-moments', cta: 'Shop special moments', caption: 'Their first. Your forever.', color: '#b6a37b' },
+]
+
 function NewSeason() {
+  const [selected, setSelected] = useState(0)
+  const edit = OCCASION_EDITS[selected]
   return (
-    <section className="editorial section" aria-labelledby="ed-h">
-      <div className="container editorial__grid">
-        <figure className="editorial__main reveal-img">
-          <Img src="/img/campaign/wardrobe/home-occasions.webp" alt="Two children walking on a sunlit terrace in layered tulle and ivory occasionwear" ratio="4/3" />
-        </figure>
-        <div className="editorial__side">
-          <figure className="editorial__portrait reveal-img" style={{ ['--d' as string]: '160ms' }}>
-            <Img src="/img/editorial/paris-portrait.webp" alt="Two children in tailored winter layers looking out over a city balcony" ratio="806/845" />
-          </figure>
-          <div className="editorial__text reveal" style={{ ['--d' as string]: '220ms' }}>
-            <p className="eyebrow">Occasion dressing · Winter 2026</p>
-            <h2 id="ed-h" className="h2">
-              A little <em>extraordinary.</em>
-            </h2>
-            <p className="lead">
-              Velvet for the festive table, tailoring for the family photograph, and a modern French sensibility that still lets them run, twirl and play.
-            </p>
-            <p className="signature editorial__sig">Everyday moments, made special.</p>
-            <div className="editorial__ctas">
-              <Link to="/collections/festive-dressing" className="btn">
-                Shop festive dressing <Icon name="arrow" size={18} className="icon-arrow" />
-              </Link>
-              <Link to="/collections/celebration-party" className="link">
-                Party & celebration
-              </Link>
+    <section className="occasion-book" aria-labelledby="ed-h">
+      <div className="container">
+        <div className="occasion-book__masthead reveal">
+          <p className="eyebrow">Occasion dressing · Winter 2026</p>
+          <span>The memory-making edit <span aria-hidden="true">↗</span></span>
+        </div>
+        <div className="occasion-book__layout">
+          <div className="occasion-book__story reveal">
+            <p className="occasion-book__kicker">Little people. Grand occasions.</p>
+            <h2 id="ed-h">A little<br /><em>extraordinary.</em></h2>
+            <p className="occasion-book__intro">For the days that become<br />“remember when?”</p>
+            <p className="occasion-book__hint"><span aria-hidden="true">↓</span> Choose a moment to explore</p>
+            <div className="occasion-book__choices" role="group" aria-label="Choose your occasion">
+              {OCCASION_EDITS.map((item, i) => (
+                <button key={item.name} type="button" className={`occasion-book__choice${selected === i ? ' is-selected' : ''}`} aria-pressed={selected === i} aria-controls="occasion-edit" onClick={() => setSelected(i)}>
+                  <span className="occasion-book__choice-number">0{i + 1}</span>
+                  <span><strong>{item.name}</strong><small>{item.note}</small></span>
+                  <Icon name="arrow" size={19} />
+                </button>
+              ))}
             </div>
-            <p className="demo-note">Campaign imagery is illustrative.</p>
+            <div id="occasion-edit" className="occasion-book__edit" aria-live="polite" aria-atomic="true">
+              <div key={selected} className="occasion-book__edit-copy">
+                <h3>{edit.title}</h3>
+                <p>{edit.copy}</p>
+                <Link to={edit.to} className="occasion-book__shop">{edit.cta} <Icon name="arrow" size={18} className="icon-arrow" /></Link>
+              </div>
+            </div>
+          </div>
+          <div className="occasion-book__collage reveal">
+            <span className="occasion-book__orbit" aria-hidden="true" />
+            <div className="occasion-book__feature">
+              <Link to={edit.to} aria-label={`Explore ${edit.name.toLowerCase()}`}>
+                {OCCASION_EDITS.map((item, i) => (
+                  <img key={item.image} src={`/img/campaign/wardrobe/${item.image}`} alt={i === selected ? item.alt : ''} aria-hidden={i !== selected} loading="lazy" className={i === selected ? 'is-selected' : ''} />
+                ))}
+                <span className="occasion-book__image-link">Discover the edit <Icon name="arrow" size={17} /></span>
+              </Link>
+              <div className="occasion-book__caption"><span>0{selected + 1} / 03</span><span>{edit.caption}</span></div>
+            </div>
+            <span className="occasion-book__stamp" aria-hidden="true">Made for<br /><em>the memories</em><span>✧</span></span>
+            <div className="occasion-book__snapshots">
+              {OCCASION_EDITS.filter((_, i) => i !== selected).map((item) => {
+                const i = OCCASION_EDITS.indexOf(item)
+                return <button key={item.name} type="button" className="occasion-book__snapshot" onClick={() => setSelected(i)} aria-label={`Preview ${item.name.toLowerCase()}`}>
+                  <img src={`/img/campaign/wardrobe/${item.image}`} alt="" loading="lazy" />
+                  <span><i style={{ background: item.color }} />{item.name}<Icon name="arrow" size={14} /></span>
+                </button>
+              })}
+            </div>
+            <p className="occasion-book__handwriting">Dressed up. Still themselves.</p>
           </div>
         </div>
+        <div className="occasion-book__footer"><span>Thoughtful details. Unforgettable little days.</span><span>Campaign imagery is illustrative.</span></div>
       </div>
     </section>
   )

@@ -16,7 +16,7 @@ export function addToBag(handle: string, color: string, size: string, qty = 1, o
   else if (!opts?.silent)
     ui.toast({
       title: 'Added to your bag',
-      duration: 4000,
+      duration: 2000,
       group: 'bag',
       body: `${p?.name ?? ''} · ${color} · ${size}`,
       image: p?.colors.find((c) => c.name === color)?.images[0],
