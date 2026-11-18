@@ -105,6 +105,7 @@ body:has(.home-two) :is(.askp__fab, .concierge__fab):is(:hover, :focus-visible) 
 }
 .h2-campaign__title nav { display: flex; justify-content: center; align-items: center; gap: clamp(20px, 2.4vw, 48px); margin-top: 12px; }
 .h2-campaign__title nav a {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -113,10 +114,13 @@ body:has(.home-two) :is(.askp__fab, .concierge__fab):is(:hover, :focus-visible) 
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .02em;
-  text-underline-offset: 5px;
+  text-decoration: none;
 }
+.h2-campaign__title nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 350ms var(--ease-out); }
 .h2-campaign__title nav a:hover,
-.h2-campaign__title nav a:focus-visible { text-decoration: underline; }
+.h2-campaign__title nav a:focus-visible { text-decoration: none; }
+.h2-campaign__title nav a:hover::after,
+.h2-campaign__title nav a:focus-visible::after { transform: scaleX(1); }
 .h2-campaign__title :focus-visible { outline-color: #d9b87a; }
 .h2-campaign--new-now .h2-campaign__title { top: min(50%, 45svh); }
 .h2-campaign--ink .h2-campaign__title :focus-visible { outline-color: #4a2240; }
