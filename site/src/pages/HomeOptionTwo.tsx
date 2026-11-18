@@ -119,6 +119,12 @@ export default function HomeOptionTwo() {
     const element = root.current
     if (!element) return
     const photos = Array.from(element.querySelectorAll<HTMLElement>('.h2-photo'))
+    const sections = Array.from(element.querySelectorAll<HTMLElement>(':scope > section'))
+    sections.forEach((section) => {
+      section.querySelectorAll<HTMLElement>('.h2-collage__tile').forEach((tile, index) => {
+        tile.style.setProperty('--h2-reveal-delay', Math.min(index, 2) * 80 + 'ms')
+      })
+    })
     photos.forEach((photo) => {
       const img = photo.querySelector('img')
       if (img?.complete && img.naturalWidth > 0) photo.classList.add('is-loaded')
@@ -137,6 +143,7 @@ export default function HomeOptionTwo() {
         })
       }, { threshold: 0.05 })
       photos.forEach((photo) => reveals?.observe(photo))
+      sections.forEach((section) => reveals?.observe(section))
       chapters = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) setActive((entry.target as HTMLElement).dataset.chapter || 'new-now')
@@ -160,6 +167,7 @@ export default function HomeOptionTwo() {
       chapters?.disconnect()
       cancelAnimationFrame(frame)
       element.classList.remove('h2-animate')
+      element.querySelectorAll<HTMLElement>('[style*="--h2-reveal-delay"]').forEach((tile) => tile.style.removeProperty('--h2-reveal-delay'))
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
     }
