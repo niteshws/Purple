@@ -110,6 +110,8 @@ function GiftingPhoto({ src, width, height, alt, title, lead = false }: {
 
 export default function HomeOptionTwo() {
   const root = useRef<HTMLDivElement>(null)
+  const film = useRef<HTMLVideoElement>(null)
+  const [filmPlaying, setFilmPlaying] = useState(false)
   const [active, setActive] = useState<string>('new-now')
   useMeta('New Now — Purple United Kids', 'The new Purple United campaign: winter layers, coastal days, partywear and little originals.', { canonical: '/' })
 
@@ -209,10 +211,18 @@ export default function HomeOptionTwo() {
         </div>
       </section>
       <section id="h2-flagship" className="h2-frame h2-film" data-chapter="flagship" data-sr="1" aria-label="Purple United flagship walkthrough">
-        <video autoPlay muted loop controls playsInline preload="metadata" poster="/video/flagship-poster.webp" aria-label="Purple United Kids flagship store walkthrough with music">
+        <video ref={film} autoPlay muted loop playsInline preload="metadata" poster="/video/flagship-poster.webp"
+          onPlay={() => setFilmPlaying(true)} onPause={() => setFilmPlaying(false)}
+          aria-label="Purple United Kids flagship store walkthrough with music">
           <source src="/video/home-option-two-flagship.mp4" type="video/mp4" />
           Your browser does not support video playback.
         </video>
+        <button type="button" className="h2-film__toggle" aria-label={filmPlaying ? 'Pause video' : 'Play video'} onClick={() => {
+          const video = film.current
+          if (!video) return
+          if (video.paused) void video.play().catch(() => setFilmPlaying(false))
+          else video.pause()
+        }}><Icon name={filmPlaying ? 'pause' : 'play'} size={21} /></button>
       </section>
     </div>
   )
