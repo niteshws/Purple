@@ -138,6 +138,12 @@ body:has(.home-two) :is(.askp__fab, .concierge__fab):is(:hover, :focus-visible) 
   background: #eadfcc;
 }
 .h2-collage__stack { display: flex; flex-direction: column; min-width: 0; gap: 0; }
+/* A shared crop gives the opening portrait trio a single, editorial rhythm.
+   It removes the unused paving below the Soft layers image while retaining her face and outfit. */
+.h2-collage--portraits .h2-collage__tile { aspect-ratio: 9 / 10; }
+.h2-collage--portraits .h2-photo,
+.h2-collage--portraits .h2-photo img { height: 100%; }
+.h2-collage--portraits .h2-photo img { object-fit: cover; }
 .h2-collage__label {
   position: absolute;
   z-index: 1;

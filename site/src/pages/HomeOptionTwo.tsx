@@ -80,11 +80,12 @@ function CollagePhoto({ photo, title, id, position = 'top-left', sizes = '100vw'
   photo: CollageImage; title: string; id?: string; position?: string; sizes?: string; heading?: boolean
 }) {
   const Heading = heading ? 'h2' : 'h3'
+  const regenerated = photo.name === 'soft-layers'
   return (
     <article id={id} className="h2-frame h2-collage__tile">
       <picture className="h2-photo">
-        <img src={COLLAGE_ASSETS + photo.name + '.webp'}
-          srcSet={COLLAGE_ASSETS + photo.name + '-small.webp ' + photo.small + 'w, ' + COLLAGE_ASSETS + photo.name + '.webp ' + photo.width + 'w'}
+        <img src={regenerated ? COLLAGE_ASSETS + 'soft-layers-v2.png' : COLLAGE_ASSETS + photo.name + '.webp'}
+          srcSet={regenerated ? undefined : COLLAGE_ASSETS + photo.name + '-small.webp ' + photo.small + 'w, ' + COLLAGE_ASSETS + photo.name + '.webp ' + photo.width + 'w'}
           sizes={sizes} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async"
           onLoad={(event) => event.currentTarget.parentElement?.classList.add('is-loaded')} />
       </picture>
@@ -189,8 +190,8 @@ export default function HomeOptionTwo() {
         {CHAPTERS.map(([name, label]) => <a key={name} href={'#h2-' + name} aria-label={label} aria-current={active === name ? 'location' : undefined}><span className="h2-chapters__name">{label}</span><span className="h2-chapters__dot" /></a>)}
       </nav>
       <FullCampaign name="new-now" title="New vibes" hero alt="Indian children’s winter knitwear campaign in a warm walnut-panelled studio" />
-      <section id="h2-editorial" className="h2-collage h2-collage--portraits" data-chapter="editorial" data-sr="1" aria-label="Everyday originals" style={{ gridTemplateColumns: `${ratio(PHOTOS.studio)}fr ${ratio(PHOTOS.layers)}fr ${ratio(PHOTOS.outside)}fr` }}>
-        <CollagePhoto photo={PHOTOS.studio} title="Everyday originals" id="h2-boys" position="top-right" sizes="(max-width: 600px) 100vw, 35vw" heading />
+      <section id="h2-editorial" className="h2-collage h2-collage--portraits" data-chapter="editorial" data-sr="1" aria-label="Everyday originals" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
+        <CollagePhoto photo={PHOTOS.studio} title="Everyday originals" id="h2-boys" position="top-right" sizes="(max-width: 600px) 100vw, 33vw" heading />
         <CollagePhoto photo={PHOTOS.layers} title="Soft layers" id="h2-girls" position="bottom-left" sizes="(max-width: 600px) 100vw, 33vw" />
         <CollagePhoto photo={PHOTOS.outside} title="Outside" sizes="(max-width: 600px) 100vw, 33vw" />
       </section>
